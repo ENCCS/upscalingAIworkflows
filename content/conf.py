@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "LESSON NAME"
+project = "Upscaling AI workflows"
 copyright = "2021, The contributors"
 author = "The contributors"
 github_user = "ENCCS"
