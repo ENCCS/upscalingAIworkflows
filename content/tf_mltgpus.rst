@@ -495,6 +495,6 @@ to setup the network and interconnects.
 
 .. exercise:: (Advanced) Custom training loop for SVHN
 
-   Use the ``SVHN_class``code provided in :doc:`/tf_intro` and write a custom training loop using 
+   Use the ``SVHN_class`` code provided in :doc:`/tf_intro` and write a custom training loop using 
    ``MirroredStrategy``.
    
