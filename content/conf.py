@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "Upscaling AI workflows"
-copyright = "2022, The contributors"
-author = "The contributors"
+copyright = "2022, Hossein Ehteshami and individual contributors."
+author = "Hossein Ehteshami"
 github_user = "ENCCS"
 github_repo_name = ""  # auto-detected from dirname if blank
 github_version = "main"
