@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "Upscaling AI workflows"
-copyright = "2021, The contributors"
+copyright = "2022, The contributors"
 author = "The contributors"
 github_user = "ENCCS"
 github_repo_name = ""  # auto-detected from dirname if blank
