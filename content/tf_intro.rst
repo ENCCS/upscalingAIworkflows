@@ -9,12 +9,12 @@ TensorFlow on a single GPU
 ==========================
 
 TensorFlow is a well-known library developed primarily in Google which has been
-proven to be one of the most robust, reilable, and fast libraries for deep learning
+proven to be one of the most robust, reliable, and fast libraries for deep learning
 among developers. I think most of us have had some form of exposure to TensorFlow
-at some point in our deep learning/machin learning journery.
+at some point in our deep learning/machine learning journey.
 
 In this section we focus on using a single GPU for training our model. It is rather
-easy to transfer/port traning of the model to the GPU with minimal coding.
+easy to transfer/port training of the model to the GPU with minimal coding.
 
 TensorFlow supports running computations on a variety of types of devices, including
 CPU and GPU. They are represented with string identifiers for example:
@@ -181,10 +181,79 @@ We can find out which devices your operations and tensors are assigned to by put
 ``tf.debugging.set_log_device_placement(True)`` as the first statement of your program.
 Enabling device placement logging causes any Tensor allocations or operations to be printed.
 
+The NLP model and the Quora dataset
+
+The `Quora Insincere Questions Classification <https://www.kaggle.com/c/quora-insincere-questions-classification/data>`_
+dataset is consistent of a large set of question which were asked on Quora platform with a label 
+to identify whether the question is sincere or insincere. An insincere question is defined 
+as a question intended to make a statement rather than look for helpful answers, i.e. toxic content. The dataset
+can be downloaded from `this link <https://archive.org/download/fine-tune-bert-tensorflow-train.csv/train.csv.zip>`_.
+
+Our task is to use a language model to classify these questions. We need to tokenize questions and 
+calculate the word embeddings using an NLP model afterwards. The output vector then can be attached
+to a classification head that can be trained on the dataset. 
+
+We have to possibilities to get the embeddings. We can either use 
+
+- word-based representations or 
+- context-based representations.
+
+
+In a **word-based representation** of a question, the embeddings for each word (token) is calculated
+and the result will be the combined of all the embeddings, averaged over the question length.
+
+Examples of pre-trained embeddings include:
+
+- **Word2Vec**: These are pre-trained embeddings of words learned from a large text corpora. 
+  Word2Vec has been pre-trained on a corpus of news articles with  300 million tokens, resulting 
+  in 300-dimensional vectors.
+
+- **GloVe**: has been pre-trained on a corpus of tweets with 27 billion tokens, resulting 
+  in 200-dimensional vectors.
+  
+
+In a **Context-based representations**, instead of learning vectors for each word in the sentence, 
+a vector for a sentence on the whole, by taking into account the order of words and the set of 
+co-occurring words, is computed
+
+Examples of deep contextualized vectors include:
+
+- **Embeddings from Language Models (ELMo)**: uses character-based word representations and 
+  bidirectional LSTMs. The pre-trained model computes a contextualized vector of 1024 dimensions. 
+  ELMo is available on Tensorflow Hub.
+
+- **Universal Sentence Encoder (USE)**: The encoder uses a Transformer 
+  architecture that uses attention mechanism to incorporate information about 
+  the order and the collection of words. The pre-trained model of USE that returns 
+  a vector of 512 dimensions is also available on Tensorflow Hub.
+
+- **Neural-Net Language Model (NNLM)**: The model simultaneously learns representations 
+  of words and probability functions for word sequences, allowing it to capture semantics of 
+  a sentence. 
+  
+We will use `a pretrained NNLM model <https://tfhub.dev/google/tf2-preview/nnlm-en-dim128/1>`_ 
+available on Tensorflow Hub, that are trained on the English Google News 200B corpus, 
+and computes a vector of 128 dimensions.
+
+.. figure:: https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-similarity.png
+   :width: 90%
+
+`(Image Source) <https://tfhub.dev/google/universal-sentence-encoder/4>`_
+
+The figure above can help us to better understand of how embeddings calculated using context-based 
+representation can be achieved. *Semantic similarity* is a measure of the degree to which two pieces 
+of text carry the same meaning. This is broadly useful in obtaining good coverage over the numerous 
+ways that a thought can be expressed using language without needing to manually enumerate them.
+
+.. figure:: https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-classification.png
+   :width: 90%
+
+`(Image Source) <https://tfhub.dev/google/universal-sentence-encoder/4>`_
+
 .. exercise :: Training on CPU and GPU
 
-  You can find two neural networks for image classifier for the `The Street View
-  House Numbers (SVHN)` dataset in the github :download:`SVHN notebook  <code/SVHN_class.ipynb>`.
+  You can find two neural networks for image classifier for the `NNLM Language Model` in 
+  the github :download:`Transfer_Learning_NLP notebook  <code/Transfer_Learning_NLP.ipynb>`.
   Try to train the model on CPU and GPU. Compare the results.
 
   Can you place manually some parts on GPU and some on CPU?

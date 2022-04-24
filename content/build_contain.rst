@@ -35,7 +35,7 @@ below for some further pointers. Note that the installation process is
 an advanced task that is beyond the scope of this course so we won't
 be covering this.
 
-.. callout:: Installing Singularity on your local system (optional)
+.. note:: Installing Singularity on your local system (optional)
 
    If you are running Linux and would like to install Singularity
    locally on your system, Singularity provide the free, open source
@@ -63,7 +63,7 @@ be covering this.
    detailed in the INSTALL.md file.
 
 
-.. note ::
+.. tip::
 
    If you do not have access to a system with Docker installed, or a
    Linux system where you can build and install Singularity but you
@@ -90,7 +90,7 @@ be covering this.
    described in this lesson.
 
 Getting started with the Docker Singularity image
-_________________________________________________
+-------------------------------------------------
 
 The `Singularity Docker image <https://quay.io/repository/singularity/singularity>`_ is available from
 `Quay.io <https://quay.io/>`_.
@@ -98,10 +98,10 @@ The `Singularity Docker image <https://quay.io/repository/singularity/singularit
 .. exercise:: Familiarise yourself with the Docker Singularity image
 
   - Using your previously acquired Docker knowledge, get the
-    Singularity image for ``v3.7.0`` and ensure that you can run a Docker
-    container using this image. You might want to use the `v3.7.0-slim`
-    version of this image since it is significantly smaller than the
-    standard image - the **slim** version of the image will be used in the
+    Singularity image for ``v3.8.2`` and ensure that you can run a Docker
+    container using this image. You might want to use the `v3.8.2-slim` for Intel/AMD architecture
+    or `v3.8.2-slim-arm64` for Arm architecture version of this image since it is significantly 
+    smaller than the standard image - the **slim** version of the image will be used in the
     examples below.
 
   - Create a directory (e.g. ``$HOME/singularity_data``) on your host
@@ -118,67 +118,67 @@ The `Singularity Docker image <https://quay.io/repository/singularity/singularit
     container, you'll probably need to add the ``--privileged`` switch to
     your docker command line.
 
-    .. tabs::
-
-       .. tab:: Questions
-
 	  - What is happening when you run the container?
 	  - Can you run an interactive shell in the container?
 
-       .. tab:: Running the image
-
-	  Having a bound directory from the host system accessible within
-	  your running Singularity container will give you somewhere to
-	  place created images so that they are accessible on the host
-	  system after the container exits.  Begin by changing into the
-	  directory that you created above for storing your definiton
-	  files and built images (e.g. ``$HOME/singularity_data``).
-
-	  You may choose to:
-
-	  - open a shell within the Docker image so you can work at a
-	    command prompt and run the ``singularity`` command directly
-	  - use the ``docker run`` command to run a new container instance
-	    every time you want to run the `singularity` command.
-
-	  Either option is fine for this section of the material.
-
-	  **Some examples:**
-
-	  To run the ``singularity`` command within the docker container
-	  directly from the host system's terminal:
-
-	  .. code-block:: bash
-
-	    docker run -it --privileged --rm -v ${PWD}:/home/singularity
-	    quay.io/singularity/singularity:v3.7.0-slim cache list
-
-	  To start a shell within the Singularity Docker container where
-	  the `singularity` command can be run directly:
-
-	  .. code-block:: bash
-
-	     docker run -it --entrypoint=/bin/sh --privileged --rm -v ${PWD}:/home/singularity quay.io/singularity/singularity:v3.7.0-slim
-
-	  To make things easier to read in the remainder of the material,
-	  command examples will use the ``singularity`` command directly,
-	  e.g. ``singularity cache list``. If you're running a shell in the
-	  Docker container, you can enter the commands as they appear.  If
-	  you're using the container's default run behaviour and running a
-	  container instance for each run of the command, you'll need to
-	  replace ``singularity`` with ``docker run --privileged -v
-	  ${PWD}:/home/singularity quay.io/singularity/singularity:v3.7.0-slim`` or similar.
+       .. solution:: Running the image
+         
+         Having a bound directory from the host system accessible within
+	      your running Singularity container will give you somewhere to
+	      place created images so that they are accessible on the host
+	      system after the container exits.  Begin by changing into the
+	      directory that you created above for storing your definiton
+	      files and built images (e.g. ``$HOME/singularity_data``).
+    
+	      You may choose to:
+    
+	      - open a shell within the Docker image so you can work at a
+	        command prompt and run the ``singularity`` command directly
+	      - use the ``docker run`` command to run a new container instance
+	        every time you want to run the `singularity` command.
+    
+	      Either option is fine for this section of the material.
+    
+	      **Some examples:**
+    
+	      To run the ``singularity`` command within the docker container
+	      directly from the host system's terminal:
+    
+	      .. code-block:: bash
+    
+	        docker run -it --privileged --rm -v ${PWD}:/home/singularity
+	        quay.io/singularity/singularity:v3.8.2-slim cache list
+    
+	      To start a shell within the Singularity Docker container where
+	      the `singularity` command can be run directly:
+    
+	      .. code-block:: bash
+    
+	         docker run -it --entrypoint=/bin/sh --privileged --rm -v ${PWD}:/home/singularity quay.io/singularity/singularity:v3.8.2-slim
+    
+	      To make things easier to read in the remainder of the material,
+	      command examples will use the ``singularity`` command directly,
+	      e.g. ``singularity cache list``. If you're running a shell in the
+	      Docker container, you can enter the commands as they appear.  If
+	      you're using the container's default run behavior and running a
+	      container instance for each run of the command, you'll need to
+	      replace ``singularity`` with ``docker run --privileged -v
+	      ${PWD}:/home/singularity quay.io/singularity/singularity:v3.8.2-slim`` or similar.
 
 Building Singularity images
-___________________________
+---------------------------
 
 Introduction
 ++++++++++++
 
-As a platform that is widely used in the scientific/research software and HPC communities, Singularity provides great support for reproducibility.
-If you build a Singularity container for some scientific software, it's likely that you and/or others will want to be able to reproduce exactly
-the same environment again. Maybe you want to verify the results of the code or provide a means that others can use to verify the results to support a paper or report.
-Maybe you're making a tool available to others and want to ensure that they have exactly the right version/configuration of the code.
+As a platform that is widely used in the scientific/research software and HPC communities, 
+Singularity provides great support for reproducibility.
+If you build a Singularity container for some scientific software, it's likely that you and/or 
+others will want to be able to reproduce exactly
+the same environment again. Maybe you want to verify the results of the code or provide a means 
+that others can use to verify the results to support a paper or report.
+Maybe you're making a tool available to others and want to ensure that they have exactly the right 
+version/configuration of the code.
 
 Similarly to Docker and many other modern software tools, Singularity
 follows the "Configuration as code" approach and a container
@@ -223,7 +223,7 @@ containers.
       image configuration but it doesn't provide the best support for
       our ultimate goal of **reproducibility**. If you spend time
       sitting at your terminal in front of a shell typing different
-      commands to add configuration, maybe you realise you made a
+      commands to add configuration, maybe you realize you made a
       mistake so you undo one piece of configuration and change
       it. This goes on until you have your completed configuration but
       there's no explicit record of exactly what you did to create
@@ -330,7 +330,7 @@ running an instance of a Docker container for each run of the command, your comm
 
 .. code-block:: bash
 
-  docker run -it --privileged --rm -v ${PWD}:/home/singularity quay.io/singularity/singularity:v3.7.0-slim build /home/singularity/my_test_image.sif /home/singularity/my_test_image.def
+  docker run -it --privileged --rm -v ${PWD}:/home/singularity quay.io/singularity/singularity:v3.8.2-slim build /home/singularity/my_test_image.sif /home/singularity/my_test_image.def
 
 The above command requests the building of an image based on the `my_test_image.def` file with the resulting image
 saved to the `my_test_image.sif` file. Note that you will need to prefix the command with `sudo` if you're running
@@ -400,7 +400,7 @@ the Docker Singularity container and run your singularity image there.
 
       .. code-block:: bash
 
-         docker run -it --entrypoint=/bin/sh --privileged --rm -v ${PWD}:/home/singularity quay.io/singularity/singularity:v3.7.0-slim
+         docker run -it --entrypoint=/bin/sh --privileged --rm -v ${PWD}:/home/singularity quay.io/singularity/singularity:v3.8.2-slim
          /# cd /home/singularity
          /home/singularity# singularity run my_test_image.sif
 
@@ -414,26 +414,34 @@ the Docker Singularity container and run your singularity image there.
 .. callout:: Using ``singularity run`` from within the Docker container
 
   It is strongly recommended that you don't use the Docker container for running Singularity images
-  in any production setting, only for creating them, since the Singularity command runs within the container as the root user.
-  However, for the purposes of this simple example, the Docker Singularity container provides an ideal environment to test that
+  in any production setting, only for creating them, since the Singularity command runs within the 
+  container as the root user.
+  However, for the purposes of this simple example, the Docker Singularity container provides an ideal 
+  environment to test that
   you have successfully built your container.
 
-Now we'll test our image on an HPC platform. Move your created ``.sif`` image file to a platform with an installation of Singularity.
-You could, for example, do this using the command line secure copy command ``scp``. For example, the following command would copy
-`my_test_image.sif` to the remote server identified by ``<target hostname>`` (don't forget the colon at the end of the hostname!):
+Now we'll test our image on an HPC platform. Move your created ``.sif`` image file to a platform with 
+an installation of Singularity.
+You could, for example, do this using the command line secure copy command ``scp``. For example, 
+the following command would copy
+`my_test_image.sif` to the remote server identified by ``<target hostname>`` (don't forget 
+the colon at the end of the hostname!):
 
 .. code-block:: bash
 
   scp -i <full path to SSH key file> my_test_image.sif <target hostname>:
 
 
-You could provide a destination path for the file straight after the colon at the end of the above command (without a space),
+You could provide a destination path for the file straight after the colon at the end of the above 
+command (without a space),
 but by default, the file will be uploaded to you home directory.
 
 Try to run the container on the login node of the HPC platform and check that you get the expected output.
 
-It is recommended that you move the create `.sif` file to a platform with an installation of Singularity, rather than attempting to run
-the image using the Docker container. However, if you do try to use the Docker container, see the notes below on "*Using singularity run from within the Docker container*" for further information.
+It is recommended that you move the create `.sif` file to a platform with an installation of Singularity, 
+rather than attempting to run
+the image using the Docker container. However, if you do try to use the Docker container, 
+see the notes below on "*Using singularity run from within the Docker container*" for further information.
 
 Now that we've built an image, we can attempt to run it:
 
@@ -481,7 +489,7 @@ by Python:
 The ``singularity run`` command should now work successfully.
 
 More about definiton files
-__________________________
+--------------------------
 
 A {Singularity} Definition file is divided into two parts:
 

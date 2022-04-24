@@ -681,7 +681,7 @@ from the Github repository.
 
    What does happen when you increase the batch size?
 
-.. exercise:: *Horovod*ize a CNN model.
+.. exercise:: Horovodize a CNN model.
 
    You can find a CNN model for an MNIST dataset :download:`here <code/SVHN_class.py>`. Apply 
    the steps mentioned above and test your script.
