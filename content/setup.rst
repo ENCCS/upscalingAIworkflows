@@ -19,7 +19,7 @@ And for a GPU-node with *X* number of GPUs per node (there are 4 GPUs available 
 
 .. code-block:: bash
 
-   salloc -n 1 --gres=gpu:4 --partition=gpu --mem-per-gpu=40GB --reservation enccs \
+   salloc -n 1 --gres=gpu:X --partition=gpu --mem-per-gpu=40GB --reservation enccs \
    --ntasks 4 --cpus-per-task 1  -t 02:00:00
 
 Once the allocation is granted you will receive a message similar to
@@ -51,8 +51,8 @@ output below.
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
   Warning: Permanently added 'cn0381' (ECDSA) to the list of known hosts.
 
-Please enter ``yes`` to the quesiton and igonre it as it is a self-assigned useless check
-that doen't understand what is the purpose of our login. Now, we are able to run
+Please enter ``yes`` to the question and ignore it as it is a self-assigned useless check
+that doesn't understand what is the purpose of our login. Now, we are able to run
 our jobs interactively.
 
 To run Jupyter Notebooks, we need to load Anaconda module.
@@ -67,7 +67,7 @@ The ip address here is the name of compute node, in the example given above is `
 
 .. code-block:: bash
 
-  jupyter-notebook --no-browser --port=8888 --ip=cn0381
+   jupyter-notebook --no-browser --port=8888 --ip=cn0381
 
 The result should look like
 
@@ -88,11 +88,12 @@ The result should look like
         http://cn0381:8888/?token=80d695595aa333c6d97dc6f868f96b36f4812622a5008090
      or http://127.0.0.1:8888/?token=80d695595aa333c6d97dc6f868f96b36f4812622a5008090
 
-In your local machine (PC/laptop), open a terminal and use this command to tunnel to the running kernel on Vega.
+In your local machine (PC/laptop), open a terminal and use this command to tunnel to the running kernel 
+on Vega.
 
 .. code-block:: bash
 
-  ssh -N -f -L 8888:cn0381:8888 euhosseine@vglogin0005.vega.izum.si
+   ssh -N -f -L 8888:cn0381:8888 username@vglogin0005.vega.izum.si
 
 The first port number is for your local machine and the second port number is what
 you specified above running a Jupyter Notebook. Open a browser, and enter ``http://localhost:8888``.
@@ -103,10 +104,11 @@ To use TensorFlow or Horovod in this course, we can simply load them through mod
 
 .. code-block:: bash
 
-  module load TensorFlow/2.5.0-fosscuda-2020b
+   module load TensorFlow/2.5.0-fosscuda-2020b
+
 
 Or
 
 .. code-block:: bash
 
-  module load Horovod/0.22.1-fosscuda-2020b-TensorFlow-2.5.0
+   module load Horovod/0.22.1-fosscuda-2020b-TensorFlow-2.5.0
