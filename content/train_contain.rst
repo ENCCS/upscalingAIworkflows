@@ -140,10 +140,6 @@ Create a new directory and save the ``mpitest.c`` given below.
          MPI_Finalize();
  
          return EXIT_SUCCESS;
- 
-   exit_with_error:
-         MPI_Finalize();
-         return EXIT_FAILURE;
    }
 
 A possible def file for the app above is given below. 
