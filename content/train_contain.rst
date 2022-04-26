@@ -548,99 +548,109 @@ AllReduce method. Here, we pin (assume) there is one GPU per CPU.
 
 .. code-block:: c++
 
-   // Copyright Jing Gong - ENCCS
-   #include <mpi.h>
-   #include <cstdio>
-   #include <chrono>
-   #include <iostream>
-   
-   __global__ void kernel (double* x, int N) {
-       size_t idx = threadIdx.x + blockIdx.x * blockDim.x;
-       if (idx < N) {
-           x[idx] += 1.0;
-       }
-   }
-   
-   // naive atomic reduction kernel
-   __global__ void atomic_red(const double  *gdata, double *out, int N){
-     size_t idx = threadIdx.x+blockDim.x*blockIdx.x;
-     if (idx < N) {
-       atomicAdd(out, gdata[idx]);
-     }
-   }
-   
-   
-   int main(int argc, char** argv) {
-   
-       int rank, num_ranks;
-   
-       MPI_Init(&argc, &argv);
-       MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
-       MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-   
-       // Total problem size
-       size_t N = 1024 * 1024 * 1024;
-   
-       // Problem size per rank (assumes divisibility of N)
-       size_t N_per_rank = N / num_ranks;
-   
-       // Adapt the last mpi_rank if necessary
-       if (rank == (num_ranks - 1)) {
-         N_per_rank = N - N_per_rank * (num_ranks - 1);
-       }
+    #include <mpi.h>
+    #include <cstdio>
+    #include <chrono>
+    #include <iostream>
+    
+    
+    __global__ void kernel (double* x, int N) {
+        size_t idx = threadIdx.x + blockIdx.x * blockDim.x;
+        if (idx < N) {
+            x[idx] += 1.0;
+        }
+    }
+    
+    // naive atomic reduction kernel
+    __global__ void atomic_red(const double  *gdata, double *out, int N){
+      size_t idx = threadIdx.x+blockDim.x*blockIdx.x;
+      if (idx < N) {
+        atomicAdd(out, gdata[idx]);
+      }
+    }
+    
+    
+    int main(int argc, char** argv) {
+    
+        int rank, num_ranks;
+    
+        MPI_Init(&argc, &argv);
+        MPI_Comm_size(MPI_COMM_WORLD, &num_ranks);
+        MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    
+        // Binding the cuda device with local MPI rank
+        int local_rank, local_size;
+        MPI_Comm local_comm;
+        MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, rank,  MPI_INFO_NULL, &local_comm);
+    
+        MPI_Comm_size(local_comm, &local_size);
+        MPI_Comm_rank(local_comm, &local_rank);
+        cudaSetDevice(local_rank%local_size); 
+    
+        // Total problem size
+        size_t N = 1024 * 1024 * 1024;
+    
+        // Problem size per rank (assumes divisibility of N)
+        size_t N_per_rank = N / num_ranks;
+    
+        // Adapt the last mpi_rank if necessary
+        if (rank == (num_ranks - 1)) {
+          N_per_rank = N - N_per_rank * (num_ranks - 1);
+        }
+    
+        // Initialize d_local_x to zero on device
+        double* d_local_x;
+        cudaMalloc((void**) &d_local_x, N_per_rank * sizeof(double));
+        cudaMemset(d_local_x, 0.0, N_per_rank*sizeof(double));
+    
+        double *d_local_sum, *h_local_sum;
+        h_local_sum = new double;
+        cudaMalloc(&d_local_sum, sizeof(double));
+            
+        // Number of repetitions
+        const int num_reps = 100;
+    
+        using namespace std::chrono;
+    
+        auto start = high_resolution_clock::now();
+    
+        int threads_per_block = 256;
+        size_t blocks = (N_per_rank + threads_per_block - 1) / threads_per_block;
+    
+        for (int i = 0; i < num_reps; ++i) {
+            kernel<<<blocks, threads_per_block>>>(d_local_x, N_per_rank);
+            cudaDeviceSynchronize();
+        }
+    
+        // summarize the vector of d_x
+        atomic_red<<<blocks, threads_per_block>>>(d_local_x, d_local_sum, N_per_rank);
          
-       // Initialize d_local_x to zero on device
-       double* d_local_x;
-       cudaMalloc((void**) &d_local_x, N_per_rank * sizeof(double));
-       cudaMemset(d_local_x, 0.0, N_per_rank*sizeof(double));
-   
-       double *d_local_sum, *h_local_sum;
-       h_local_sum = new double;
-       cudaMalloc(&d_local_sum, sizeof(double));
-           
-       // Number of repetitions
-       const int num_reps = 100;
-   
-       using namespace std::chrono;
-   
-       auto start = high_resolution_clock::now();
-   
-       int threads_per_block = 256;
-       size_t blocks = (N_per_rank + threads_per_block - 1) / threads_per_block;
-   
-       for (int i = 0; i < num_reps; ++i) {
-           kernel<<<blocks, threads_per_block>>>(d_local_x, N_per_rank);
-           cudaDeviceSynchronize();
-       }
-   
-       // summarize the vector of d_x
-       atomic_red<<<blocks, threads_per_block>>>(d_local_x, d_local_sum, N_per_rank);
+        auto end = high_resolution_clock::now();
+    
+        auto duration = duration_cast<milliseconds>(end - start);
+    
+        // Copy vector sums from device to host:
+        cudaMemcpy(h_local_sum, d_local_sum, sizeof(double), cudaMemcpyDeviceToHost);
+    
+        // Reduce all sums into the global sum
+        double h_global_sum;
+        MPI_Allreduce(h_local_sum, &h_global_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
         
-       auto end = high_resolution_clock::now();
-   
-       auto duration = duration_cast<milliseconds>(end - start);
-   
-       // Copy vector sums from device to host:
-       cudaMemcpy(h_local_sum, d_local_sum, sizeof(double), cudaMemcpyDeviceToHost);
-   
-       // Reduce all sums into the global sum
-       double h_global_sum;
-       MPI_Allreduce(h_local_sum, &h_global_sum, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
-       
-       std::cout << "Time per kernel = " << duration.count() << " ms " << std::endl;
-   
-       if (rank == 0) {
-         if (abs(h_global_sum - N*100) > 1e-14) {
-           std::cerr << "The sum is incorrect!" << std::endl;
-           return -1;
-         }
-         std::cout << "The total sum of x = " << h_global_sum << std::endl;
-       }
-       
-       MPI_Finalize();
-   
-       return 0;
-   }
+        std::cout << "Time per kernel = " << duration.count() << " ms " << std::endl;
+    
+        if (rank == 0) {
+          if (abs(h_global_sum - N*100) > 1e-14) {
+            std::cerr << "The sum is incorrect!" << std::endl;
+            return -1;
+          }
+          std::cout << "The total sum of x = " << h_global_sum << std::endl;
+        }
+    
+        MPI_Finalize();
+    
+        return 0;
+    }
+
 
 Please save this as ``reduction.cu`` and compile the code using the command
 
