@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "Upscaling AI workflows"
-copyright = "2022, Hossein Ehteshami and individual contributors."
-author = "Hossein Ehteshami"
+copyright = "2025, ENCCS, and individual contributors."
+author = "ENCCS and individual contributors."
 github_user = "ENCCS"
 github_repo_name = ""  # auto-detected from dirname if blank
 github_version = "main"
@@ -73,7 +73,7 @@ html_favicon = "img/favicon.ico"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 html_css_files = ["overrides.css"]
 
 # HTML context:
@@ -126,3 +126,17 @@ DIRECTIVES = [SignatureDirective, ParametersDirective, TypealongDirective]
 def setup(app):
     for obj in DIRECTIVES:
         app.add_directive(obj.cssname(), obj)
+
+
+import os
+
+if os.environ.get("GITHUB_REF", "") == "refs/heads/main":
+    html_js_files = [
+        (
+            "https://plausible.io/js/script.js",
+            {
+                "data-domain": "enccs.github.io/upscalingAIworkflows",
+                "defer": "defer",
+            },
+        ),
+    ]
