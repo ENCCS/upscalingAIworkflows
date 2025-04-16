@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction to Containers &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Introduction to Docker" href="../intro_docker/" />
+    <link rel="prev" title="Access to Vega" href="../setup/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction to Containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#cons-and-pros-of-containers">Cons and Pros of Containers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pros">Pros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cons">Cons</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cons-and-pros-of-vms">Cons and Pros of VMs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Pros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Cons</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#putting-the-pieces-together">Putting the Pieces Together</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Introduction to Containers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/intro-container.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="introduction-to-containers">
+<span id="intro-container"></span><h1>Introduction to Containers<a class="headerlink" href="#introduction-to-containers" title="Link to this heading"></a></h1>
+<figure class="align-default" id="id3">
+<a class="reference internal image-reference" href="https://upload.wikimedia.org/wikipedia/commons/1/1c/MAERSK_MC_KINNEY_MÖLLER_%26_MARSEILLE_MAERSK_%2848694054418%29.jpg"><img alt="https://upload.wikimedia.org/wikipedia/commons/1/1c/MAERSK_MC_KINNEY_MÖLLER_%26_MARSEILLE_MAERSK_%2848694054418%29.jpg" src="https://upload.wikimedia.org/wikipedia/commons/1/1c/MAERSK_MC_KINNEY_MÖLLER_%26_MARSEILLE_MAERSK_%2848694054418%29.jpg" style="width: 90%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><a class="reference external" href="https://upload.wikimedia.org/wikipedia/commons/1/1c/MAERSK_MC_KINNEY_MÖLLER_%26_MARSEILLE_MAERSK_%2848694054418%29.jpg">(Image Source)</a></span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<p>When software is deployed, a set of libraries and configuration files
+is used in a runtime environment.  Typically, we have several
+applications running in the runtime environment.  Therefore, if a
+system update changes a lib to fix an issue, it might break other apps
+that use the same library.  We all have experienced this at some
+point.</p>
+<p>As a developer, you need to control the version of libraries within
+the runtime environment.  Two technologies that can help you achieve
+this goal are Containers and Virtual Machines (VMs).  Managing the
+environment of the apps becomes possible with the help of
+“virtualization.”  The system resources, e.g., RAM, CPU, storage,
+networking, can be “virtually” delivered as multiple resources in the
+virtualization process.</p>
+<p>Containers are executable units of software that encapsulate
+everything to run. In principle, one can run containers anywhere.
+Containers use the operating system (OS) level virtualization,
+isolating processes from the rest of the OS environment and
+controlling the allocation of (hardware) resources. The isolation is
+enabled via kernel namespaces and cgroups (as we will discuss them in
+detail at <span class="xref std std-doc">namespc-cgroup</span> section), which have been in Linux for
+a long time.</p>
+<div class="admonition-virtualization callout admonition" id="callout-0">
+<p class="admonition-title">Virtualization</p>
+<p>Containers are an example of what’s called <strong>virtualization</strong> –
+having a second “virtual” computer running and accessible from a main
+or <strong>host</strong> computer. A VM typically contains a whole copy
+of an operating system in addition to its own file system and has to
+get booted up in the same way a computer would. A container is
+considered a lightweight version of a virtual machine; underneath,
+the container is using the Linux kernel and simply has some flavor of
+Linux + the file system inside.</p>
+</div>
+<p>The key differentiator between containers and VMs is that VMs
+virtualize an entire machine down to the hardware layers and
+containers only virtualize software layers above the operating system
+level.</p>
+<img alt="../_images/conts_vms.jpeg" src="../_images/conts_vms.jpeg" />
+<section id="cons-and-pros-of-containers">
+<h2>Cons and Pros of Containers<a class="headerlink" href="#cons-and-pros-of-containers" title="Link to this heading"></a></h2>
+<section id="pros">
+<h3>Pros<a class="headerlink" href="#pros" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Containers are lightweight software packages that contain all the
+dependencies.</p></li>
+<li><p>Because of their lightweight, it is easy and very fast to
+iteratively modify them.</p></li>
+</ul>
+</section>
+<section id="cons">
+<h3>Cons<a class="headerlink" href="#cons" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Since containers share the same underlying hardware system, it is
+possible that an exploit in one container could break out of the
+container and affect the shared hardware.</p></li>
+</ul>
+</section>
+</section>
+<section id="cons-and-pros-of-vms">
+<h2>Cons and Pros of VMs<a class="headerlink" href="#cons-and-pros-of-vms" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Pros<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>VMs are immune to any exploits or interference from other VMs on a
+shared host due run in isolation as because of a fully standalone
+system.</p></li>
+<li><p>Since VMs are full-flegded OS, they are more dynamic and can be
+interactively developed. Once the basic hardware definition is
+specified for a VM, the VM can then be treated as a bare bones
+computer.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h3>Cons<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>It is time consuming to build and regenerate VMs, because they
+encompass a full stack system. Any modifications to a VM snapshot
+can take significant time to regenerate and validate they behave as
+expected.</p></li>
+<li><p>VMs can take up a lot of storage space. They can quickly grow to
+several Gigabytes in size. This can lead to disk space shortage
+issues on the VMs host machine.</p></li>
+</ul>
+<p>One final term: if the <em>container</em> is an alternative file system layer
+that you can access and run from your computer, the <strong>container image</strong>
+is like a template for that container. The container image has all the
+needed information to start up a running copy of the container. A
+running container tends to be transient and can be started and shut
+down. The image is more long-lived, as a source file for the container.
+You could think of the container image like a cookie cutter – it can be
+used to create multiple copies of the same shape (or container) and is
+relatively unchanging, where cookies come and go. If you want a
+different type of container (cookie) you need a different image (cookie
+cutter).</p>
+<section id="putting-the-pieces-together">
+<h4>Putting the Pieces Together<a class="headerlink" href="#putting-the-pieces-together" title="Link to this heading"></a></h4>
+<p>Think back to some of the challenges we described at the beginning. The
+many layers of scientific software installations make it hard to install
+and re-install scientific software – which ultimately, hinders
+reliability and reproducibility.</p>
+<p>But now, think about what a container is - a self-contained, complete,
+separate computer file system. What if you put your scientific software
+tools into a container?</p>
+<p>This solves several of our problems:</p>
+<ul class="simple">
+<li><p>There is a clear record of what software and software dependencies
+were used, from bottom to top.</p></li>
+<li><p>The container can be used on any computer that has Docker installed</p></li>
+<li><p>It doesn’t matter whether the computer is Mac, Windows or Linux-based.</p></li>
+<li><p>The container ensures that you can use the exact same software and
+environment on your computer and on other resources (like a
+large-scale computing cluster).</p></li>
+</ul>
+<p>The rest of this workshop will show you how to download and run
+pre-existing containers on your own computer, and how to create and
+share your own containers.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../setup/" class="btn btn-neutral float-left" title="Access to Vega" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../intro_docker/" class="btn btn-neutral float-right" title="Introduction to Docker" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

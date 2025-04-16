@@ -1,0 +1,404 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating More Complex Container Images &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="What is Singularity?" href="../singlrty_start/" />
+    <link rel="prev" title="Creating your own container images" href="../create_contain/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating More Complex Container Images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#using-scripts-and-files-from-outside-the-container">Using scripts and files from outside the container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#including-personal-scripts-and-data-in-a-container">Including personal scripts and data in a container</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#more-fancy-dockerfile-options">More fancy <cite>Dockerfile</cite> options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Creating More Complex Container Images</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/compx_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="creating-more-complex-container-images">
+<span id="compx-contain"></span><h1>Creating More Complex Container Images<a class="headerlink" href="#creating-more-complex-container-images" title="Link to this heading"></a></h1>
+<p>In order to create and use your own containers, you may need more
+information than our previous example. You may want to use files from
+outside the container, copy those files into the container, and just
+generally learn a little bit about software installation. This episode
+will cover these. Note that the examples will get gradually more and
+more complex - most day-to-day use of containers can be accomplished
+using the first 1-2 sections on this page.</p>
+<section id="using-scripts-and-files-from-outside-the-container">
+<h2>Using scripts and files from outside the container<a class="headerlink" href="#using-scripts-and-files-from-outside-the-container" title="Link to this heading"></a></h2>
+<p>Let’s create a file and folder called it <code class="docutils literal notranslate"><span class="pre">foo/dummy.py</span></code> in the root
+folder.</p>
+<p>Please copy the <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> and place it in the <code class="docutils literal notranslate"><span class="pre">foo</span></code> directory.
+Let’s say we wanted to try running the script using our recently
+created <code class="docutils literal notranslate"><span class="pre">ubuntu-python</span></code> container.</p>
+<div class="admonition-running-containers callout admonition" id="callout-0">
+<p class="admonition-title">Running containers</p>
+<p>What command would we use to run python from the <code class="docutils literal notranslate"><span class="pre">alpine-python</span></code>
+container?</p>
+</div>
+<p>If we try running the container and Python script, what happens?</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>alice/ubuntu-python<span class="w"> </span>python3<span class="w"> </span>dummy.py
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python3: can’t open file ‘dummy.py’: [Errno 2] No such file or directory
+</pre></div>
+</div>
+<div class="admonition-no-such-file-or-directory callout admonition" id="callout-1">
+<p class="admonition-title">No such file or directory</p>
+<p>What does the error message mean? Why might the Python inside the
+container not be able to find or open our script?</p>
+</div>
+<p>The problem here is that the container and its file system is separate
+from our host computer’s file system. When the container runs, it can’t
+see anything outside itself, including any of the files on our computer.
+In order to use Python (inside the container) and our script (outside
+the container, on our computer), we need to create a link between the
+directory on our computer and the container.</p>
+<p>This link is called a “mount” and is what happens automatically when a
+USB drive or other external hard drive gets connected to a computer -
+you can see the contents appear as if they were on your computer.</p>
+<p>We can create a mount between our computer and the running container by
+using an additional option to <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>. We’ll also use the
+variable <code class="docutils literal notranslate"><span class="pre">$PWD</span></code> which will substitute in our current working
+directory. The option will look like this</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>-v<span class="w"> </span><span class="nv">$PWD</span>:/temp
+</pre></div>
+</div>
+<p>What this means is – link my current directory with the container, and
+inside the container, name the directory <code class="docutils literal notranslate"><span class="pre">/temp</span></code></p>
+<p>Let’s try running the command now:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="nv">$PWD</span>:/temp<span class="w"> </span>alice/ubuntu-python<span class="w"> </span>python3<span class="w"> </span>dummy.py
+</pre></div>
+</div>
+<p>But we get the same error!</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>python3: can&#39;t open file &#39;dummy.py&#39;: [Errno 2] No such file or directory
+</pre></div>
+</div>
+<p>This final piece is a bit tricky – we really have to remember to put
+ourselves inside the container. Where is the <cite>dummy.py</cite> file? It’s in
+the directory that’s been mapped to <cite>/temp</cite> – so we need to include
+that in the path to the script. This command should give us what we
+need:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="nv">$PWD</span>:/temp<span class="w"> </span>alice/alpine-python<span class="w"> </span>python3<span class="w"> </span>/temp/dummy.py
+</pre></div>
+</div>
+<p>Note that if we create any files in the <cite>/temp</cite> directory while the
+container is running, these files will appear on our host filesystem
+in the original directory and will stay there even when the container
+stops.</p>
+<div class="admonition-checking-the-options-interactive-jobs exercise important admonition" id="exercise-0">
+<p class="admonition-title">Checking the options, Interactive jobs</p>
+<ol class="arabic simple">
+<li><p>Can you go through each piece of the Docker command above
+the explain what it does? How would you characterize the
+key components of a Docker command?</p></li>
+<li><p>Try using the directory mount option but run the container
+interactively. Can you find the folder that’s connected to
+your computer? What’s inside?</p></li>
+</ol>
+<div class="admonition-solution solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Solution</p>
+<ol class="arabic">
+<li><p>Here’s a breakdown of each piece of the command above</p>
+<ul class="simple">
+<li><p><cite>docker run</cite>: use Docker to run a container</p></li>
+<li><p><cite>-v $PWD:/temp</cite>: connect my current working directory
+(<cite>$PWD</cite>) as a folder inside the container called <cite>/temp</cite></p></li>
+<li><p><cite>alice/ubuntu-python</cite>: name of the container to run</p></li>
+<li><p><cite>python3 /temp/dummy.py</cite>: what commands to run in the container</p></li>
+</ul>
+<p>More generally, every Docker command will have the form:
+<cite>docker [action] [docker options] [docker image] [command
+to run inside]</cite></p>
+</li>
+<li><p>The docker command to run the container interactively is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span><span class="nv">$PWD</span>:/temp<span class="w"> </span>-it<span class="w"> </span>alice/ubuntu-python<span class="w"> </span>sh
+</pre></div>
+</div>
+<p>Once inside, you should be able to navigate to the <cite>/temp</cite>
+folder and see that’s contents are the same as the files on your
+computer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/temp
+/#<span class="w"> </span>ls
+</pre></div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<p>Mounting a folder can be very useful when you want to run the software
+inside your container on many different input files. In other
+situations, you may want to save or archive an authoritative version
+of your data by adding it to the container permanently.  That’s what
+we will cover next.</p>
+</section>
+<section id="including-personal-scripts-and-data-in-a-container">
+<h2>Including personal scripts and data in a container<a class="headerlink" href="#including-personal-scripts-and-data-in-a-container" title="Link to this heading"></a></h2>
+<p>Our next project will be to add our own files to a container -
+something you might want to do if you’re sharing a finished analysis
+or just want to have an archived copy of your entire analysis
+including the data. Let’s as some that we’ve finished with our
+<cite>dummy.py</cite> script and want to add it to the container itself.</p>
+<p>In your shell, you should still be in the <cite>dummy</cite> folder in the
+<cite>docker-intro</cite> folder.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">pwd</span>
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/Users/yourname/foo
+</pre></div>
+</div>
+<p>We will modify our Dockerfile again to build an image based on Alpine
+Linux with Python 3 installed (just as we did perviously). This time
+we will add an additional line before the <cite>CMD</cite> line:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">COPY</span><span class="w"> </span>dummy.py<span class="w"> </span>/home
+</pre></div>
+</div>
+<p>This line will cause Docker to copy the file from your computer into
+the container’s file system <em>at build time</em>. Modify the Dockerfile as
+before (or copy the version from the <cite>basic/</cite> subdirectory) and add
+the extra copy line. Once you have done that, build the container like
+before, but give it a different name:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">build</span> <span class="o">-</span><span class="n">t</span> <span class="n">alice</span><span class="o">/</span><span class="n">ubuntu</span><span class="o">-</span><span class="n">dummy</span> <span class="o">.</span>
+</pre></div>
+</div>
+<div class="admonition-did-it-work exercise important admonition" id="exercise-1">
+<p class="admonition-title">Did it work?</p>
+<p>Can you remember how to run a container interactively? Try
+that with this one.  Once inside, try running the Python script.</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-1">
+<p class="admonition-title">Solution</p>
+<p>You can start the container interactively like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>alice/ubuntu-dummy<span class="w"> </span>sh
+</pre></div>
+</div>
+<p>You should be able to run the python command inside the
+container like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span>python3<span class="w"> </span>/home/dummy.py
+</pre></div>
+</div>
+</div>
+</div>
+<p>This <cite>COPY</cite> keyword can be used to place your own scripts or own data
+into a container that you want to publish or use as a record. Note
+that it’s not necessarily a good idea to put your scripts inside the
+container if you’re constantly changing or editing them.  Then,
+referencing the scripts from outside the container is a good idea, as
+we did in the previous section. You also want to think carefully about
+size – if you run <cite>docker image ls</cite> you’ll see the size of each image
+all the way on the right of the screen. The bigger your image becomes,
+the harder it will be to easily download.</p>
+<div class="admonition-copying-alternatives callout admonition" id="callout-2">
+<p class="admonition-title">Copying alternatives</p>
+<p>Another trick for getting your own files into a container is by
+using the <cite>RUN</cite> keyword and downloading the files from the
+internet. For example, if your code is in a GitHub repository, you
+could include this statement in your Dockerfile to download the
+latest version every time you build the container:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/alice/mycode
+</pre></div>
+</div>
+<p>Similarly, the <cite>wget</cite> command can be used to download any file
+publicly available on the internet:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">RUN</span><span class="w"> </span>wget<span class="w"> </span>ftp://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.10.0/ncbi-blast-2.10.0+-x64-linux.tar.gz
+</pre></div>
+</div>
+</div>
+</section>
+<section id="more-fancy-dockerfile-options">
+<h2>More fancy <cite>Dockerfile</cite> options<a class="headerlink" href="#more-fancy-dockerfile-options" title="Link to this heading"></a></h2>
+<p>We can expand on the example above to make our container even more
+“automatic”.  Here are some ideas:</p>
+<p>Make the <cite>dummy.py</cite> script run automatically:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:18.04</span>
+
+<span class="k">COPY</span><span class="w"> </span>dummy.py<span class="w"> </span>/home
+<span class="k">RUN</span><span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3
+
+<span class="c"># Run the dummy.py script as the default command</span>
+<span class="k">CMD</span><span class="w"> </span>python3<span class="w"> </span>/home/dummy.py
+<span class="c"># OR</span>
+<span class="c"># CMD [&quot;python3&quot;, &quot;/home/dummy.py&quot;]</span>
+</pre></div>
+</div>
+<p>Build and test it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>ubuntu-dummy:v1<span class="w"> </span>.
+docker<span class="w"> </span>run<span class="w"> </span>ubuntu-dummy:v1
+</pre></div>
+</div>
+<p>Make the <cite>dummy.py</cite> script run automatically with arguments from the
+command line:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:18.04</span>
+
+<span class="k">COPY</span><span class="w"> </span>dummy.py<span class="w"> </span>/home
+<span class="k">RUN</span><span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3
+
+<span class="c"># Run the dummy.py script as the default command and</span>
+<span class="c"># allow people to enter arguments for it</span>
+<span class="k">ENTRYPOINT</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python3&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/home/dummy.py&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Build and test it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>ubuntu-dummy:v2<span class="w"> </span>.
+docker<span class="w"> </span>run<span class="w"> </span>ubuntu-dummy:v2
+</pre></div>
+</div>
+<p>Add the <cite>dummy.py</cite> script to the <cite>PATH</cite> so you can run it directly:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:18.04</span>
+
+<span class="k">COPY</span><span class="w"> </span>dummy.py<span class="w"> </span>/home
+<span class="c"># set script permissions</span>
+<span class="k">RUN</span><span class="w"> </span>chmod<span class="w"> </span>+x<span class="w"> </span>/home/dummy.py
+<span class="c"># add /home folder to the PATH</span>
+<span class="k">ENV</span><span class="w"> </span>PATH<span class="w"> </span>/home:<span class="nv">$PATH</span>
+
+<span class="k">RUN</span><span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3
+</pre></div>
+</div>
+<p>Build and test it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>ubuntu-dummy:v3<span class="w"> </span>.
+docker<span class="w"> </span>run<span class="w"> </span>alpine-dummy:v3<span class="w"> </span>dummy.py
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../create_contain/" class="btn btn-neutral float-left" title="Creating your own container images" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../singlrty_start/" class="btn btn-neutral float-right" title="What is Singularity?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Access to Vega &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Introduction to Containers" href="../intro-container/" />
+    <link rel="prev" title="Upscaling AI Workflows" href="../" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Access to Vega</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/setup.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="access-to-vega">
+<span id="setup"></span><h1>Access to Vega<a class="headerlink" href="#access-to-vega" title="Link to this heading"></a></h1>
+<p>You should have received your username from the Vega support with the help of our colleagues at
+ENCCS. One important step to login to the system is to generate an SSH key and upload your public
+to the server. You can read it in <a class="reference external" href="https://doc.vega.izum.si/ssh/">the Vega documentation</a>.</p>
+<p>Once the setup is completed, you can login to the system. While the <code class="docutils literal notranslate"><span class="pre">Singularity</span></code>
+module is readily available in the login node, we should book a compute node to run
+our examples. You can book a CPU-node for 1 hour using this command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>-t<span class="w"> </span><span class="m">1</span>:00:00
+</pre></div>
+</div>
+<p>And for a GPU-node with <em>X</em> number of GPUs per node (there are 4 GPUs available per node in Vega)</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>salloc<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>--gres<span class="o">=</span>gpu:X<span class="w"> </span>--partition<span class="o">=</span>gpu<span class="w"> </span>--mem-per-gpu<span class="o">=</span>40GB<span class="w"> </span>--reservation<span class="w"> </span>enccs<span class="w"> </span><span class="se">\</span>
+--ntasks<span class="w"> </span><span class="m">4</span><span class="w"> </span>--cpus-per-task<span class="w"> </span><span class="m">1</span><span class="w">  </span>-t<span class="w"> </span><span class="m">02</span>:00:00
+</pre></div>
+</div>
+<p>Once the allocation is granted you will receive a message similar to</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>salloc: Pending job allocation 24122556
+salloc: job 24122556 queued and waiting for resources
+salloc: job 24122556 has been allocated resources
+salloc: Granted job allocation 24122556
+salloc: Waiting for resource configuration
+salloc: Nodes cn0381 are ready for job
+</pre></div>
+</div>
+<p>The granted CPU compute node here is <cite>cn0381</cite>. The general form for the CPU compute node likes
+like <cite>cn0XXX</cite> for GPU compute node <cite>gnXXX</cite>. Now you should SSH to the compute node to run interactively
+our job using the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>cn0381
+</pre></div>
+</div>
+<p>You might get a warning regarding the authenticity of the host, similar to the
+output below.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>The authenticity of host &#39;cn0381 (&lt;no hostip for proxy command&gt;)&#39; can&#39;t be established.
+ECDSA key fingerprint is SHA256:0BOlvbjVPLytjYEium04uNTCACCQN/Rr7NMJhje30aw.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added &#39;cn0381&#39; (ECDSA) to the list of known hosts.
+</pre></div>
+</div>
+<p>Please enter <code class="docutils literal notranslate"><span class="pre">yes</span></code> to the question and ignore it as it is a self-assigned useless check
+that doesn’t understand what is the purpose of our login. Now, we are able to run
+our jobs interactively.</p>
+<p>To run Jupyter Notebooks, we need to load Anaconda module.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>Anaconda3/2020.11
+module<span class="w"> </span>load<span class="w"> </span>scikit-learn
+</pre></div>
+</div>
+<p>Afterwards, you can run a Jupyter kernel by specifying the port number and ip address.
+The ip address here is the name of compute node, in the example given above is <cite>cn0381</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>jupyter-notebook<span class="w"> </span>--no-browser<span class="w"> </span>--port<span class="o">=</span><span class="m">8888</span><span class="w"> </span>--ip<span class="o">=</span>cn0381
+</pre></div>
+</div>
+<p>The result should look like</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>[I 13:21:26.105 NotebookApp] JupyterLab extension loaded from /cvmfs/sling.si/modules/el7/software/Anaconda3/2020.11/lib/python3.8/site-packages/jupyterlab
+[I 13:21:26.105 NotebookApp] JupyterLab application directory is /cvmfs/sling.si/modules/el7/software/Anaconda3/2020.11/share/jupyter/lab
+[I 13:21:26.107 NotebookApp] Serving notebooks from local directory: /ceph/hpc/home/euhosseine
+[I 13:21:26.107 NotebookApp] Jupyter Notebook 6.1.4 is running at:
+[I 13:21:26.107 NotebookApp] http://cn0381:8888/?token=80d695595aa333c6d97dc6f868f96b36f4812622a5008090
+[I 13:21:26.107 NotebookApp]  or http://127.0.0.1:8888/?token=80d695595aa333c6d97dc6f868f96b36f4812622a5008090
+[I 13:21:26.107 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 13:21:26.122 NotebookApp]
+
+  To access the notebook, open this file in a browser:
+      file:///ceph/hpc/home/euhosseine/.local/share/jupyter/runtime/nbserver-339349-open.html
+  Or copy and paste one of these URLs:
+      http://cn0381:8888/?token=80d695595aa333c6d97dc6f868f96b36f4812622a5008090
+   or http://127.0.0.1:8888/?token=80d695595aa333c6d97dc6f868f96b36f4812622a5008090
+</pre></div>
+</div>
+<p>In your local machine (PC/laptop), open a terminal and use this command to tunnel to the running kernel
+on Vega.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ssh<span class="w"> </span>-N<span class="w"> </span>-f<span class="w"> </span>-L<span class="w"> </span><span class="m">8888</span>:cn0381:8888<span class="w"> </span>username@vglogin0005.vega.izum.si
+</pre></div>
+</div>
+<p>The first port number is for your local machine and the second port number is what
+you specified above running a Jupyter Notebook. Open a browser, and enter <code class="docutils literal notranslate"><span class="pre">http://localhost:8888</span></code>.
+You should see a prompt to enter the password or the token. The token in this run is the number after
+the <code class="docutils literal notranslate"><span class="pre">token</span></code>. Entering the token, you will be shown the tree of structure of home folder.</p>
+<p>To use TensorFlow or Horovod in this course, we can simply load them through module system.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>TensorFlow/2.5.0-fosscuda-2020b
+</pre></div>
+</div>
+<p>Or</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>Horovod/0.22.1-fosscuda-2020b-TensorFlow-2.5.0
+</pre></div>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../" class="btn btn-neutral float-left" title="Upscaling AI Workflows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../intro-container/" class="btn btn-neutral float-right" title="Introduction to Containers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

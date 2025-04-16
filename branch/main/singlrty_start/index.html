@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is Singularity? &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Working with Singularity containers" href="../work_contain/" />
+    <link rel="prev" title="Creating More Complex Container Images" href="../compx_contain/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is Singularity?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#getting-started-with-singularity">Getting started with Singularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#images-and-containers">Images and containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-an-image-and-running-a-singularity-container">Getting an image and running a Singularity container</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What is Singularity?</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/singlrty_start.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="what-is-singularity">
+<span id="singlrty-start"></span><h1>What is Singularity?<a class="headerlink" href="#what-is-singularity" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://sylabs.io/singularity/">Singularity</a> is another container
+platform. In some ways it appears similar to Docker from a user
+perspective, but in others, particularly in the system’s architecture,
+it is fundamentally different. These differences mean that Singularity
+is particularly well-suited to running on distributed, High
+Performance Computing (HPC) infrastructure, as well as a Linux laptop
+or desktop!</p>
+<p>System administrators will not, generally, install Docker on shared
+computing platforms such as lab desktops, research clusters or HPC
+platforms because the design of Docker presents potential security
+issues for shared platforms with multiple users. Singularity, on the
+other hand, can be run by end-users entirely within “user space”, that
+is, no special administrative privileges need to be assigned to a user
+in order for them to run and interact with containers on a platform
+where Singularity has been installed.</p>
+<section id="getting-started-with-singularity">
+<h2>Getting started with Singularity<a class="headerlink" href="#getting-started-with-singularity" title="Link to this heading"></a></h2>
+<p>Initially developed within the research community, Singularity is open
+source and the <a class="reference external" href="https://github.com/hpcng/singularity">repository</a> is
+currently available in the “<a class="reference external" href="https://github.com/hpcng">The Next Generation of High Performance
+Computing</a>” GitHub organisations.  Part I
+of this Singularity material is intended to be undertaken on a remote
+platform where Singularity has been pre-installed.</p>
+<p>If you’re attending a taught version of this course, you will be
+provided with access details for a remote platform made available to
+you for use for Part I of the Singularity material. This platform will
+have the Singularity software pre-installed.</p>
+<div class="admonition-installing-singularity-on-your-own-laptop-desktop callout admonition" id="callout-0">
+<p class="admonition-title">Installing Singularity on your own laptop/desktop</p>
+<p>If you have a Linux system on which you have administrator access
+and you can install Singularity locally on this system.</p>
+</div>
+<p>Sign in to the Vega system that you’ve been provided with access to.
+Check that the <cite>singularity</cite> command is available in your terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>SingularityPRO<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.7-5.el8
+</pre></div>
+</div>
+<p>Depending on the version of Singularity installed on your system, you
+may see a different version.</p>
+<div class="admonition-singularity-on-hpc-systems-loading-a-module callout admonition" id="callout-1">
+<p class="admonition-title">Singularity on HPC systems: Loading a module</p>
+<p>HPC systems often use <em>modules</em> to provide access to software on the
+system.  If you get a command not found error (e.g. <cite>bash:
+singularity: command not found</cite> or similar) you may need to load the
+<em>singularity module</em> before you can use the <cite>singularity</cite> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>singularity
+</pre></div>
+</div>
+</div>
+<p>Nonetheless, for the Vega system <cite>singularity</cite> is readily available.</p>
+</section>
+<section id="images-and-containers">
+<h2>Images and containers<a class="headerlink" href="#images-and-containers" title="Link to this heading"></a></h2>
+<p>We’ll start with a brief note on the terminology used in this section
+of the course.  We refer to both <strong>images</strong> and <strong>containers</strong>. What
+is the distinction between these two terms?</p>
+<p><strong>Images</strong> are bundles of files including an operating system,
+software and potentially data and other application-related
+files. They may sometimes be referred to as a disk image or container
+image and they may be stored in different ways, perhaps as a single
+file, or as a group of files.  Either way, we refer to this file, or
+collection of files, as an image.</p>
+<p>A <strong>container</strong> is a virtual environment that is based on an
+image. That is, the files, applications, tools, etc that are available
+within a running container are determined by the image that the
+container is started from. It may be possible to start multiple
+container instances from an image. You could, perhaps, consider an
+image to be a form of template from which running container instances
+can be started.</p>
+</section>
+<section id="getting-an-image-and-running-a-singularity-container">
+<h2>Getting an image and running a Singularity container<a class="headerlink" href="#getting-an-image-and-running-a-singularity-container" title="Link to this heading"></a></h2>
+<p>If you recall from learning about Docker, Docker images are formed of
+a set of layers that make up the complete image. When you pull a
+Docker image from Docker Hub, you see the different layers being
+downloaded to your system. They are stored in your local Docker
+repository on your system and you can see details of the available
+images using the <cite>docker</cite> command.</p>
+<p>Singularity images are a little different. Singularity uses the
+<a class="reference external" href="https://github.com/sylabs/sif">Signularity Image Format (SIF)</a> and
+images are provided as single <cite>SIF</cite> files. Singularity images can be
+pulled from <a class="reference external" href="https://singularity-hub.org/">Singularity Hub</a>, a
+registry for container images. Singularity is also capable of running
+containers based on images pulled from <a class="reference external" href="https://hub.docker.com/">Docker Hub</a> and some other sources. We’ll look at
+accessing containers from Docker Hub later in the Singularity
+material.</p>
+<div class="admonition-singularity-hub callout admonition" id="callout-2">
+<p class="admonition-title">Singularity Hub</p>
+<p>Note that in addition to providing a repository that you can pull
+images from, <a class="reference external" href="https://singularity-hub.org/">Singularity Hub</a> can
+also build Singularity images for you from a <cite>recipe</cite> - a
+configuration file defining the steps to build an image.  We’ll look
+at recipes and building images later.</p>
+</div>
+<p>Let’s begin by creating a <cite>test</cite> directory, changing into it and
+pulling a test Hello World image from Singularity Hub:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span><span class="nb">test</span>
+<span class="nb">cd</span><span class="w"> </span><span class="nb">test</span>
+singularity<span class="w"> </span>pull<span class="w"> </span>hello-world.sif<span class="w"> </span>shub://vsoch/hello-world
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>What is the main difference between above and the Docker pull request?</p>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>INFO:<span class="w">    </span>Downloading<span class="w"> </span>shub<span class="w"> </span>image
+<span class="m">59</span>.75<span class="w"> </span>MiB<span class="w"> </span>/<span class="w"> </span><span class="m">59</span>.75<span class="w"> </span>MiB<span class="w"> </span><span class="o">[=====================================================================]</span><span class="w"> </span><span class="m">100</span>.00%<span class="w"> </span><span class="m">52</span>.03<span class="w"> </span>MiB/s<span class="w"> </span>1s
+</pre></div>
+</div>
+<p>What just happened?! We pulled a SIF image from Singularity Hub using
+the <cite>singularity pull</cite> command and directed it to store the image file
+using the name <cite>hello-world.sif</cite>. If you run the <cite>ls</cite> command, you
+should see that the <cite>hello-world.sif</cite> file is now in your current
+directory. This is our image and we can now run a container based on
+this image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>run<span class="w"> </span>hello-world.sif
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>RaawwWWWWWRRRR!!<span class="w"> </span>Avocado!
+</pre></div>
+</div>
+<p>The above command ran the hello-world container from the image we
+downloaded from Singularity Hub and the resulting output was shown.</p>
+<p>How did the container determine what to do when we ran it?! What did
+running the container actually do to result in the displayed output?</p>
+<p>When you run a container from an image without using any additional
+command line arguments, the container runs the default run script that
+is embedded within the image. This is a shell script that can be used
+to run commands, tools or applications stored within the image on
+container startup. We can inspect the image’s run script using the
+<cite>singularity inspect</cite> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>inspect<span class="w"> </span>-r<span class="w"> </span>hello-world.sif
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+
+<span class="nb">exec</span><span class="w"> </span>/bin/bash<span class="w"> </span>/rawr.sh
+</pre></div>
+</div>
+<p>This shows us the script within the <cite>hello-world.sif</cite> image configured
+to run by default when we use the <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">run</span></code> command.</p>
+<p>That concludes this introductory Singularity episode. The next episode
+looks in more detail at running containers.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../compx_contain/" class="btn btn-neutral float-left" title="Creating More Complex Container Images" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../work_contain/" class="btn btn-neutral float-right" title="Working with Singularity containers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

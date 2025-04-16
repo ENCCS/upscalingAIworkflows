@@ -1,0 +1,769 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PWD exercises &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="Namespaces and cgroups" href="../../../upscalingAIcontainer/content/namespc-cgroup/" />
+    <link rel="prev" title="Containers in research workflows" href="../rep_gran/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../../../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">PWD exercises</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#clone-the-labs-github-repo">Clone the Lab’s GitHub Repo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#task-1-run-some-simple-docker-containers">Task 1: Run some simple Docker containers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#run-a-single-task-in-an-alpine-linux-container">Run a single task in an Alpine Linux container</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#run-an-interactive-ubuntu-container">Run an interactive Ubuntu container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-a-background-mysql-container">Run a background MySQL container</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#task-2-package-and-run-a-custom-app-using-docker">Task 2: Package and run a custom app using Docker</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#build-a-simple-website-image">Build a simple website image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#task-3-modify-a-running-website">Task 3: Modify a running website</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#start-our-web-app-with-a-bind-mount">Start our web app with a bind mount</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#modify-the-running-website">Modify the running website</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#update-the-image">Update the image</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-the-new-version">Test the new version</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#push-your-images-to-docker-hub">Push your images to Docker Hub</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">PWD exercises</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/containers/content/pwd_exmps.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pwd-exercises">
+<span id="pwd-exmps"></span><h1>PWD exercises<a class="headerlink" href="#pwd-exercises" title="Link to this heading"></a></h1>
+<section id="clone-the-labs-github-repo">
+<h2>Clone the Lab’s GitHub Repo<a class="headerlink" href="#clone-the-labs-github-repo" title="Link to this heading"></a></h2>
+<p>Use the following command to clone the lab’s repo from GitHub (you can click the
+command or manually type it). This will make a copy of the lab’s repo in a new
+sub-directory called linux_tweet_app.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/dockersamples/linux_tweet_app
+</pre></div>
+</div>
+<section id="task-1-run-some-simple-docker-containers">
+<h3>Task 1: Run some simple Docker containers<a class="headerlink" href="#task-1-run-some-simple-docker-containers" title="Link to this heading"></a></h3>
+<p>There are different ways to use containers. These include:</p>
+<ul class="simple">
+<li><p><strong>To run a single task</strong>: This could be a shell script or a custom app.</p></li>
+<li><p><strong>Interactively</strong>: This connects you to the container similar to the way you SSH into a remote server.</p></li>
+<li><p><strong>In the background</strong>: For long-running services like websites and databases.</p></li>
+</ul>
+<p>In this section you’ll try each of those options and see how Docker manages the workload.</p>
+</section>
+</section>
+<section id="run-a-single-task-in-an-alpine-linux-container">
+<h2>Run a single task in an Alpine Linux container<a class="headerlink" href="#run-a-single-task-in-an-alpine-linux-container" title="Link to this heading"></a></h2>
+<p>In this step we’re going to start a new container and tell it to run the <code class="docutils literal notranslate"><span class="pre">hostname</span></code> command.
+The container will start, execute the hostname command, then exit.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Run the following command in your Linux console.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>alpine<span class="w"> </span>hostname
+</pre></div>
+</div>
+<p>The output below shows that the <code class="docutils literal notranslate"><span class="pre">alpine:latest</span></code> image could not be found locally.
+When this happens, Docker automatically pulls it from Docker Hub.</p>
+<p>After the image is pulled, the container’s hostname is displayed
+(<code class="docutils literal notranslate"><span class="pre">888e89a3b36b</span></code> in the example below).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bash</span> <span class="n">Unable</span> <span class="n">to</span> <span class="n">find</span> <span class="n">image</span> <span class="s1">&#39;alpine:latest&#39;</span> <span class="n">locally</span>
+<span class="n">latest</span><span class="p">:</span> <span class="n">Pulling</span> <span class="kn">from</span><span class="w"> </span><span class="nn">library</span><span class="o">/</span><span class="n">alpine</span>
+<span class="mi">88286</span><span class="n">f41530e</span><span class="p">:</span> <span class="n">Pull</span> <span class="n">complete</span>
+<span class="n">Digest</span><span class="p">:</span> <span class="n">sha256</span><span class="p">:</span><span class="n">f006ecbb824d87947d0b51ab8488634bf69fe4094959d935c0c103f4820a417d</span>
+<span class="n">Status</span><span class="p">:</span> <span class="n">Downloaded</span> <span class="n">newer</span> <span class="n">image</span> <span class="k">for</span> <span class="n">alpine</span><span class="p">:</span><span class="n">latest</span>
+<span class="mf">888e89</span><span class="n">a3b36b</span>
+</pre></div>
+</div>
+<p>2. Docker keeps a container running as long as the process it started inside
+the container is still running. In this case the <code class="docutils literal notranslate"><span class="pre">hostname</span></code> process exits
+as soon as the output is written. This means the container stops. However,
+Docker doesn’t delete resources by default, so the container still exists
+in the <code class="docutils literal notranslate"><span class="pre">Exited</span></code> state.</p>
+<p>List all containers.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>--all
+</pre></div>
+</div>
+<p>Notice that your Alpine Linux container is in the <code class="docutils literal notranslate"><span class="pre">Exited</span></code> state.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>CONTAINER<span class="w"> </span>ID<span class="w">        </span>IMAGE<span class="w">               </span>COMMAND<span class="w">             </span>CREATED<span class="w">             </span>STATUS<span class="w">            </span>PORTS<span class="w">               </span>NAMES
+888e89a3b36b<span class="w">        </span>alpine<span class="w">              </span><span class="s2">&quot;hostname&quot;</span><span class="w">          </span><span class="m">50</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">      </span>Exited<span class="w"> </span><span class="o">(</span><span class="m">0</span><span class="o">)</span><span class="w"> </span><span class="m">49</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">                       </span>awesome_elion
+</pre></div>
+</div>
+<p><strong>Note</strong>: The container ID is the hostname that the container displayed. In the example above it’s <code class="docutils literal notranslate"><span class="pre">888e89a3b36b</span></code>.</p>
+</div></blockquote>
+<p>Containers which do one task and then exit can be very useful. You could build a
+Docker image that executes a script to configure something. Anyone can execute
+that task just by running the container - they don’t need the actual scripts or configuration information.</p>
+<section id="run-an-interactive-ubuntu-container">
+<h3>Run an interactive Ubuntu container<a class="headerlink" href="#run-an-interactive-ubuntu-container" title="Link to this heading"></a></h3>
+<p>You can run a container based on a different version of Linux than is running on
+your Docker host.</p>
+<p>In the next example, we are going to run an Ubuntu Linux container on top of an
+Alpine Linux Docker host (Play With Docker uses Alpine Linux for its nodes).</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Run a Docker container and access its shell.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span>--interactive<span class="w"> </span>--tty<span class="w"> </span>--rm<span class="w"> </span>ubuntu<span class="w"> </span>bash
+</pre></div>
+</div>
+<p>In this example, we’re giving Docker three parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--interactive</span></code> says you want an interactive session.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--tty</span></code> allocates a pseudo-tty.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--rm</span></code> tells Docker to go ahead and remove the container when it’s done executing.</p></li>
+</ul>
+<p>The first two parameters allow you to interact with the Docker container.</p>
+<p>We’re also telling the container to run <code class="docutils literal notranslate"><span class="pre">bash</span></code> as its main process (PID 1).</p>
+<p>When the container starts you’ll drop into the bash shell with the default prompt
+<code class="docutils literal notranslate"><span class="pre">root&#64;&lt;container</span> <span class="pre">id&gt;:/#</span></code>. Docker has attached to the shell in the container,
+relaying input and output between your local session and the shell session in the container.</p>
+<ol class="arabic simple" start="2">
+<li><p>Run the following commands in the container.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">/</span></code> will list the contents of the root directory in the container,
+<code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">aux</span></code> will show running processes in the container, <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">/etc/issue</span></code> will
+show which Linux distro the container is running, in this case Ubuntu 20.04.3 LTS.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ls<span class="w"> </span>/
+ps<span class="w"> </span>aux
+cat<span class="w"> </span>/etc/issue
+</pre></div>
+</div>
+<p>3. Type exit to leave the shell session. This will terminate the bash process,
+causing the container to exit.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exit</span>
+</pre></div>
+</div>
+<p><strong>Note</strong>: As we used the <code class="docutils literal notranslate"><span class="pre">--rm</span></code> flag when we started the container, Docker
+removed the container when it stopped. This means if you run another <code class="docutils literal notranslate"><span class="pre">docker</span>
+<span class="pre">container</span> <span class="pre">ls</span> <span class="pre">--all</span></code> you won’t see the Ubuntu container.</p>
+<ol class="arabic simple" start="3">
+<li><p>For fun, let’s check the version of our host VM.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>/etc/issue
+</pre></div>
+</div>
+<p>You should see:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Welcome<span class="w"> </span>to<span class="w"> </span>Alpine<span class="w"> </span>Linux<span class="w"> </span><span class="m">3</span>.8
+Kernel<span class="w"> </span><span class="se">\r</span><span class="w"> </span>on<span class="w"> </span>an<span class="w"> </span><span class="se">\m</span><span class="w"> </span><span class="o">(</span><span class="se">\l</span><span class="o">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Notice that our host VM is running Alpine Linux, yet we were able to run an
+Ubuntu container. As previously mentioned, the distribution of Linux inside
+the container does not need to match the distribution of Linux running on the Docker host.</p>
+<p>However, Linux containers require the Docker host to be running a Linux kernel.
+For example, Linux containers cannot run directly on Windows Docker hosts.
+The same is true of Windows containers - they need to run on a Docker host with a Windows kernel.</p>
+<p>Interactive containers are useful when you are putting together your own image.
+You can run a container and verify all the steps you need to deploy your app,
+and capture them in a Dockerfile.</p>
+</section>
+<section id="run-a-background-mysql-container">
+<h3>Run a background MySQL container<a class="headerlink" href="#run-a-background-mysql-container" title="Link to this heading"></a></h3>
+<p>Background containers are how you’ll run most applications. Here’s a simple example using MySQL.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Run a new MySQL container with the following command.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--detach<span class="w"> </span><span class="se">\</span>
+--name<span class="w"> </span>mydb<span class="w"> </span><span class="se">\</span>
+-e<span class="w"> </span><span class="nv">MYSQL_ROOT_PASSWORD</span><span class="o">=</span>my-secret-pw<span class="w"> </span><span class="se">\</span>
+mysql:latest
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--detach</span></code> will run the container in the background.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--name</span></code> will name it mydb.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-e</span></code> will use an environment variable to specify the root password
+(NOTE: This should never be done in production).</p></li>
+</ul>
+<p>As the MySQL image was not available locally, Docker automatically pulled it from Docker Hub.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Unable<span class="w"> </span>to<span class="w"> </span>find<span class="w"> </span>image<span class="w"> </span><span class="s1">&#39;mysql:latest&#39;</span><span class="w"> </span>locallylatest:<span class="w"> </span>Pulling<span class="w"> </span>from<span class="w"> </span>library/mysql
+aa18ad1a0d33:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+fdb8d83dece3:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+75b6ce7b50d3:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+ed1d0a3a64e4:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+8eb36a82c85b:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+41be6f1a1c40:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+0e1b414eac71:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+914c28654a91:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+587693eb988c:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+b183c3585729:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+315e21657aa4:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+Digest:<span class="w"> </span>sha256:0dc3dacb751ef46a6647234abdec2d47400f0dfbe77ab490b02bffdae57846ed
+Status:<span class="w"> </span>Downloaded<span class="w"> </span>newer<span class="w"> </span>image<span class="w"> </span><span class="k">for</span><span class="w"> </span>mysql:latest
+41d6157c9f7d1529a6c922acb8167ca66f167119df0fe3d86964db6c0d7ba4e0
+</pre></div>
+</div>
+<p>As long as the MySQL process is running, Docker will keep the container running in the background.</p>
+<ol class="arabic simple" start="2">
+<li><p>List the running containers.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>ls
+</pre></div>
+</div>
+<p>Notice your container is running.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>CONTAINER<span class="w"> </span>ID<span class="w">        </span>IMAGE<span class="w">               </span>COMMAND<span class="w">                  </span>CREATED<span class="w">             </span>STATUS<span class="w">              </span>PORTS<span class="w">            </span>NAMES
+3f4e8da0caf7<span class="w">        </span>mysql:latest<span class="w">        </span><span class="s2">&quot;docker-entrypoint...&quot;</span><span class="w">   </span><span class="m">52</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">      </span>Up<span class="w"> </span><span class="m">51</span><span class="w"> </span>seconds<span class="w">       </span><span class="m">3306</span>/tcp<span class="w">            </span>mydb
+</pre></div>
+</div>
+<p>3. You can check what’s happening in your containers by using a couple of built-in
+Docker commands: <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">logs</span></code> and <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">top</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>logs<span class="w"> </span>mydb
+</pre></div>
+</div>
+<p>This shows the logs from the MySQL Docker container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&lt;output<span class="w"> </span>truncated&gt;
+<span class="m">2017</span>-09-29T16:02:58.605004Z<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">[</span>Note<span class="o">]</span><span class="w"> </span>Executing<span class="w"> </span><span class="s1">&#39;SELECT * FROM INFORMATION_SCHEMA.TABLES;&#39;</span><span class="w"> </span>to<span class="w"> </span>get<span class="w"> </span>a<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>tables<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>deprecated<span class="w"> </span>partition<span class="w"> </span>engine.<span class="w"> </span>You<span class="w"> </span>may<span class="w"> </span>use<span class="w"> </span>the<span class="w"> </span>startup<span class="w"> </span>option<span class="w"> </span><span class="s1">&#39;--disable-partition-engine-check&#39;</span><span class="w"> </span>to<span class="w"> </span>skip<span class="w"> </span>this<span class="w"> </span>check.
+<span class="m">2017</span>-09-29T16:02:58.605026Z<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">[</span>Note<span class="o">]</span><span class="w"> </span>Beginning<span class="w"> </span>of<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>non-natively<span class="w"> </span>partitioned<span class="w"> </span>tables
+<span class="m">2017</span>-09-29T16:02:58.616575Z<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">[</span>Note<span class="o">]</span><span class="w"> </span>End<span class="w"> </span>of<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>non-natively<span class="w"> </span>partitioned<span class="w"> </span>tables
+</pre></div>
+</div>
+<p>Let’s look at the processes running inside the container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>top<span class="w"> </span>mydb
+</pre></div>
+</div>
+<p>You should see the MySQL daemon (<code class="docutils literal notranslate"><span class="pre">mysqld</span></code>) is running in the container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>PID<span class="w">                 </span>USER<span class="w">                </span>TIME<span class="w">                </span>COMMAND
+<span class="m">2876</span><span class="w">                </span><span class="m">999</span><span class="w">                 </span><span class="m">0</span>:00<span class="w">                </span>mysqld
+</pre></div>
+</div>
+<p>Although MySQL is running, it is isolated within the container because no network
+ports have been published to the host. Network traffic cannot reach containers from
+the host unless ports are explicitly published.</p>
+<ol class="arabic simple" start="4">
+<li><p>List the MySQL version using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">exec</span></code>.</p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">exec</span></code> allows you to run a command inside a container.
+In this example, we’ll use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">exec</span></code> to run the command-line
+equivalent of <code class="docutils literal notranslate"><span class="pre">mysql</span> <span class="pre">--user=root</span> <span class="pre">--password=$MYSQL_ROOT_PASSWORD</span> <span class="pre">--version</span></code>
+inside our MySQL container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>mydb<span class="w"> </span><span class="se">\</span>
+mysql<span class="w"> </span>--user<span class="o">=</span>root<span class="w"> </span>--password<span class="o">=</span><span class="nv">$MYSQL_ROOT_PASSWORD</span><span class="w"> </span>--version
+</pre></div>
+</div>
+<p>You will see the MySQL version number, as well as a handy warning.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mysql:<span class="w"> </span><span class="o">[</span>Warning<span class="o">]</span><span class="w"> </span>Using<span class="w"> </span>a<span class="w"> </span>password<span class="w"> </span>on<span class="w"> </span>the<span class="w"> </span><span class="nb">command</span><span class="w"> </span>line<span class="w"> </span>interface<span class="w"> </span>can<span class="w"> </span>be<span class="w"> </span>insecure.
+mysql<span class="w">  </span>Ver<span class="w"> </span><span class="m">14</span>.14<span class="w"> </span>Distrib<span class="w"> </span><span class="m">5</span>.7.19,<span class="w"> </span><span class="k">for</span><span class="w"> </span>Linux<span class="w"> </span><span class="o">(</span>x86_64<span class="o">)</span><span class="w"> </span>using<span class="w">  </span>EditLine<span class="w"> </span>wrapper
+</pre></div>
+</div>
+<p>5. You can also use <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">exec</span></code> to connect to a new shell process
+inside an already-running container. Executing the command below will give you
+an interactive shell (<code class="docutils literal notranslate"><span class="pre">sh</span></code>) inside your MySQL container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>mydb<span class="w"> </span>sh
+</pre></div>
+</div>
+<p>Notice that your shell prompt has changed. This is because your shell is now
+connected to the sh process running inside of your container.</p>
+<p>Let’s check the version number by running the same command again, only this
+time from within the new shell session in the container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mysql<span class="w"> </span>--user<span class="o">=</span>root<span class="w"> </span>--password<span class="o">=</span><span class="nv">$MYSQL_ROOT_PASSWORD</span><span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Notice the output is the same as before.</p>
+<p>Type exit to leave the interactive shell session.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">exit</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="task-2-package-and-run-a-custom-app-using-docker">
+<h3>Task 2: Package and run a custom app using Docker<a class="headerlink" href="#task-2-package-and-run-a-custom-app-using-docker" title="Link to this heading"></a></h3>
+<p>In this step you’ll learn how to package your own apps as Docker images using a Dockerfile.</p>
+<p>The Dockerfile syntax is straightforward. In this task, we’re going to create a
+simple NGINX website from a Dockerfile.</p>
+</section>
+</section>
+<section id="build-a-simple-website-image">
+<h2>Build a simple website image<a class="headerlink" href="#build-a-simple-website-image" title="Link to this heading"></a></h2>
+<p>Let’s have a look at the Dockerfile we’ll be using, which builds a simple website
+that allows you to send a tweet.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Make sure you’re in the linux_tweet_app directory.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/linux_tweet_app
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Display the contents of the Dockerfile.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span>Dockerfile
+FROM<span class="w"> </span>nginx:latest
+
+COPY<span class="w"> </span>index.html<span class="w"> </span>/usr/share/nginx/html
+COPY<span class="w"> </span>linux.png<span class="w"> </span>/usr/share/nginx/html
+
+EXPOSE<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">443</span>
+
+CMD<span class="w"> </span><span class="o">[</span><span class="s2">&quot;nginx&quot;</span>,<span class="w"> </span><span class="s2">&quot;-g&quot;</span>,<span class="w"> </span><span class="s2">&quot;daemon off;&quot;</span><span class="o">]</span>
+</pre></div>
+</div>
+<p>Let’s see what each of these lines in the Dockerfile do.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">FROM</span></code> specifies the base image to use as the starting point for this new
+image you’re creating. For this example we’re starting from <code class="docutils literal notranslate"><span class="pre">nginx:latest</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">COPY</span></code> copies files from the Docker host into the image, at a known location.
+In this example, <code class="docutils literal notranslate"><span class="pre">COPY</span></code> is used to copy two files into the image: <code class="docutils literal notranslate"><span class="pre">index.html</span></code>.
+and a graphic that will be used on our webpage.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">EXPOSE</span></code> documents which ports the application uses.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CMD</span></code> specifies what command to run when a container is started from the image.
+Notice that we can specify the command, as well as run-time arguments.</p></li>
+</ul>
+<p>3. In order to make the following commands more copy/paste friendly, export an environment
+variable containing your DockerID (if you don’t have a DockerID you can get one for
+free via Docker Hub).</p>
+<p>You will have to manually type this command as it requires your unique DockerID.</p>
+<p><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">DOCKERID=&lt;your</span> <span class="pre">docker</span> <span class="pre">id&gt;</span></code></p>
+<p>Echo the value of the variable back to the terminal to ensure it was stored correctly.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span><span class="w"> </span><span class="nv">$DOCKERID</span>
+</pre></div>
+</div>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">build</span></code> command to create a new Docker image using the instructions
+in the Dockerfile.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--tag</span></code> allows us to give the image a custom name. In this case it’s comprised of our
+DockerID, the application name, and a version. Having the Docker ID attached to the name
+will allow us to store it on Docker Hub in a later step</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.</span></code> tells Docker to use the current directory as the build context</p></li>
+</ul>
+<p>Be sure to include period (.) at the end of the command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span><span class="nv">$DOCKERID</span>/linux_tweet_app:1.0<span class="w"> </span>.
+</pre></div>
+</div>
+<p>The output below shows the Docker daemon executing each line in the Dockerfile</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Sending<span class="w"> </span>build<span class="w"> </span>context<span class="w"> </span>to<span class="w"> </span>Docker<span class="w"> </span>daemon<span class="w">  </span><span class="m">32</span>.77kB
+Step<span class="w"> </span><span class="m">1</span>/5<span class="w"> </span>:<span class="w"> </span>FROM<span class="w"> </span>nginx:latest
+latest:<span class="w"> </span>Pulling<span class="w"> </span>from<span class="w"> </span>library/nginx
+afeb2bfd31c0:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+7ff5d10493db:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+d2562f1ae1d0:<span class="w"> </span>Pull<span class="w"> </span><span class="nb">complete</span>
+Digest:<span class="w"> </span>sha256:af32e714a9cc3157157374e68c818b05ebe9e0737aac06b55a09da374209a8f9
+Status:<span class="w"> </span>Downloaded<span class="w"> </span>newer<span class="w"> </span>image<span class="w"> </span><span class="k">for</span><span class="w"> </span>nginx:latest
+---&gt;<span class="w"> </span>da5939581ac8
+Step<span class="w"> </span><span class="m">2</span>/5<span class="w"> </span>:<span class="w"> </span>COPY<span class="w"> </span>index.html<span class="w"> </span>/usr/share/nginx/html
+---&gt;<span class="w"> </span>eba2eec2bea9
+Step<span class="w"> </span><span class="m">3</span>/5<span class="w"> </span>:<span class="w"> </span>COPY<span class="w"> </span>linux.png<span class="w"> </span>/usr/share/nginx/html
+---&gt;<span class="w"> </span>4d080f499b53
+Step<span class="w"> </span><span class="m">4</span>/5<span class="w"> </span>:<span class="w"> </span>EXPOSE<span class="w"> </span><span class="m">80</span><span class="w"> </span><span class="m">443</span>
+---&gt;<span class="w"> </span>Running<span class="w"> </span><span class="k">in</span><span class="w"> </span>47232cb5699f
+---&gt;<span class="w"> </span>74c968a9165f
+Removing<span class="w"> </span>intermediate<span class="w"> </span>container<span class="w"> </span>47232cb5699f
+Step<span class="w"> </span><span class="m">5</span>/5<span class="w"> </span>:<span class="w"> </span>CMD<span class="w"> </span>nginx<span class="w"> </span>-g<span class="w"> </span>daemon<span class="w"> </span>off<span class="p">;</span>
+---&gt;<span class="w"> </span>Running<span class="w"> </span><span class="k">in</span><span class="w"> </span>4623761274ac
+---&gt;<span class="w"> </span>12045a0df899
+Removing<span class="w"> </span>intermediate<span class="w"> </span>container<span class="w"> </span>4623761274ac
+Successfully<span class="w"> </span>built<span class="w"> </span>12045a0df899
+Successfully<span class="w"> </span>tagged<span class="w"> </span>&lt;your<span class="w"> </span>docker<span class="w"> </span>ID&gt;/linux_tweet_app:latest
+</pre></div>
+</div>
+<ol class="arabic simple" start="6">
+<li><p>Use the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">run</span></code> command to start a new container from the image you created.</p></li>
+</ol>
+<p>As this container will be running an NGINX web server, we’ll use the <code class="docutils literal notranslate"><span class="pre">--publish</span></code> flag to publish
+port 80 inside the container onto port 80 on the host. This will allow traffic coming in to
+the Docker host on port 80 to be directed to port 80 in the container.
+The format of the <code class="docutils literal notranslate"><span class="pre">--publish</span></code> flag is <code class="docutils literal notranslate"><span class="pre">host_port:container_port</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--detach<span class="w"> </span><span class="se">\</span>
+--publish<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span><span class="se">\</span>
+--name<span class="w"> </span>linux_tweet_app<span class="w"> </span><span class="se">\</span>
+<span class="nv">$DOCKERID</span>/linux_tweet_app:1.0
+</pre></div>
+</div>
+<p>Any external traffic coming into the server on port 80 will now be directed
+into the container on port 80.</p>
+<p>In a later step you will see how to map traffic from two different ports - this
+is necessary when two containers use the same port to communicate since you can
+only expose the port once on the host.</p>
+<ol class="arabic simple" start="7">
+<li><p>Load the website which should be running.</p></li>
+<li><p>Once you’ve accessed your website, shut it down and remove it.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>rm<span class="w"> </span>--force<span class="w"> </span>linux_tweet_app
+</pre></div>
+</div>
+</div></blockquote>
+<section id="task-3-modify-a-running-website">
+<h3>Task 3: Modify a running website<a class="headerlink" href="#task-3-modify-a-running-website" title="Link to this heading"></a></h3>
+<p>When you’re actively working on an application it is inconvenient to have to stop
+the container, rebuild the image, and run a new version every time you make a change
+to your source code.</p>
+<p>One way to streamline this process is to mount the source code directory on the
+local machine into the running container. This will allow any changes made to
+the files on the host to be immediately reflected in the container.</p>
+<p>We do this using something called a <a class="reference external" href="https://docs.docker.com/engine/admin/volumes/bind-mounts/">bind mount</a>.</p>
+<p>When you use a bind mount, a file or directory on the host machine is mounted
+into a container running on the same host.</p>
+</section>
+</section>
+<section id="start-our-web-app-with-a-bind-mount">
+<h2>Start our web app with a bind mount<a class="headerlink" href="#start-our-web-app-with-a-bind-mount" title="Link to this heading"></a></h2>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Let’s start the web app and mount the current directory into the container.</p></li>
+</ol>
+<p>In this example we’ll use the <code class="docutils literal notranslate"><span class="pre">--mount</span></code> flag to mount the current directory
+on the host into <code class="docutils literal notranslate"><span class="pre">/usr/share/nginx/html</span></code> inside the container.</p>
+<p>Be sure to run this command from within the <code class="docutils literal notranslate"><span class="pre">linux_tweet_app</span></code> directory on your Docker host.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--detach<span class="w"> </span><span class="se">\</span>
+--publish<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span><span class="se">\</span>
+--name<span class="w"> </span>linux_tweet_app<span class="w"> </span><span class="se">\</span>
+--mount<span class="w"> </span><span class="nv">type</span><span class="o">=</span>bind,source<span class="o">=</span><span class="s2">&quot;</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">&quot;</span>,target<span class="o">=</span>/usr/share/nginx/html<span class="w"> </span><span class="se">\</span>
+<span class="nv">$DOCKERID</span>/linux_tweet_app:1.0
+</pre></div>
+</div>
+<p><strong>Remember</strong> from the Dockerfile, <code class="docutils literal notranslate"><span class="pre">usr/share/nginx/html</span></code> is where the html
+files are stored for the web app.</p>
+<ol class="arabic simple" start="2">
+<li><p>The website should be running.</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="modify-the-running-website">
+<h2>Modify the running website<a class="headerlink" href="#modify-the-running-website" title="Link to this heading"></a></h2>
+<p>Bind mounts mean that any changes made to the local file system are immediately
+reflected in the running container.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Copy a new <code class="docutils literal notranslate"><span class="pre">index.html</span></code> into the container.</p></li>
+</ol>
+<p>The Git repo that you pulled earlier contains several different versions of an
+index.html file. You can manually run an ls command from within the <code class="docutils literal notranslate"><span class="pre">~/linux_tweet_app</span></code>
+directory to see a list of them. In this step we’ll replace <code class="docutils literal notranslate"><span class="pre">index.html</span></code>
+with <code class="docutils literal notranslate"><span class="pre">index-new.html</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">cp</span> <span class="pre">index-new.html</span> <span class="pre">index.html</span></code></p>
+<ol class="arabic simple" start="2">
+<li><p>Go to the running website and refresh the page. Notice that the site has changed.</p></li>
+</ol>
+<div class="admonition-trick callout admonition" id="callout-0">
+<p class="admonition-title">Trick</p>
+<p>If you are comfortable with vi you can use it to load the local index.html file
+and make additional changes. Those too would be reflected when you reload the webpage.
+If you are really adventurous, why not try using exec to access the running container
+and modify the files stored there.</p>
+</div>
+</div></blockquote>
+<p>Even though we’ve modified the index.html local filesystem and seen it reflected in
+the running container, we’ve not actually changed the Docker image that the container was started from.</p>
+<p>To show this, stop the current container and re-run the <code class="docutils literal notranslate"><span class="pre">1.0</span></code> image without a bind mount.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Stop and remove the currently running container.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>rm<span class="w"> </span>--force<span class="w"> </span>linux_tweet_app
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Rerun the current version without a bind mount.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--detach<span class="w"> </span><span class="se">\</span>
+--publish<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span><span class="se">\</span>
+--name<span class="w"> </span>linux_tweet_app<span class="w"> </span><span class="se">\</span>
+<span class="nv">$DOCKERID</span>/linux_tweet_app:1.0
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Notice the website is back to the original version.</p></li>
+<li><p>Stop and remove the current container</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>rm<span class="w"> </span>--force<span class="w"> </span>linux_tweet_app
+</pre></div>
+</div>
+</div></blockquote>
+<section id="update-the-image">
+<h3>Update the image<a class="headerlink" href="#update-the-image" title="Link to this heading"></a></h3>
+<p>To persist the changes you made to the index.html file into the image,
+you need to build a new version of the image.</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Build a new image and tag it as <code class="docutils literal notranslate"><span class="pre">2.0</span></code></p></li>
+</ol>
+<p>Remember that you previously modified the <code class="docutils literal notranslate"><span class="pre">index.html</span></code> file on the Docker hosts
+local filesystem. This means that running another docker image build command
+will build a new image with the updated <code class="docutils literal notranslate"><span class="pre">index.html</span></code></p>
+<p>Be sure to include the period (<code class="docutils literal notranslate"><span class="pre">.</span></code>) at the end of the command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>build<span class="w"> </span>--tag<span class="w"> </span><span class="nv">$DOCKERID</span>/linux_tweet_app:2.0<span class="w"> </span>.
+</pre></div>
+</div>
+<p>Notice how fast that built! This is because Docker only modified the portion
+of the image that changed vs. rebuilding the whole image.</p>
+<ol class="arabic simple" start="2">
+<li><p>Let’s look at the images on the system.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>ls
+</pre></div>
+</div>
+<p>You now have both versions of the web app on your host.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>REPOSITORY<span class="w">                     </span>TAG<span class="w">                 </span>IMAGE<span class="w"> </span>ID<span class="w">            </span>CREATED<span class="w">             </span>SIZE
+&lt;docker<span class="w"> </span>id&gt;/linux_tweet_app<span class="w">    </span><span class="m">2</span>.0<span class="w">                 </span>01612e05312b<span class="w">        </span><span class="m">16</span><span class="w"> </span>seconds<span class="w"> </span>ago<span class="w">      </span>108MB
+&lt;docker<span class="w"> </span>id&gt;/linux_tweet_app<span class="w">    </span><span class="m">1</span>.0<span class="w">                 </span>bb32b5783cd3<span class="w">        </span><span class="m">4</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="w">       </span>108MB
+mysql<span class="w">                          </span>latest<span class="w">              </span>b4e78b89bcf3<span class="w">        </span><span class="m">2</span><span class="w"> </span>weeks<span class="w"> </span>ago<span class="w">         </span>412MB
+ubuntu<span class="w">                         </span>latest<span class="w">              </span>2d696327ab2e<span class="w">        </span><span class="m">2</span><span class="w"> </span>weeks<span class="w"> </span>ago<span class="w">         </span>122MB
+nginx<span class="w">                          </span>latest<span class="w">              </span>da5939581ac8<span class="w">        </span><span class="m">3</span><span class="w"> </span>weeks<span class="w"> </span>ago<span class="w">         </span>108MB
+alpine<span class="w">                         </span>latest<span class="w">              </span>76da55c8019d<span class="w">        </span><span class="m">3</span><span class="w"> </span>weeks<span class="w"> </span>ago<span class="w">         </span><span class="m">3</span>.97MB
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="test-the-new-version">
+<h3>Test the new version<a class="headerlink" href="#test-the-new-version" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Run a new container from the new version of the image.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--detach<span class="w"> </span><span class="se">\</span>
+--publish<span class="w"> </span><span class="m">80</span>:80<span class="w"> </span><span class="se">\</span>
+--name<span class="w"> </span>linux_tweet_app<span class="w"> </span><span class="se">\</span>
+<span class="nv">$DOCKERID</span>/linux_tweet_app:2.0
+</pre></div>
+</div>
+<p>2. Check the new version of the website (You may need to refresh your browser
+to get the new version to load).</p>
+<p>The web page will have an orange background.</p>
+<p>We can run both versions side by side. The only thing we need to be aware of
+is that we cannot have two containers using port 80 on the same host.</p>
+<p>As we’re already using port 80 for the container running from the <code class="docutils literal notranslate"><span class="pre">2.0</span></code> version
+of the image, we will start a new container and publish it on port 8080.
+Additionally, we need to give our container a unique name (<code class="docutils literal notranslate"><span class="pre">old_linux_tweet_app</span></code>)</p>
+<ol class="arabic simple" start="3">
+<li><p>Run another new container, this time from the old version of the image.</p></li>
+</ol>
+<p>Notice that this command maps the new container to port 8080 on the host.
+This is because two containers cannot map to the same port on a single Docker host.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+--detach<span class="w"> </span><span class="se">\</span>
+--publish<span class="w"> </span><span class="m">8080</span>:80<span class="w"> </span><span class="se">\</span>
+--name<span class="w"> </span>old_linux_tweet_app<span class="w"> </span><span class="se">\</span>
+<span class="nv">$DOCKERID</span>/linux_tweet_app:1.0
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>View the old version of the website.</p></li>
+</ol>
+</div></blockquote>
+</section>
+<section id="push-your-images-to-docker-hub">
+<h3>Push your images to Docker Hub<a class="headerlink" href="#push-your-images-to-docker-hub" title="Link to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>List the images on your Docker host.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>ls<span class="w"> </span>-f<span class="w"> </span><span class="nv">reference</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$DOCKERID</span><span class="s2">/*&quot;</span>
+</pre></div>
+</div>
+<p>You will see that you now have two <code class="docutils literal notranslate"><span class="pre">linux_tweet_app</span></code> images - one tagged
+as 1.0 and the other as 2.0.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>REPOSITORY<span class="w">                     </span>TAG<span class="w">                 </span>IMAGE<span class="w"> </span>ID<span class="w">            </span>CREATED<span class="w">             </span>SIZE
+&lt;docker<span class="w"> </span>id&gt;/linux_tweet_app<span class="w">    </span><span class="m">2</span>.0<span class="w">                 </span>01612e05312b<span class="w">        </span><span class="m">3</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="w">       </span>108MB
+&lt;docker<span class="w"> </span>id&gt;/linux_tweet_app<span class="w">    </span><span class="m">1</span>.0<span class="w">                 </span>bb32b5783cd3<span class="w">        </span><span class="m">7</span><span class="w"> </span>minutes<span class="w"> </span>ago<span class="w">       </span>108MB
+</pre></div>
+</div>
+<p>These images are only stored in your Docker hosts local repository. Your Docker
+host will be deleted after the workshop. In this step we’ll push the images to
+a public repository so you can run them from any Linux machine with Docker.</p>
+<p>Distribution is built into the Docker platform. You can build images locally
+and push them to a public or private registry, making them available to other users.
+Anyone with access can pull that image and run a container from it. The behavior
+of the app in the container will be the same for everyone, because the image
+contains the fully-configured app - the only requirements to run it are Linux and Docker.</p>
+<p><a class="reference external" href="https://hub.docker.com/">Docker Hub</a> is the default public registry for Docker images.</p>
+<ol class="arabic simple" start="2">
+<li><p>Before you can push your images, you will need to log into Docker Hub.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>login
+</pre></div>
+</div>
+<p>You will need to supply your Docker ID credentials when prompted.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Username:<span class="w"> </span>&lt;your<span class="w"> </span>docker<span class="w"> </span>id&gt;
+Password:<span class="w"> </span>&lt;your<span class="w"> </span>docker<span class="w"> </span>id<span class="w"> </span>password&gt;
+Login<span class="w"> </span>Succeeded
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li><p>Push version <code class="docutils literal notranslate"><span class="pre">1.0</span></code> of your web app using <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">image</span> <span class="pre">push</span></code>.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>push<span class="w"> </span><span class="nv">$DOCKERID</span>/linux_tweet_app:1.0
+</pre></div>
+</div>
+<p>You’ll see the progress as the image is pushed up to Docker Hub.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>The<span class="w"> </span>push<span class="w"> </span>refers<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>repository<span class="w"> </span><span class="o">[</span>docker.io/&lt;your<span class="w"> </span>docker<span class="w"> </span>id&gt;/linux_tweet_app<span class="o">]</span>
+910e84bcef7a:<span class="w"> </span>Pushed
+1dee161c8ba4:<span class="w"> </span>Pushed
+110566462efa:<span class="w"> </span>Pushed
+305e2b6ef454:<span class="w"> </span>Pushed
+24e065a5f328:<span class="w"> </span>Pushed
+<span class="m">1</span>.0:<span class="w"> </span>digest:<span class="w"> </span>sha256:51e937ec18c7757879722f15fa1044cbfbf2f6b7eaeeb578c7c352baba9aa6dc<span class="w"> </span>size:<span class="w"> </span><span class="m">1363</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Now push version <code class="docutils literal notranslate"><span class="pre">2.0</span></code>.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>push<span class="w"> </span><span class="nv">$DOCKERID</span>/linux_tweet_app:2.0
+</pre></div>
+</div>
+<p>Notice that several lines of the output say <code class="docutils literal notranslate"><span class="pre">Layer</span> <span class="pre">already</span> <span class="pre">exists</span></code>. This is because
+Docker will leverage read-only layers that are the same as any previously uploaded image layers.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>The<span class="w"> </span>push<span class="w"> </span>refers<span class="w"> </span>to<span class="w"> </span>a<span class="w"> </span>repository<span class="w"> </span><span class="o">[</span>docker.io/&lt;your<span class="w"> </span>docker<span class="w"> </span>id&gt;/linux_tweet_app<span class="o">]</span>
+0b171f8fbe22:<span class="w"> </span>Pushed
+70d38c767c00:<span class="w"> </span>Pushed
+110566462efa:<span class="w"> </span>Layer<span class="w"> </span>already<span class="w"> </span>exists
+305e2b6ef454:<span class="w"> </span>Layer<span class="w"> </span>already<span class="w"> </span>exists
+24e065a5f328:<span class="w"> </span>Layer<span class="w"> </span>already<span class="w"> </span>exists
+<span class="m">2</span>.0:<span class="w"> </span>digest:<span class="w"> </span>sha256:7c51f77f90b81e5a598a13f129c95543172bae8f5850537225eae0c78e4f3add<span class="w"> </span>size:<span class="w"> </span><span class="m">1363</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>You can browse to <code class="docutils literal notranslate"><span class="pre">https://hub.docker.com/r/&lt;your</span> <span class="pre">docker</span> <span class="pre">id&gt;/</span></code> and see your
+newly-pushed Docker images. These are public repositories, so anyone can pull
+the image - you don’t even need a Docker ID to pull public images.
+Docker Hub also supports private repositories.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../rep_gran/" class="btn btn-neutral float-left" title="Containers in research workflows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../upscalingAIcontainer/content/namespc-cgroup/" class="btn btn-neutral float-right" title="Namespaces and cgroups" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

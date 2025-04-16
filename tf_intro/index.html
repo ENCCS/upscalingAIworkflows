@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TensorFlow on a single GPU &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Distributed training in TensorFlow" href="../tf_mltgpus/" />
+    <link rel="prev" title="Building Singularity images" href="../build_contain/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">TensorFlow on a single GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#get-the-physical-devices">Get the physical devices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#placement-of-calculations">Placement of calculations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#determining-the-placement">Determining the Placement</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-device-placement">Logging device placement</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">TensorFlow on a single GPU</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/tf_intro.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <figure class="align-default" id="id3">
+<span id="tf-intro"></span><a class="reference internal image-reference" href="https://www.gstatic.com/devrel-devsite/prod/v93a6dcf50ad5e38e51034415df5b4a8345b5c8613f785e48818ae468dabf73c8/tensorflow/images/lockup.svg"><img alt="https://www.gstatic.com/devrel-devsite/prod/v93a6dcf50ad5e38e51034415df5b4a8345b5c8613f785e48818ae468dabf73c8/tensorflow/images/lockup.svg" src="https://www.gstatic.com/devrel-devsite/prod/v93a6dcf50ad5e38e51034415df5b4a8345b5c8613f785e48818ae468dabf73c8/tensorflow/images/lockup.svg" style="width: 40%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><a class="reference external" href="https://www.tensorflow.org">(Image Source)</a></span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="tensorflow-on-a-single-gpu">
+<h1>TensorFlow on a single GPU<a class="headerlink" href="#tensorflow-on-a-single-gpu" title="Link to this heading"></a></h1>
+<p>TensorFlow is a well-known library developed primarily in Google which has been
+proven to be one of the most robust, reliable, and fast libraries for deep learning
+among developers. I think most of us have had some form of exposure to TensorFlow
+at some point in our deep learning/machine learning journey.</p>
+<p>In this section we focus on using a single GPU for training our model. It is rather
+easy to transfer/port training of the model to the GPU with minimal coding.</p>
+<p>TensorFlow supports running computations on a variety of types of devices, including
+CPU and GPU. They are represented with string identifiers for example:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/device:CPU:0</span></code>: The CPU of your machine.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/GPU:0</span></code>: Short-hand notation for the first GPU of your machine that is
+visible to TensorFlow.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/job:localhost/replica:0/task:0/device:GPU:1</span></code>: Fully qualified name of
+the second GPU of your machine that is visible to TensorFlow.</p></li>
+</ul>
+</div></blockquote>
+<p>If a TensorFlow operation has both CPU and GPU implementations, by default,
+the GPU device is prioritized when the operation is assigned. For example, <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code>
+has both CPU and GPU kernels and on a system with devices <code class="docutils literal notranslate"><span class="pre">CPU:0</span></code> and <code class="docutils literal notranslate"><span class="pre">GPU:0</span></code>,
+the <code class="docutils literal notranslate"><span class="pre">GPU:0</span></code> device is selected to run <code class="docutils literal notranslate"><span class="pre">tf.matmul</span></code> unless you explicitly request
+to run it on another device.</p>
+<p>If a TensorFlow operation has no corresponding GPU implementation, then the operation
+falls back to the CPU device. For example, since <code class="docutils literal notranslate"><span class="pre">tf.cast</span></code> only has a CPU kernel,
+on a system with devices <code class="docutils literal notranslate"><span class="pre">CPU:0</span></code> and <code class="docutils literal notranslate"><span class="pre">GPU:0</span></code>, the <code class="docutils literal notranslate"><span class="pre">CPU:0</span></code> device is selected
+to run <code class="docutils literal notranslate"><span class="pre">tf.cast</span></code>, even if requested to run on the <code class="docutils literal notranslate"><span class="pre">GPU:0</span></code> device.</p>
+<section id="get-the-physical-devices">
+<h2>Get the physical devices<a class="headerlink" href="#get-the-physical-devices" title="Link to this heading"></a></h2>
+<p>After booking a node with multiple GPUs, let’s check if we have TensorFlow module
+loaded and if the physical GPU device is available.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Num of GPUs Available: &quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s1">&#39;GPU&#39;</span><span class="p">)))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;TensorFlow version: &quot;</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Num<span class="w"> </span>of<span class="w"> </span>GPUs<span class="w"> </span>Available:<span class="w">  </span><span class="m">6</span>
+TensorFlow<span class="w"> </span>version:<span class="w">  </span><span class="m">2</span>.5.0
+</pre></div>
+</div>
+<p>We can see the list of all of available devices:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:CPU:0&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;CPU&#39;</span><span class="o">)</span>,
+PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:GPU:0&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="o">)</span>,
+PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:GPU:1&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="o">)</span>,
+PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:GPU:2&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="o">)</span>,
+PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:GPU:3&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="o">)</span>,
+PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:GPU:4&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="o">)</span>,
+PhysicalDevice<span class="o">(</span><span class="nv">name</span><span class="o">=</span><span class="s1">&#39;/physical_device:GPU:5&#39;</span>,<span class="w"> </span><span class="nv">device_type</span><span class="o">=</span><span class="s1">&#39;GPU&#39;</span><span class="o">)]</span>
+</pre></div>
+</div>
+<p>If you have GPUs, then you should see the GPU device in the above list.
+We can also check specifically for the GPU or CPU devices.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s1">&#39;GPU&#39;</span><span class="p">)</span>
+<span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s1">&#39;CPU&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="placement-of-calculations">
+<h2>Placement of calculations<a class="headerlink" href="#placement-of-calculations" title="Link to this heading"></a></h2>
+<p>TensorFlow automatically place tensor operations to physical devices which is by
+default is the GPU if available. Now, let’s define a random Tensor, and check where
+it is placed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+<span class="n">x</span><span class="o">.</span><span class="n">device</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;/job:localhost/replica:0/task:0/device:GPU:0&#39;</span>
+</pre></div>
+</div>
+<p>The above string will end with <code class="docutils literal notranslate"><span class="pre">GPU:K</span></code> if the Tensor is placed on the K-th GPU device.
+We can also check if a tensor is placed on a specific device by using <code class="docutils literal notranslate"><span class="pre">device_endswith</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the Tensor on CPU #0:  &quot;</span><span class="p">),</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;CPU:0&#39;</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Is the Tensor on GPU #0:  &quot;</span><span class="p">),</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;GPU:0&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Is<span class="w"> </span>the<span class="w"> </span>Tensor<span class="w"> </span>on<span class="w"> </span>CPU<span class="w"> </span><span class="c1">#0:</span>
+False
+
+Is<span class="w"> </span>the<span class="w"> </span>Tensor<span class="w"> </span>on<span class="w"> </span>GPU<span class="w"> </span><span class="c1">#0:</span>
+True
+</pre></div>
+</div>
+</section>
+<section id="determining-the-placement">
+<h2>Determining the Placement<a class="headerlink" href="#determining-the-placement" title="Link to this heading"></a></h2>
+<p>It is possible to force placement on specific devices, if they are available. We can view
+the benefits of GPU acceleration by running some tests and placing the operations on
+the CPU or GPU respectively.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">time_matadd</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+  <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix addition (10 loops): </span><span class="si">{:0.2f}</span><span class="s2">ms&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="n">result</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">time_matmul</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+  <span class="k">for</span> <span class="n">loop</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix multiplication (10 loops): </span><span class="si">{:0.2f}</span><span class="s2">ms&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="n">result</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We run the above tests first on a CPU using <code class="docutils literal notranslate"><span class="pre">tf.device(&quot;CPU:0&quot;)</span></code>,
+which forces the operations to be run on the CPU.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On CPU:&quot;</span><span class="p">)</span>
+<span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;CPU:0&quot;</span><span class="p">):</span>
+  <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+  <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;CPU:0&quot;</span><span class="p">)</span>
+  <span class="n">time_matadd</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">time_matmul</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>On<span class="w"> </span>CPU:
+Matrix<span class="w"> </span>addition<span class="w"> </span><span class="o">(</span><span class="m">10</span><span class="w"> </span>loops<span class="o">)</span>:<span class="w"> </span><span class="m">3</span>.51ms
+Matrix<span class="w"> </span>multiplication<span class="w"> </span><span class="o">(</span><span class="m">10</span><span class="w"> </span>loops<span class="o">)</span>:<span class="w"> </span><span class="m">199</span>.40ms
+</pre></div>
+</div>
+<p>And doing the same operations on the GPU:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s2">&quot;GPU&quot;</span><span class="p">):</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;On GPU:&quot;</span><span class="p">)</span>
+  <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;GPU:0&quot;</span><span class="p">):</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">])</span>
+    <span class="k">assert</span> <span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;GPU:0&quot;</span><span class="p">)</span>
+    <span class="n">time_matadd</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">time_matmul</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>On<span class="w"> </span>GPU:
+Matrix<span class="w"> </span>addition<span class="w"> </span><span class="o">(</span><span class="m">10</span><span class="w"> </span>loops<span class="o">)</span>:<span class="w"> </span><span class="m">0</span>.89ms
+Matrix<span class="w"> </span>multiplication<span class="w"> </span><span class="o">(</span><span class="m">10</span><span class="w"> </span>loops<span class="o">)</span>:<span class="w"> </span><span class="m">22</span>.64ms
+</pre></div>
+</div>
+<p>Note the significant time difference between running these operations on different devices.</p>
+</section>
+<section id="logging-device-placement">
+<h2>Logging device placement<a class="headerlink" href="#logging-device-placement" title="Link to this heading"></a></h2>
+<p>We can find out which devices your operations and tensors are assigned to by putting
+<code class="docutils literal notranslate"><span class="pre">tf.debugging.set_log_device_placement(True)</span></code> as the first statement of your program.
+Enabling device placement logging causes any Tensor allocations or operations to be printed.</p>
+<p>The NLP model and the Quora dataset</p>
+<p>The <a class="reference external" href="https://www.kaggle.com/c/quora-insincere-questions-classification/data">Quora Insincere Questions Classification</a>
+dataset is consistent of a large set of question which were asked on Quora platform with a label
+to identify whether the question is sincere or insincere. An insincere question is defined
+as a question intended to make a statement rather than look for helpful answers, i.e. toxic content. The dataset
+can be downloaded from <a class="reference external" href="https://archive.org/download/fine-tune-bert-tensorflow-train.csv/train.csv.zip">this link</a>.</p>
+<p>Our task is to use a language model to classify these questions. We need to tokenize questions and
+calculate the word embeddings using an NLP model afterwards. The output vector then can be attached
+to a classification head that can be trained on the dataset.</p>
+<p>We have to possibilities to get the embeddings. We can either use</p>
+<ul class="simple">
+<li><p>word-based representations or</p></li>
+<li><p>context-based representations.</p></li>
+</ul>
+<p>In a <strong>word-based representation</strong> of a question, the embeddings for each word (token) is calculated
+and the result will be the combined of all the embeddings, averaged over the question length.</p>
+<p>Examples of pre-trained embeddings include:</p>
+<ul class="simple">
+<li><p><strong>Word2Vec</strong>: These are pre-trained embeddings of words learned from a large text corpora.
+Word2Vec has been pre-trained on a corpus of news articles with  300 million tokens, resulting
+in 300-dimensional vectors.</p></li>
+<li><p><strong>GloVe</strong>: has been pre-trained on a corpus of tweets with 27 billion tokens, resulting
+in 200-dimensional vectors.</p></li>
+</ul>
+<p>In a <strong>Context-based representations</strong>, instead of learning vectors for each word in the sentence,
+a vector for a sentence on the whole, by taking into account the order of words and the set of
+co-occurring words, is computed</p>
+<p>Examples of deep contextualized vectors include:</p>
+<ul class="simple">
+<li><p><strong>Embeddings from Language Models (ELMo)</strong>: uses character-based word representations and
+bidirectional LSTMs. The pre-trained model computes a contextualized vector of 1024 dimensions.
+ELMo is available on Tensorflow Hub.</p></li>
+<li><p><strong>Universal Sentence Encoder (USE)</strong>: The encoder uses a Transformer
+architecture that uses attention mechanism to incorporate information about
+the order and the collection of words. The pre-trained model of USE that returns
+a vector of 512 dimensions is also available on Tensorflow Hub.</p></li>
+<li><p><strong>Neural-Net Language Model (NNLM)</strong>: The model simultaneously learns representations
+of words and probability functions for word sequences, allowing it to capture semantics of
+a sentence.</p></li>
+</ul>
+<p>We will use <a class="reference external" href="https://tfhub.dev/google/tf2-preview/nnlm-en-dim128/1">a pretrained NNLM model</a>
+available on Tensorflow Hub, that are trained on the English Google News 200B corpus,
+and computes a vector of 128 dimensions.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-similarity.png"><img alt="https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-similarity.png" src="https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-similarity.png" style="width: 90%;" />
+</a>
+</figure>
+<p><a class="reference external" href="https://tfhub.dev/google/universal-sentence-encoder/4">(Image Source)</a></p>
+<p>The figure above can help us to better understand of how embeddings calculated using context-based
+representation can be achieved. <em>Semantic similarity</em> is a measure of the degree to which two pieces
+of text carry the same meaning. This is broadly useful in obtaining good coverage over the numerous
+ways that a thought can be expressed using language without needing to manually enumerate them.</p>
+<figure class="align-default">
+<a class="reference internal image-reference" href="https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-classification.png"><img alt="https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-classification.png" src="https://www.gstatic.com/aihub/tfhub/universal-sentence-encoder/example-classification.png" style="width: 90%;" />
+</a>
+</figure>
+<p><a class="reference external" href="https://tfhub.dev/google/universal-sentence-encoder/4">(Image Source)</a></p>
+<div class="admonition-training-on-cpu-and-gpu exercise important admonition" id="exercise-0">
+<p class="admonition-title">Training on CPU and GPU</p>
+<p>You can find two neural networks for image classifier for the <cite>NNLM Language Model</cite> in
+the github <a class="reference download internal" download="" href="../_downloads/10696fc9ea0defd12e4b66e96821a29b/Transfer_Learning_NLP.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Transfer_Learning_NLP</span> <span class="pre">notebook</span></code></a>.
+Try to train the model on CPU and GPU. Compare the results.</p>
+<p>Can you place manually some parts on GPU and some on CPU?</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../build_contain/" class="btn btn-neutral float-left" title="Building Singularity images" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tf_mltgpus/" class="btn btn-neutral float-right" title="Distributed training in TensorFlow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

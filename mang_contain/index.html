@@ -1,0 +1,292 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cleaning Up Containers &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Creating your own container images" href="../create_contain/" />
+    <link rel="prev" title="Introduction to Docker" href="../intro_docker/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Cleaning Up Containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#removing-images">Removing images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#what-containers-are-running">What containers are running?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-containers-have-run-recently">What containers have run recently?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-do-i-remove-an-exited-container">How do I remove an exited container?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Removing images</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Cleaning Up Containers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/mang_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cleaning-up-containers">
+<span id="mang-contain"></span><h1>Cleaning Up Containers<a class="headerlink" href="#cleaning-up-containers" title="Link to this heading"></a></h1>
+<section id="removing-images">
+<h2>Removing images<a class="headerlink" href="#removing-images" title="Link to this heading"></a></h2>
+<p>The images and their corresponding containers can start to take up a
+lot of disk space if you don’t clean them up occasionally, so it’s a
+good idea to periodically remove container images that you won’t be
+using anymore.</p>
+<p>In order to remove a specific image, you need to find out details
+about the image, specifically, the “image ID”. For example say my
+laptop contained the following image.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>ls
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>REPOSITORY       TAG         IMAGE ID       CREATED          SIZE
+hello-world      latest      fce289e99eb9   15 months ago    1.84kB
+</pre></div>
+</div>
+<p>You can remove the image with a <cite>docker image rm</cite> command that
+includes the image ID, such as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>rm<span class="w"> </span>fce289e99eb9
+</pre></div>
+</div>
+<p>or use the image name, like so:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>rm<span class="w"> </span>hello-world
+</pre></div>
+</div>
+<p>However, you may see this output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Error response from daemon: conflict: unable to remove repository
+reference &quot;hello-world&quot; (must force) - container e7d3b76b00f4 is
+using its referenced image fce289e99eb9
+</pre></div>
+</div>
+<p>This happens when Docker hasn’t cleaned up some of the times when a
+container has been actually run. So before removing the container
+image, we need to be able to see what containers are currently
+running, or have been run recently, and how to remove these.</p>
+<section id="what-containers-are-running">
+<h3>What containers are running?<a class="headerlink" href="#what-containers-are-running" title="Link to this heading"></a></h3>
+<p>Working with containers, we are going to shift to a new docker
+command: <cite>docker container</cite>.  Similar to <cite>docker image</cite>, we can list
+running containers by typing:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>ls
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+</pre></div>
+</div>
+<p>Notice that this command didn’t return any containers because our
+containers all exited and thus stopped running after they completed
+their work.</p>
+<div class="admonition-docker-ps callout admonition" id="callout-0">
+<p class="admonition-title"><cite>docker ps</cite></p>
+<p>The command <cite>docker ps</cite> serves the same purpose as <cite>docker container
+ls</cite>, and comes from the Unix shell command <cite>ps</cite> which describes
+running processes.</p>
+</div>
+</section>
+</section>
+<section id="what-containers-have-run-recently">
+<h2>What containers have run recently?<a class="headerlink" href="#what-containers-have-run-recently" title="Link to this heading"></a></h2>
+<p>There is also a way to list running containers, and those that have
+completed recently, which is to add the <cite>–all</cite>/<cite>-a</cite> flag to the
+<cite>docker container ls</cite> command as shown below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>ls<span class="w"> </span>--all
+</pre></div>
+</div>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                     PORTS               NAMES
+9c698655416a        hello-world         &quot;/hello&quot;            2 minutes ago       Exited (0) 2 minutes ago                       zen_dubinsky
+6dd822cf6ca9        hello-world         &quot;/hello&quot;            3 minutes ago       Exited (0) 3 minutes ago                       eager_engelbart
+</pre></div>
+</div>
+<div class="admonition-keeping-it-clean callout admonition" id="callout-1">
+<p class="admonition-title">Keeping it clean</p>
+<p>You might be surprised at the number of containers Docker is still
+keeping track of.  One way to prevent this from happening is to add
+the <cite>–rm</cite> flag to <cite>docker run</cite>. This will completely wipe out the
+record of the run container when it exits. If you need a reference
+to the running container for any reason, <strong>don’t</strong> use this flag.</p>
+</div>
+</section>
+<section id="how-do-i-remove-an-exited-container">
+<h2>How do I remove an exited container?<a class="headerlink" href="#how-do-i-remove-an-exited-container" title="Link to this heading"></a></h2>
+<p>To delete an exited container you can run the following command,
+inserting the <cite>CONTAINER ID</cite> for the container you wish to remove.  It
+will repeat the <cite>CONTAINER ID</cite> back to you, if successful.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>rm<span class="w"> </span>9c698655416a
+</pre></div>
+</div>
+<p>output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>9c698655416a
+</pre></div>
+</div>
+<p>If you want to remove all exited containers at once you can use the
+<cite>docker containers prune</cite> command.  <strong>Be careful</strong> with this command.
+If you have containers you may want to reconnect to, you should not
+use this command.  It will ask you if to confirm you want to remove
+these containers, see output below.  If successful it will print the
+full <cite>CONTAINER ID</cite> back to you.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>container<span class="w"> </span>prune
+</pre></div>
+</div>
+<p>Output:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>WARNING! This will remove all stopped containers.
+Are you sure you want to continue? [y/N] y
+Deleted Containers:
+9c698655416a848278d16bb1352b97e72b7ea85884bff8f106877afe0210acfc
+6dd822cf6ca92f3040eaecbd26ad2af63595f30bb7e7a20eacf4554f6ccc9b2b
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h2>Removing images<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<p>Now that we’ve removed any potentially running or stopped containers,
+we can try again to delete the <cite>hello-world</cite> <strong>image</strong>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>image<span class="w"> </span>rm<span class="w"> </span>hello-world
+</pre></div>
+</div>
+<p>output</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Untagged: hello-world:latest
+Untagged: hello-world@sha256:5f179596a7335398b805f036f7e8561b6f0e32cd30a32f5e19d17a3cda6cc33d
+Deleted: sha256:fce289e99eb9bca977dae136fbe2a82b6b7d4c372474c9235adc1741675f587e
+Deleted: sha256:af0b15c8625bb1938f1d7b17081031f649fd14e6b233688eea3c5483994a66a3
+</pre></div>
+</div>
+<p>The reason that there are a few lines of output, is that a given image
+may have been formed by merging multiple underlying layers.  Any
+layers that are used by multiple Docker images will only be stored
+once.  Now the result of <cite>docker image ls</cite> should no longer include
+the <cite>hello-world</cite> image.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../intro_docker/" class="btn btn-neutral float-left" title="Introduction to Docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../create_contain/" class="btn btn-neutral float-right" title="Creating your own container images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

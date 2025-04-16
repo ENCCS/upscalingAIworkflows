@@ -1,0 +1,373 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "1e2d259d",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import numpy as np\n",
+    "import pandas as pd\n",
+    "import time\n",
+    "import tensorflow as tf\n",
+    "\n",
+    "import pathlib\n",
+    "import shutil\n",
+    "import tempfile"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "id": "3547f8e5",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Defaulting to user installation because normal site-packages is not writeable\n",
+      "Requirement already satisfied: tensorflow_hub in /mnt/tier2/users/u100186/.local/lib/python3.9/site-packages (0.12.0)\n",
+      "Requirement already satisfied: protobuf>=3.8.0 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/protobuf-python/3.17.3-GCCcore-10.3.0/lib/python3.9/site-packages (from tensorflow_hub) (3.17.3)\n",
+      "Requirement already satisfied: numpy>=1.12.0 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/SciPy-bundle/2021.05-foss-2021a/lib/python3.9/site-packages (from tensorflow_hub) (1.20.3)\n",
+      "Requirement already satisfied: six>=1.9 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from protobuf>=3.8.0->tensorflow_hub) (1.16.0)\n",
+      "\u001b[33mWARNING: You are using pip version 21.1.1; however, version 22.0.4 is available.\n",
+      "You should consider upgrading via the '/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/bin/python3.9 -m pip install --upgrade pip' command.\u001b[0m\n",
+      "Defaulting to user installation because normal site-packages is not writeable\n",
+      "Requirement already satisfied: tensorflow_datasets in /mnt/tier2/users/u100186/.local/lib/python3.9/site-packages (4.5.2)\n",
+      "Requirement already satisfied: dill in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/TensorFlow/2.6.0-foss-2021a-CUDA-11.3.1/lib/python3.9/site-packages (from tensorflow_datasets) (0.3.3)\n",
+      "Requirement already satisfied: protobuf>=3.12.2 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/protobuf-python/3.17.3-GCCcore-10.3.0/lib/python3.9/site-packages (from tensorflow_datasets) (3.17.3)\n",
+      "Requirement already satisfied: tensorflow-metadata in /mnt/tier2/users/u100186/.local/lib/python3.9/site-packages (from tensorflow_datasets) (1.7.0)\n",
+      "Requirement already satisfied: absl-py in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/TensorFlow/2.6.0-foss-2021a-CUDA-11.3.1/lib/python3.9/site-packages (from tensorflow_datasets) (0.13.0)\n",
+      "Requirement already satisfied: termcolor in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/TensorFlow/2.6.0-foss-2021a-CUDA-11.3.1/lib/python3.9/site-packages (from tensorflow_datasets) (1.1.0)\n",
+      "Requirement already satisfied: numpy in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/SciPy-bundle/2021.05-foss-2021a/lib/python3.9/site-packages (from tensorflow_datasets) (1.20.3)\n",
+      "Requirement already satisfied: requests>=2.19.0 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from tensorflow_datasets) (2.25.1)\n",
+      "Requirement already satisfied: tqdm in /mnt/tier2/users/u100186/.local/lib/python3.9/site-packages (from tensorflow_datasets) (4.64.0)\n",
+      "Requirement already satisfied: six in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from tensorflow_datasets) (1.16.0)\n",
+      "Requirement already satisfied: promise in /mnt/tier2/users/u100186/.local/lib/python3.9/site-packages (from tensorflow_datasets) (2.3)\n",
+      "Requirement already satisfied: chardet<5,>=3.0.2 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from requests>=2.19.0->tensorflow_datasets) (4.0.0)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from requests>=2.19.0->tensorflow_datasets) (2020.12.5)\n",
+      "Requirement already satisfied: idna<3,>=2.5 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from requests>=2.19.0->tensorflow_datasets) (2.10)\n",
+      "Requirement already satisfied: urllib3<1.27,>=1.21.1 in /mnt/tier2/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/lib/python3.9/site-packages (from requests>=2.19.0->tensorflow_datasets) (1.26.4)\n",
+      "Requirement already satisfied: googleapis-common-protos<2,>=1.52.0 in /mnt/tier2/users/u100186/.local/lib/python3.9/site-packages (from tensorflow-metadata->tensorflow_datasets) (1.56.0)\n",
+      "\u001b[33mWARNING: You are using pip version 21.1.1; however, version 22.0.4 is available.\n",
+      "You should consider upgrading via the '/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/bin/python3.9 -m pip install --upgrade pip' command.\u001b[0m\n",
+      "\u001b[33mWARNING: You are using pip version 21.1.1; however, version 22.0.4 is available.\n",
+      "You should consider upgrading via the '/apps/USE/easybuild/release/2021.3/software/Python/3.9.5-GCCcore-10.3.0/bin/python3.9 -m pip install --upgrade pip' command.\u001b[0m\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install tensorflow_hub\n",
+    "!pip install tensorflow_datasets\n",
+    "!pip install -q git+https://github.com/tensorflow/docs"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "id": "20e7c3ca",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Version:  2.6.0\n",
+      "Hub version:  0.12.0\n",
+      "GPU is available\n",
+      "Number of GPUs : 4\n"
+     ]
+    }
+   ],
+   "source": [
+    "import tensorflow_hub as hub\n",
+    "import tensorflow_datasets as tfds\n",
+    "import matplotlib.pyplot as plt\n",
+    "plt.rcParams['figure.figsize'] = (12, 8)\n",
+    "from  IPython import display\n",
+    "%matplotlib inline\n",
+    "\n",
+    "import pathlib\n",
+    "import shutil\n",
+    "import tempfile\n",
+    "import os\n",
+    "\n",
+    "import tensorflow_docs as tfdocs\n",
+    "import tensorflow_docs.modeling\n",
+    "import tensorflow_docs.plots\n",
+    "from sklearn.model_selection import train_test_split\n",
+    "\n",
+    "print(\"Version: \", tf.__version__)\n",
+    "print(\"Hub version: \", hub.__version__)\n",
+    "print(\"GPU is\", \"available\" if tf.config.list_physical_devices('GPU') else \"NOT AVAILABLE\")\n",
+    "print('Number of GPUs :',len(tf.config.list_physical_devices('GPU')))\n",
+    "\n",
+    "logdir = pathlib.Path(tempfile.mkdtemp())/\"tensorboard_logs\"\n",
+    "shutil.rmtree(logdir, ignore_errors=True)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "id": "7f482a47",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "(1306122, 3)"
+      ]
+     },
+     "execution_count": 4,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "if os.path.exists('dataset.pkl'):\n",
+    "    df = pd.read_pickle('dataset.pkl')\n",
+    "else:\n",
+    "    df = pd.read_csv('https://archive.org/download/fine-tune-bert-tensorflow-train.csv/train.csv.zip', \n",
+    "             compression='zip', low_memory=False)\n",
+    "    df.to_pickle('dataset.pkl')\n",
+    "df.shape"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "id": "dcbe7686",
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "<AxesSubplot:title={'center':'Target distribution'}, ylabel='Frequency'>"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "df['target'].plot(kind='hist', title='Target distribution')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "id": "6e4ae11a",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(130612, 3) (1175, 3)\n"
+     ]
+    }
+   ],
+   "source": [
+    "train_df, remaining = train_test_split(df, random_state=42, train_size=0.1, stratify=df.target.values)\n",
+    "valid_df, _  = train_test_split(remaining, random_state=42, train_size=0.001, stratify=remaining.target.values)\n",
+    "print(train_df.shape, valid_df.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "id": "1523c480",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "buffer_size = train_df.size\n",
+    "batch_size = 256\n",
+    "train_dataset = tf.data.Dataset.from_tensor_slices((train_df.question_text.values, train_df.target.values)).shuffle(buffer_size).batch(batch_size)\n",
+    "valid_dataset = tf.data.Dataset.from_tensor_slices((valid_df.question_text.values, valid_df.target.values)).batch(batch_size)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "id": "3f770226",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "511\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "511"
+      ]
+     },
+     "execution_count": 18,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "num = 0;\n",
+    "for x, y in train_dataset:\n",
+    "    num += 1\n",
+    "print(num)\n",
+    "train_df.shape[0]//256 + 1"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "8c6fad42",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "module_url = \"https://tfhub.dev/google/tf2-preview/nnlm-en-dim128/1\"\n",
+    "embeding_size = 128\n",
+    "name_of_model = 'nnlm-en-dim128'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "f54f7041",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "def train_and_evaluate_model(module_url, embed_size, name, trainable=False):\n",
+    "    hub_layer = hub.KerasLayer(module_url, input_shape=[], output_shape=[embed_size], dtype = tf.string, trainable=trainable)\n",
+    "    model = tf.keras.models.Sequential([\n",
+    "                                      hub_layer,\n",
+    "                                      tf.keras.layers.Dense(256, activation='relu'),\n",
+    "                                      tf.keras.layers.Dense(64, activation='relu'),\n",
+    "                                      tf.keras.layers.Dense(1, activation='sigmoid')\n",
+    "    ])\n",
+    "    \n",
+    "    model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.0001),\n",
+    "                loss = tf.losses.BinaryCrossentropy(),\n",
+    "                metrics = [tf.metrics.BinaryAccuracy(name='accuracy')])\n",
+    "    history = model.fit(train_dataset,\n",
+    "                      epochs = 100,\n",
+    "                      validation_data=valid_dataset,\n",
+    "                      callbacks=[tfdocs.modeling.EpochDots(),\n",
+    "                                 tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=2, mode='min'),\n",
+    "                                 tf.keras.callbacks.TensorBoard(logdir/name)],\n",
+    "                      verbose = 0\n",
+    "                      )\n",
+    "    return history"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6dd30341",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "histories = {}"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "6aa37722",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "start = time.time()\n",
+    "histories[name_of_model] = train_and_evaluate_model(module_url, embed_size=embeding_size, name=name_of_model)\n",
+    "endt = time.time()-start\n",
+    "print(\"\\n \\n Time for {} ms\".format(1000*endt))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "53073097",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plt.rcParams['figure.figsize'] = (12, 8)\n",
+    "plotter = tfdocs.plots.HistoryPlotter(metric = 'accuracy')\n",
+    "plotter.plot(histories)\n",
+    "plt.xlabel(\"Epochs\")\n",
+    "plt.legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')\n",
+    "plt.title(\"Accuracy Curves for Models\")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "febe3942",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "plotter = tfdocs.plots.HistoryPlotter(metric = 'loss')\n",
+    "plotter.plot(histories)\n",
+    "plt.xlabel(\"Epochs\")\n",
+    "plt.legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')\n",
+    "plt.title(\"Loss Curves for Models\")\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5a120359",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "%load_ext tensorboard\n",
+    "%tensorboard --logdir {logdir} --host mel2038 --port 8888"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "63f27306",
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3 (ipykernel)",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.9.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 5
+}

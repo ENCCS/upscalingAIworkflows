@@ -1,0 +1,547 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Working with Singularity containers &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Building Singularity images" href="../build_contain/" />
+    <link rel="prev" title="What is Singularity?" href="../singlrty_start/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Working with Singularity containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#singularity-s-image-cache">Singularity’s image cache</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#working-with-containers">Working with containers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#running-specific-commands-within-a-container">Running specific commands within a container</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#running-a-shell-within-a-container">Running a shell within a container</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#users-files-and-directories-within-a-singularity-container">Users, files and directories within a Singularity container</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#using-docker-images-with-singularity">Using Docker images with Singularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#references">References</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Working with Singularity containers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/work_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="working-with-singularity-containers">
+<span id="work-contain"></span><h1>Working with Singularity containers<a class="headerlink" href="#working-with-singularity-containers" title="Link to this heading"></a></h1>
+<section id="singularity-s-image-cache">
+<h2>Singularity’s image cache<a class="headerlink" href="#singularity-s-image-cache" title="Link to this heading"></a></h2>
+<p>While Singularity doesn’t have a local image repository in the same
+way as Docker, it does cache downloaded image files. As we saw in the
+previous episode, images are simply <cite>.sif</cite> files stored on your local
+disk.</p>
+<p>If you delete a local <cite>.sif</cite> image that you have pulled from a remote
+image repository and then pull it again, if the image is unchanged
+from the version you previously pulled, you will be given a copy of
+the image file from your local cache rather than the image being
+downloaded again from the remote source. This removes unnecessary
+network transfers and is particularly useful for large images which
+may take some time to transfer over the network.  To demonstrate this,
+remove the <cite>hello-world.sif</cite> file stored in your <cite>test</cite> directory and
+then issue the <cite>pull</cite> command again:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>rm<span class="w"> </span>hello-world.sif
+singularity<span class="w"> </span>pull<span class="w"> </span>hello-world.sif<span class="w"> </span>shub://vsoch/hello-world
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>INFO:<span class="w">    </span>Use<span class="w"> </span>image<span class="w"> </span>from<span class="w"> </span>cache
+</pre></div>
+</div>
+<p>As we can see in the above output, the image has been returned from
+the cache and we don’t see the output that we saw previously showing
+the image being downloaded from Singularity Hub.</p>
+<p>How do we know what is stored in the local cache? We can find out
+using the <cite>singularity cache</cite> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>cache<span class="w"> </span>list
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>There<span class="w"> </span>are<span class="w"> </span><span class="m">1</span><span class="w"> </span>container<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>using<span class="w"> </span><span class="m">62</span>.65<span class="w"> </span>MB<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>oci<span class="w"> </span>blob<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span>
+using<span class="w"> </span><span class="m">0</span>.00<span class="w"> </span>kB<span class="w"> </span>of<span class="w"> </span>space<span class="w"> </span>Total<span class="w"> </span>space<span class="w"> </span>used:<span class="w"> </span><span class="m">62</span>.65<span class="w"> </span>MB
+</pre></div>
+</div>
+<p>This tells us how many container files are stored in the cache and how
+much disk space the cache is using but it doesn’t tell us <strong>what</strong> is
+actually being stored. To find out more information we can add the
+<cite>-v</cite> verbose flag to the <cite>list</cite> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>cache<span class="w"> </span>list<span class="w"> </span>-v
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME<span class="w">                     </span>DATE<span class="w"> </span>CREATED<span class="w">           </span>SIZE<span class="w">             </span>TYPE
+hello-world_latest.sif<span class="w">   </span><span class="m">2020</span>-04-03<span class="w"> </span><span class="m">13</span>:20:44<span class="w">    </span><span class="m">62</span>.65<span class="w"> </span>MB<span class="w">         </span>shub
+
+There<span class="w"> </span>are<span class="w"> </span><span class="m">1</span><span class="w"> </span>container<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>using<span class="w"> </span><span class="m">62</span>.65<span class="w"> </span>MB<span class="w"> </span>and<span class="w"> </span><span class="m">0</span><span class="w"> </span>oci<span class="w"> </span>blob<span class="w"> </span>file<span class="o">(</span>s<span class="o">)</span><span class="w"> </span>using<span class="w"> </span><span class="m">0</span>.00<span class="w"> </span>kB<span class="w"> </span>of<span class="w"> </span>space
+Total<span class="w"> </span>space<span class="w"> </span>used:<span class="w"> </span><span class="m">62</span>.65<span class="w"> </span>MB
+</pre></div>
+</div>
+<p>This provides us with some more useful information about the actual
+images stored in the cache.  In the <cite>TYPE</cite> column we can see that our
+image type is <cite>shub</cite> because it’s a <cite>SIF</cite> image that has been pulled
+from Singularity Hub.</p>
+<div class="admonition-cleaning-the-singularity-image-cache callout admonition" id="callout-0">
+<p class="admonition-title">Cleaning the Singularity image cache</p>
+<p>We can remove images from the cache using the <cite>singularity cache
+clean</cite> command.  Running the command without any options will
+display a warning and ask you to confirm that you want to remove
+everything from your cache. You can also remove specific images or
+all images of a particular type. Look at the output of <cite>singularity
+cache clean –help</cite> for more information.</p>
+</div>
+<div class="admonition-basic-exercise-clearing-specific-image-types-from-the-cache exercise important admonition" id="exercise-0">
+<p class="admonition-title">Basic exercise: Clearing specific image types from the cache</p>
+<p>What command would you use to remove only images of type
+<strong>shub</strong> from your local Singularity image cache?  How could you
+test this safely to ensure your command is going to do the right
+thing?</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You can see exactly what would be deleted by using the <code class="docutils literal notranslate"><span class="pre">--dry-run</span></code> option or <code class="docutils literal notranslate"><span class="pre">-n</span></code>.</p>
+</div>
+<div class="admonition-solution solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Solution</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>cache<span class="w"> </span>clean<span class="w"> </span>--type<span class="o">=</span>shub
+singularity<span class="w"> </span>cache<span class="w"> </span>clean<span class="w"> </span>-n<span class="w"> </span>--type<span class="o">=</span>shub
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Removing<span class="w"> </span>/&lt;cache_dir&gt;/.singularity/cache/shub
+</pre></div>
+</div>
+</div>
+</div>
+<section id="working-with-containers">
+<h3>Working with containers<a class="headerlink" href="#working-with-containers" title="Link to this heading"></a></h3>
+<section id="running-specific-commands-within-a-container">
+<h4>Running specific commands within a container<a class="headerlink" href="#running-specific-commands-within-a-container" title="Link to this heading"></a></h4>
+<p>We saw earlier that we can use the <cite>singularity inspect</cite> command to
+see the run script that a container is configured to run by
+default. What if we want to run a different command within a
+container, or we want to open a shell within a container that we can
+interact with?</p>
+<p>If we know the path of an executable that we want to run within a
+container, we can use the <cite>singularity exec</cite> command. For example,
+using the <cite>hello-world.sif</cite> container that we’ve already pulled from
+Singularity Hub, we can run the following within the <cite>test</cite> directory
+where the <cite>hello-world.sif</cite> file is located:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>hello-world.sif<span class="w"> </span>/bin/echo<span class="w"> </span>Hello<span class="w"> </span>World!
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hello<span class="w"> </span>World!
+</pre></div>
+</div>
+<p>Here we see that a container has been started from the
+<cite>hello-world.sif</cite> image and the <cite>/bin/echo</cite> command has been run
+within the container, passing the input <cite>Hello World!</cite>.  The command
+has echoed the provided input to the console and the container has
+terminated.</p>
+<div class="admonition-basic-exercise-running-a-different-command-within-the-hello-world-container exercise important admonition" id="exercise-1">
+<p class="admonition-title">Basic exercise: Running a different command within the
+           “hello-world” container</p>
+<p>Can you run a container based on the <cite>hello-world.sif</cite> image that
+<strong>prints the current date and time</strong>?</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-1">
+<p class="admonition-title">Solution</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>hello-world.sif<span class="w"> </span>/bin/date
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Fri<span class="w"> </span>Jun<span class="w"> </span><span class="m">26</span><span class="w"> </span><span class="m">15</span>:17:44<span class="w"> </span>BST<span class="w"> </span><span class="m">2020</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="running-a-shell-within-a-container">
+<h4>Running a shell within a container<a class="headerlink" href="#running-a-shell-within-a-container" title="Link to this heading"></a></h4>
+<p>If you want to open an interactive shell within a container,
+Singularity provides the <cite>singularity shell</cite> command. Again, using the
+<cite>hello-world.sif</cite> image, and within our <cite>test</cite> directory, we can run a
+shell within a container from the hello-world image:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>shell<span class="w"> </span>hello-world.sif
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Singularity&gt;<span class="w"> </span>whoami
+<span class="o">[</span>&lt;your<span class="w"> </span>username&gt;<span class="o">]</span>
+Singularity&gt;<span class="w"> </span>ls
+hello-world.sif
+Singularity&gt;
+</pre></div>
+</div>
+<p>As shown above, we have opened a shell in a new container started from
+the <cite>hello-world.sif</cite> image.</p>
+<div class="admonition-running-a-shell-inside-a-singularity-container callout admonition" id="callout-1">
+<p class="admonition-title">Running a shell inside a Singularity container</p>
+<p>Q: What do you notice about the output of the above commands
+entered within the Singularity container shell?</p>
+<p>Q: Does this differ from what you might see within a Docker container?</p>
+</div>
+<p>Use the <cite>exit</cite> command to exit from the container shell.</p>
+</section>
+<section id="users-files-and-directories-within-a-singularity-container">
+<h4>Users, files and directories within a Singularity container<a class="headerlink" href="#users-files-and-directories-within-a-singularity-container" title="Link to this heading"></a></h4>
+<p>The first thing to note is that when you run <cite>whoami</cite> within the
+container you should see the username that you are signed in as on the
+host system when you run the container.  For example, if my username
+is <cite>jc1000</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>shell<span class="w"> </span>hello-world.sif
+
+Singularity&gt;<span class="w"> </span>whoami
+jc1000
+</pre></div>
+</div>
+<p>But hang on! I downloaded the standard, public version of the
+<cite>hello-world.sif</cite> image from Singularity Hub. I haven’t customised it
+in any way. How is it configured with my own user details?!</p>
+<p>If you have any familiarity with Linux system administration, you may
+be aware that in Linux, users and their Unix groups are configured in
+the <cite>/etc/passwd</cite> and <cite>/etc/group</cite> files respectively.  In order for
+the shell within the container to know of my user, the relevant user
+information needs to be available within these files within the
+container.</p>
+<p>Assuming this feature is enabled on your system, when the container is
+started, Singularity appends the relevant user and group lines from
+the host system to the <cite>/etc/passwd</cite> and <cite>/etc/group</cite> files within the
+container <a class="reference external" href="https://www.intel.com/content/dam/www/public/us/en/documents/presentation/hpc-containers-singularity-advanced.pdf">[1]</a>.</p>
+<p>Singularity also <strong>binds</strong> some directories from the host system where
+you are running the <cite>singularity</cite> command into the container that
+you’re starting. Note that this bind process isn’t copying files into
+the running container, it is simply making an existing directory on
+the host system visible and accessible within the container
+environment. If you write files to this directory within the running
+container, when the container shuts down, those changes will persist
+in the relevant location on the host system.</p>
+<p>There is a default configuration of which files and directories are
+bound into the container but ultimate control of how things are set up
+on the system where you’re running Singularity is determined by the
+system administrator.  As a result, this section provides an overview
+but you may find that things are a little different on the system that
+you’re running on.</p>
+<p>One directory that is likely to be accessible within a container that
+you start is your <strong>home directory</strong>.  The mapping of file content and
+directories from a host system into a Singularity container is
+illustrated in the example below showing a subset of the directories
+on the host Linux system and in a Singularity container:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Host system:                                                      Singularity container:
+-------------                                                     ----------------------
+/                                                                 /
+├── bin                                                           ├── bin
+├── etc                                                           ├── etc
+│   ├── ...                                                       │   ├── ...
+│   ├── group  ─&gt; user&#39;s group added to group file in container ─&gt;│   ├── group
+│   └── passwd ──&gt; user info added to passwd file in container ──&gt;│   └── passwd
+├── home                                                          ├── usr
+│   └── jc1000 ───&gt; user home directory made available ──&gt; ─┐     ├── sbin
+├── usr                 in container via bind mount         │     ├── home
+├── sbin                                                    └────────&gt;└── jc1000
+└── ...                                                           └── ...
+</pre></div>
+</div>
+<div class="admonition-questions-and-exercises-files-in-singularity-containers exercise important admonition" id="exercise-2">
+<p class="admonition-title">Questions and exercises: Files in Singularity containers</p>
+<p><strong>Q1:</strong> What do you notice about the ownership of files in a
+container started from the hello-world image?  (e.g. take a look
+at the ownership of files in the root directory (<cite>/</cite>))</p>
+<p><strong>Exercise 1:</strong> In this container, try editing (for example
+using the editor <cite>vi</cite> which should be avaiable in the container)
+the <cite>/rawr.sh</cite> file. What do you notice?</p>
+<p>If you’re not familiar with <cite>vi</cite> there are many quick
+reference pages online showing  the main commands for using the editor,
+for example <a class="reference external" href="http://web.mit.edu/merolish/Public/vi-ref.pdf">this one</a></p>
+<p><strong>Exercise 2:</strong> In your home directory within the container
+shell, try and create a simple text file. Is it possible to
+do this? If so, why? If not, why not?! If you can  successfully create
+a file, what happens to it when you exit the shell and the container
+shuts down?</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-2">
+<p class="admonition-title">Solution</p>
+<p><strong>A1:</strong> Use the <cite>ls -l</cite> command to see a detailed file
+listing including file ownership and permission details.  You may
+see that all the files are owned by you, alternatively, most files
+in the root (<cite>/</cite>) directory may be owned by the <cite>root</cite> user. If
+the files are owned by you, this looks good - you should be ready
+to edit something in the exercise that follows…otherwise, if the
+files are owned by root, maybe not…</p>
+<p><strong>Exercise 1:</strong> Unfortunately, it’s not so easy, depending on how
+you tried to edit <cite>/rawr.sh</cite> you probably saw an error similar to
+the following: <cite>Can’t open file for writing</cite> or <cite>Read-only file
+system</cite></p>
+<p><strong>Exercise 2:</strong> Within your home directory, you <strong>should</strong> be able
+to successfully create a file. Since you’re seeing your home
+directory on the host system which has been bound into the
+container, when you exit and the container shuts down, the file
+that you created within the container should still be present when
+you look at your home directory on the host system.</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="using-docker-images-with-singularity">
+<h2>Using Docker images with Singularity<a class="headerlink" href="#using-docker-images-with-singularity" title="Link to this heading"></a></h2>
+<p>Singularity can also start containers from Docker images, opening up
+access to a huge number of existing container images available on
+<a class="reference external" href="https://hub.docker.com/">Docker Hub</a> and other registries.</p>
+<p>While Singularity doesn’t support running Docker images directly, it
+can pull them from Docker Hub and convert them into a suitable format
+for running via Singularity. When you pull a Docker image, Singularity
+pulls the slices or <strong>layers</strong> that make up the Docker image and
+converts them into a single-file Singularity SIF image.</p>
+<p>For example, moving on from the simple <strong>Hello World</strong> examples that
+we’ve looked at so far, let’s pull one of the <a class="reference external" href="https://hub.docker.com/_/python">official Docker Python
+images</a>. We’ll use the image with
+the tag <cite>3.8.6-slim-buster</cite> which has Python 3.8.6 installed on
+Debian’s <a class="reference external" href="https://www.debian.org/releases/buster/">Buster</a> (v10)
+Linux distribution:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>pull<span class="w"> </span>python-3.8.6.sif<span class="w"> </span>docker://python:3.8.6-slim-buster
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO:    Converting OCI blobs to SIF format
+INFO:    Starting build...
+Getting image source signatures
+Copying blob 852e50cd189d done
+Copying blob 334ed303e4ad done
+Copying blob a687a65725ea done
+Copying blob fe607cb30fbe done
+Copying blob b8a3bc0a3645 done
+Copying config 08d8e312de done
+Writing manifest to image destination
+Storing signatures
+2020/12/07 18:36:18  info unpack layer: sha256:852e50cd189dfeb54d97680d9fa6bed21a6d7d18cfb56d6abfe2de9d7f173795
+2020/12/07 18:36:19  info unpack layer: sha256:334ed303e4ad2f8dc872f2e845d79012ad648eaced444e009ae9a397cc4b4dbb
+2020/12/07 18:36:19  info unpack layer: sha256:a687a65725ea883366a61d24db0f946ad384aea893297d9510e50fa13f565539
+2020/12/07 18:36:19  info unpack layer: sha256:fe607cb30fbe1148b5885d58c909d0c08cbf2c0848cc871845112f3ee0a0f9ba
+2020/12/07 18:36:19  info unpack layer: sha256:b8a3bc0a3645e2afcd8807830833a0df0bd243d58d518e17b2335342e2614bd3
+INFO:    Creating SIF file...
+INFO:    Build complete: python-3.8.6.sif
+</pre></div>
+</div>
+<p>Note how we see singularity saying that it’s “<strong>Converting OCI blobs
+to SIF format</strong>”. We then see the layers of the Docker image being
+downloaded and unpacked and written into a single SIF file. Once the
+process is complete, we should see the python-3.8.6.sif image file in
+the current directory.</p>
+<p>We can now run a container from this image as we would with any other
+singularity image.</p>
+<div class="admonition-running-the-python-3-8-6-image-that-we-just-pulled-from-docker-hub exercise important admonition" id="exercise-3">
+<p class="admonition-title">Running the Python 3.8.6 image that we just pulled from Docker Hub</p>
+<ul class="simple">
+<li><p><strong>E1</strong>: Try running the Python 3.8.6 image. What happens?</p></li>
+<li><p><strong>E2</strong>: Try running some simple Python statements…</p></li>
+</ul>
+<div class="admonition-solution solution important dropdown admonition" id="solution-3">
+<p class="admonition-title">Solution</p>
+<p>Running the Python 3.8.6 image</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>run<span class="w"> </span>python-3.8.6.sif
+</pre></div>
+</div>
+<p>This should put you straight into a Python interactive shell
+within the running container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Python<span class="w"> </span><span class="m">3</span>.8.6<span class="w"> </span><span class="o">(</span>default,<span class="w"> </span>Nov<span class="w"> </span><span class="m">25</span><span class="w"> </span><span class="m">2020</span>,<span class="w"> </span><span class="m">02</span>:47:44<span class="o">)</span>
+<span class="w">      </span><span class="o">[</span>GCC<span class="w"> </span><span class="m">8</span>.3.0<span class="o">]</span><span class="w"> </span>on<span class="w"> </span>linux
+<span class="w">      </span>Type<span class="w"> </span><span class="s2">&quot;help&quot;</span>,<span class="w"> </span><span class="s2">&quot;copyright&quot;</span>,<span class="w"> </span><span class="s2">&quot;credits&quot;</span><span class="w"> </span>or<span class="w"> </span><span class="s2">&quot;license&quot;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>more<span class="w"> </span>information.
+<span class="w">      </span>&gt;&gt;&gt;
+</pre></div>
+</div>
+<p>Now try running some simple Python statements:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt;<span class="w"> </span>import<span class="w"> </span>math
+<span class="w">      </span>&gt;&gt;&gt;<span class="w"> </span>math.pi
+<span class="w">      </span><span class="m">3</span>.141592653589793
+<span class="w">      </span>&gt;&gt;&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>In addition to running a container and having it run the default run
+script, you could also start a container running a shell in case you
+want to undertake any configuration prior to running Python. This is
+covered in the following exercise:</p>
+<div class="admonition-open-a-shell-within-a-python-container exercise important admonition" id="exercise-4">
+<p class="admonition-title">Open a shell within a Python container</p>
+<p>Try to run a shell within a singularity container based on
+the <cite>python-3.8.6.sif</cite> image.  That is, run a container that
+opens a shell rather than the default Python interactive console
+as we saw above. Can you find more than one way to achieve this?</p>
+<p>Within the shell, try starting the Python interactive console
+and running some Python commands.</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-4">
+<p class="admonition-title">Solution</p>
+<p>Recall from the earlier material that we can use the
+<cite>singularity shell</cite> command to open a shell within a container.
+To open a regular shell within a container based on the
+<cite>python-3.8.6.sif</cite> image, we can therefore simply run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>singularity shell python-3.8.6.sif
+
+      Singularity&gt; echo $SHELL
+      /bin/bash
+
+      Singularity&gt; cat /etc/issue
+      Debian GNU/Linux 10 \n \l
+
+Singularity&gt; exit
+</pre></div>
+</div>
+<p>It is also possible to use the <cite>singularity exec</cite> command to
+run an executable within a container.  We could, therefore, use
+the <cite>exec</cite> command to run <cite>/bin/bash</cite>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>python-3.8.6.sif<span class="w"> </span>/bin/bash
+
+Singularity&gt;<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$SHELL</span>
+<span class="w">      </span>/bin/bash
+</pre></div>
+</div>
+<p>You can run the Python console from your container shell
+simply by running the <cite>python</cite> command.</p>
+</div>
+</div>
+<p>This concludes the second episode and Part I of the Singularity
+material. Part II contains a further two episodes where we’ll look
+creating your own images and then more advanced use of containers for
+running MPI parallel applications.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://www.intel.com/content/dam/www/public/us/en/documents/presentation/hpc-containers-singularity-advanced.pdf">[1] Gregory M. Kurzer, Containers for Science, Reproducibility and Mobility: Singularity P2. Intel HPC Developer Conference, 2017.</a></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../singlrty_start/" class="btn btn-neutral float-left" title="What is Singularity?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../build_contain/" class="btn btn-neutral float-right" title="Building Singularity images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Namespaces and cgroups &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="Quick Reference" href="../../../quick-reference/" />
+    <link rel="prev" title="PWD exercises" href="../../../containers/content/pwd_exmps/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../../../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Namespaces and cgroups</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-are-namespaces">What Are Namespaces?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#types-of-namespaces">Types of Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#an-example-of-parent-and-child-pid-namespaces">An Example of Parent and Child PID Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-namespace">Creating a Namespace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#looking-at-a-namespace-from-the-outside">Looking at a Namespace from the Outside</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#namespaces-and-containers">Namespaces and Containers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-are-cgroups">What Are cgroups?</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cgroup-versions">Cgroup Versions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-a-cgroup">Creating a cgroup</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Namespaces and cgroups</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/upscalingAIcontainer/content/namespc-cgroup.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="namespaces-and-cgroups">
+<span id="namespc-cgroup"></span><h1>Namespaces and cgroups<a class="headerlink" href="#namespaces-and-cgroups" title="Link to this heading"></a></h1>
+<section id="what-are-namespaces">
+<h2>What Are Namespaces?<a class="headerlink" href="#what-are-namespaces" title="Link to this heading"></a></h2>
+<p>Namespaces have been part of the Linux kernel since about 2002, and over time more
+tooling and namespace types have been added. Real container support was added to
+the Linux kernel only in 2013, however. This is what made namespaces really useful
+and brought them to the masses.</p>
+<div class="admonition-definition-according-to-wikipedia-https-en-wikipedia-org-wiki-linux-namespaces callout admonition" id="callout-0">
+<p class="admonition-title">Definition according to <a class="reference external" href="https://en.wikipedia.org/wiki/Linux_namespaces">Wikipedia</a></p>
+<p><cite>Namespaces are a feature of the Linux kernel that partitions kernel resources
+such that one set of processes sees one set of resources while another set of
+processes sees a different set of resources.</cite></p>
+</div>
+<p>In other words, the key feature of namespaces is that they isolate processes from
+each other. On a server where you are running many different services, isolating
+each service and its associated processes from other services means that there is
+a smaller blast radius for changes, as well as a smaller footprint for security‑related
+concerns.</p>
+<p>Using containers during the development process gives the developer an isolated
+environment that looks and feels like a complete VM. It’s not a VM, though – it’s
+a process running on a server somewhere. If the developer starts two containers,
+there are two processes running on a single server somewhere – but they are isolated
+from each other.</p>
+<section id="types-of-namespaces">
+<h3>Types of Namespaces<a class="headerlink" href="#types-of-namespaces" title="Link to this heading"></a></h3>
+<p>Within the Linux kernel, there are different types of namespaces. Each namespace
+has its own unique properties:</p>
+<ul class="simple">
+<li><p>A <a class="reference external" href="https://man7.org/linux/man-pages/man7/user_namespaces.7.html">user namespace</a>
+has its own set of user IDs and group IDs for assignment to processes. In particular,
+this means that a process can have root privilege within its user namespace without
+having it in other user namespaces.</p></li>
+<li><p>A <a class="reference external" href="https://man7.org/linux/man-pages/man7/pid_namespaces.7.html">process ID (PID) namespace</a>
+assigns a set of PIDs to processes that are independent from the set of PIDs in other namespaces.
+The first process created in a new namespace has PID 1 and child processes are assigned subsequent PIDs.
+If a child process is created with its own PID namespace, it has PID 1 in that namespace
+as well as its PID in the parent process’ namespace. See below for an example.</p></li>
+<li><p>A <a class="reference external" href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html">network namespace</a>
+has an independent network stack: its own private routing table, set of IP addresses,
+socket listing, connection tracking table, firewall, and other network‑related resources.</p></li>
+<li><p>A <a class="reference external" href="https://man7.org/linux/man-pages/man7/mount_namespaces.7.html">mount namespace</a>
+has an independent list of mount points seen by the processes in the namespace. This means
+that you can mount and unmount filesystems in a mount namespace without affecting the host filesystem.</p></li>
+<li><p>An <a class="reference external" href="https://man7.org/linux/man-pages/man7/ipc_namespaces.7.html">interprocess communication (IPC) namespace</a>
+has its own IPC resources.</p></li>
+<li><p>A <a class="reference external" href="https://man7.org/linux/man-pages/man7/uts_namespaces.7.html">UNIX Time‑Sharing (UTS) namespace</a>
+allows a single system to appear to have different host and domain names to different processes.</p></li>
+</ul>
+</section>
+<section id="an-example-of-parent-and-child-pid-namespaces">
+<h3>An Example of Parent and Child PID Namespaces<a class="headerlink" href="#an-example-of-parent-and-child-pid-namespaces" title="Link to this heading"></a></h3>
+<p>In the diagram below, there are three PID namespaces – a parent namespace and
+two child namespaces. Within the parent namespace, there are four processes,
+named PID1 through PID4. These are normal processes which can all see each
+other and share resources.</p>
+<p>The child processes with PID2 and PID3 in the parent namespace also belong to
+their own PID namespaces in which their PID is 1. From within a child namespace,
+the PID1 process cannot see anything outside. For example, PID1 in both child
+namespaces cannot see PID4 in the parent namespace.</p>
+<p>This provides isolation between (in this case) processes within different namespaces.</p>
+<figure class="align-default" id="id3">
+<img alt="https://www.nginx.com/wp-content/uploads/2021/07/Namespaces-cgroups_PID-namespaces.svg" src="https://www.nginx.com/wp-content/uploads/2021/07/Namespaces-cgroups_PID-namespaces.svg" />
+<figcaption>
+<p><span class="caption-text"><a class="reference external" href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work">(Image Source)</a></span><a class="headerlink" href="#id3" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</section>
+<section id="creating-a-namespace">
+<h3>Creating a Namespace<a class="headerlink" href="#creating-a-namespace" title="Link to this heading"></a></h3>
+<p>With all that theory under our belts, let’s cement our understanding by actually
+creating a new namespace. The Linux <a class="reference external" href="https://man7.org/linux/man-pages/man1/unshare.1.html">unshare</a>
+command is a good place to start. The manual page indicates that it does exactly what we want:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>NAME
+<span class="w">        </span>unshare<span class="w"> </span>-<span class="w"> </span>run<span class="w"> </span>program<span class="w"> </span><span class="k">in</span><span class="w"> </span>new<span class="w"> </span>name<span class="w"> </span>namespaces
+</pre></div>
+</div>
+<p>Let’s see our user ID, group, and so on. While in PWD we have root privileges,
+to use this command we don’t have to have root privileges:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>id
+<span class="nv">uid</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span>,1<span class="o">(</span>bin<span class="o">)</span>,2<span class="o">(</span>daemon<span class="o">)</span>,3<span class="o">(</span>sys<span class="o">)</span>,4<span class="o">(</span>adm<span class="o">)</span>,6<span class="o">(</span>disk<span class="o">)</span>,10<span class="o">(</span>wheel<span class="o">)</span>,11<span class="o">(</span>floppy<span class="o">)</span>,20<span class="o">(</span>dialout<span class="o">)</span>,26<span class="o">(</span>tape<span class="o">)</span>,27<span class="o">(</span>video<span class="o">)</span>
+</pre></div>
+</div>
+<p>Now we run the following unshare command to create a new namespace with its own
+user and PID namespaces. We map the root user to the new namespace (in other words,
+we have root privilege within the new namespace), mount a new proc filesystem,
+and fork my process (in this case, bash) in the newly created namespace.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>unshare<span class="w"> </span>--user<span class="w"> </span>--pid<span class="w"> </span>--map-root-user<span class="w"> </span>--mount-proc<span class="w"> </span>--fork<span class="w"> </span>bash
+</pre></div>
+</div>
+<p>The command above accomplishes the same thing as issuing
+the <code class="docutils literal notranslate"><span class="pre">&lt;runtime&gt;</span> <span class="pre">exec</span> <span class="pre">-it</span> <span class="pre">&lt;image&gt;</span> <span class="pre">/bin/bash</span></code> command in a running container.</p>
+<div class="admonition-ps-process-status-command-in-pwd callout admonition" id="callout-1">
+<p class="admonition-title"><code class="docutils literal notranslate"><span class="pre">ps</span></code> (process status) command in PWD</p>
+<p>The avaiable <code class="docutils literal notranslate"><span class="pre">ps</span></code> command in PWD doesn’t show the output in a desired state.
+We need to install it manually using</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apk<span class="w"> </span>add<span class="w"> </span>--no-cache<span class="w"> </span>procps
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">ps</span> <span class="pre">-ef</span></code> command shows there are two processes running – <strong>bash</strong> and
+the <strong>ps</strong> command itself – and the id command confirms that I’m <strong>root</strong> in the new
+namespace (which is also indicated by the changed command prompt):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ps -ef
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 15:46 pts/1    00:00:00 bash
+root        21     1  0 15:56 pts/1    00:00:00 ps -ef
+
+$ id
+uid=0(root) gid=0(root) groups=0(root),65534(nobody),65534(nobody)
+</pre></div>
+</div>
+<p>The crucial thing to notice is that I can see only the two processes in my namespace,
+not any other processes running on the system. I am completely isolated within my own namespace.</p>
+<p>(** Above exercise can be also done on the Vega.)</p>
+</section>
+<section id="looking-at-a-namespace-from-the-outside">
+<h3>Looking at a Namespace from the Outside<a class="headerlink" href="#looking-at-a-namespace-from-the-outside" title="Link to this heading"></a></h3>
+<p>Although we can’t see other processes from within the namespace, with the lsns (list namespaces)
+command we can list all available namespaces and display information about them,
+from the perspective of the parent namespace (outside the new namespace).</p>
+<p>The output shows the namespaces – of types user, mnt, and pid – which correspond
+to the arguments on the unshare command we ran above. From this external perspective,
+each namespace is running as user $USER, not root, whereas inside the namespace processes run as root,
+with access to all of the expected resources.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>lsns<span class="w"> </span>--output-all
+<span class="w">        </span>NS<span class="w"> </span>TYPE<span class="w">   </span>PATH<span class="w">              </span>NPROCS<span class="w"> </span>PID<span class="w"> </span>PPID<span class="w"> </span>COMMAND<span class="w"> </span>UID<span class="w"> </span>USER<span class="w">    </span>NETNSID<span class="w"> </span>NSFS
+<span class="m">4026531835</span><span class="w"> </span>cgroup<span class="w"> </span>/proc/1/ns/cgroup<span class="w">      </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root
+<span class="m">4026533087</span><span class="w"> </span>uts<span class="w">    </span>/proc/1/ns/uts<span class="w">         </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root
+<span class="m">4026533090</span><span class="w"> </span>ipc<span class="w">    </span>/proc/1/ns/ipc<span class="w">         </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root
+<span class="m">4026533093</span><span class="w"> </span>net<span class="w">    </span>/proc/1/ns/net<span class="w">         </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root<span class="w"> </span>unassigned
+<span class="m">4026537060</span><span class="w"> </span>pid<span class="w">    </span>/proc/1/ns/pid<span class="w">         </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root
+<span class="m">4026537071</span><span class="w"> </span>user<span class="w">   </span>/proc/1/ns/user<span class="w">        </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root
+<span class="m">4026537072</span><span class="w"> </span>mnt<span class="w">    </span>/proc/1/ns/mnt<span class="w">         </span><span class="m">2</span><span class="w">   </span><span class="m">1</span><span class="w">    </span><span class="m">0</span><span class="w"> </span>bash<span class="w">      </span><span class="m">0</span><span class="w"> </span>root
+</pre></div>
+</div>
+</section>
+<section id="namespaces-and-containers">
+<h3>Namespaces and Containers<a class="headerlink" href="#namespaces-and-containers" title="Link to this heading"></a></h3>
+<p>Namespaces are one of the technologies that containers are built on, used to enforce
+segregation of resources. We’ve shown how to create namespaces manually, but container
+runtimes like Docker makes things easier by creating namespaces on your behalf.</p>
+</section>
+</section>
+<section id="what-are-cgroups">
+<h2>What Are cgroups?<a class="headerlink" href="#what-are-cgroups" title="Link to this heading"></a></h2>
+<p>A control group (cgroup) is a Linux kernel feature that limits, accounts for,
+and isolates the resource usage (CPU, memory, disk I/O, network, and so on) of a collection of processes.</p>
+<p>Cgroups provide the following features:</p>
+<ul class="simple">
+<li><p><strong>Resource limits</strong>: You can configure a cgroup to limit how much of a particular
+resource (memory or CPU, for example) a process can use.</p></li>
+<li><p><strong>Prioritization</strong>: You can control how much of a resource (CPU, disk, or network)
+a process can use compared to processes in another cgroup when there is resource contention.</p></li>
+<li><p><strong>Accounting</strong>: Resource limits are monitored and reported at the cgroup level.</p></li>
+<li><p><strong>Control</strong>: You can change the status (frozen, stopped, or restarted) of all
+processes in a cgroup with a single command.</p></li>
+</ul>
+<p>So basically you use cgroups to control how much of a given key resource (CPU, memory, network, and disk I/O)
+can be accessed or used by a process or set of processes. Cgroups are a key component
+of containers because there are often multiple processes running in a container
+that you need to control together. In a Kubernetes environment, cgroups can be
+used to implement resource requests and limits and corresponding QoS classes at the pod level.</p>
+<p>The following diagram illustrates how when you allocate a particular percentage
+of available system resources to a cgroup (in this case <strong>cgroup‑1</strong>),
+he remaining percentage is available to other cgroups (and individual processes) on the system.</p>
+<section id="cgroup-versions">
+<h3>Cgroup Versions<a class="headerlink" href="#cgroup-versions" title="Link to this heading"></a></h3>
+<p>According to <a class="reference external" href="https://en.wikipedia.org/wiki/Cgroups">Wikipedia</a>, the first version
+of cgroups was merged into the Linux kernel mainline in late 2007 or early 2008,
+and “the documentation of cgroups‑v2 first appeared in [the] Linux kernel … [in] 2016”.
+Among the many changes in version 2, the big ones are a much simplified tree architecture,
+new features and interfaces in the cgroup hierarchy, and better
+accommodation of “rootless” containers (with non‑zero UIDs).</p>
+<figure class="align-default">
+<img alt="https://www.nginx.com/wp-content/uploads/2021/07/Namespaces-cgroups_resource-limits.svg" src="https://www.nginx.com/wp-content/uploads/2021/07/Namespaces-cgroups_resource-limits.svg" />
+</figure>
+<p><a class="reference external" href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work">(Image Source)</a></p>
+</section>
+<section id="creating-a-cgroup">
+<h3>Creating a cgroup<a class="headerlink" href="#creating-a-cgroup" title="Link to this heading"></a></h3>
+<p>The following command creates a v1 cgroup (you can tell by pathname format)
+called foo and sets the memory limit for it to 50,000,000 bytes (50 MB).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/sys/fs/cgroup/memory/foo
+$<span class="w"> </span>sudo<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">50000000</span><span class="w"> </span>&gt;<span class="w"> </span>/sys/fs/cgroup/memory/foo/memory.limit_in_bytes
+</pre></div>
+</div>
+<p>If we know check the mem limits, we get</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>cat<span class="w"> </span>/sys/fs/cgroup/memory/foo/memory.limit_in_bytes
+<span class="m">49999872</span>
+</pre></div>
+</div>
+<p>Now, let’s create a test bash file to check cgroup functionality. A simple example
+of such shell is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>vim<span class="w"> </span>test.sh
+
+<span class="c1">#!/bin/sh</span>
+<span class="k">while</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;hellp world&quot;</span>
+<span class="w">    </span>sleep<span class="w"> </span><span class="m">60</span>
+<span class="k">done</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">test.sh</span></code> is a shell script, which prints a message to the screen
+and then sleeps for 60 seconds. It is fine for our purposes because it is in
+an infinite loop.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sh<span class="w"> </span>./test.sh<span class="w"> </span><span class="p">&amp;</span>
+<span class="o">[</span><span class="m">1</span><span class="o">]</span><span class="w"> </span><span class="m">31344</span>
+hello<span class="w"> </span>world
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">test.sh</span></code> is started in the background and its PID is reported as 31344.
+The script produces its output and then we assign the process to the cgroup
+by piping its PID into the cgroup file <code class="docutils literal notranslate"><span class="pre">/sys/fs/cgroup/memory/foo/cgroup.procs</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">31344</span><span class="w"> </span>&gt;<span class="w"> </span>/sys/fs/cgroup/memory/foo/cgroup.procs
+</pre></div>
+</div>
+<p>To validate that my process is in fact subject to the memory limits that we defined
+for cgroup foo, we run the following ps command. The -o cgroup flag displays
+the cgroups to which the specified process (31344) belongs. The output confirms
+that its memory cgroup is foo.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ps<span class="w"> </span>-o<span class="w"> </span>cgroup<span class="w"> </span><span class="m">31344</span>
+CGROUP
+<span class="m">11</span>:memory:/docker/874edaaa7ef8e61e283b438077e82c3435e53c5bedc91ba63ea84eca0993678f/foo,10:blkio:/docker/874eda
+</pre></div>
+</div>
+<p>We can also check the amount of memory currently <code class="docutils literal notranslate"><span class="pre">test.sh</span></code> is using with the command below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>cat<span class="w"> </span>/sys/fs/cgroup/memory/foo/memory.usage_in_bytes
+<span class="m">1712128</span>
+</pre></div>
+</div>
+<p>Namespaces and cgroups are the building blocks for containers and modern applications.
+Having an understanding of how they work is important as we refactor applications
+to more modern architectures.</p>
+<p>Namespaces provide isolation of system resources, and cgroups allow for fine‑grained
+control and enforcement of limits for those resources.</p>
+<p>Containers are not the only way that you can use namespaces and cgroups.
+Namespaces and cgroup interfaces are built into the Linux kernel, which means that other applications can use them to provide separation and resource constraints.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../containers/content/pwd_exmps/" class="btn btn-neutral float-left" title="PWD exercises" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../quick-reference/" class="btn btn-neutral float-right" title="Quick Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,640 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running MPI parallel jobs using Singularity containers &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="Containers in research workflows" href="../rep_gran/" />
+    <link rel="prev" title="Training Neural Networks using Containers" href="../../../train_contain/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../../../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Running MPI parallel jobs using Singularity containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mpi-overview">MPI overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mpi-codes-with-singularity-containers">MPI codes with Singularity containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#building-and-running-a-singularity-image-for-an-mpi-code">Building and running a Singularity image for an MPI code</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#building-and-testing-an-image">Building and testing an image</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-singularity-containers-via-mpi">Running Singularity containers via MPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#a-simpler-mpi-example">A simpler MPI example</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Running MPI parallel jobs using Singularity containers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/containers/content/mpi_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="running-mpi-parallel-jobs-using-singularity-containers">
+<span id="mpi-contain"></span><h1>Running MPI parallel jobs using Singularity containers<a class="headerlink" href="#running-mpi-parallel-jobs-using-singularity-containers" title="Link to this heading"></a></h1>
+<section id="mpi-overview">
+<h2>MPI overview<a class="headerlink" href="#mpi-overview" title="Link to this heading"></a></h2>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI (Message Passing Interface)</a>
+is a widely used standard for parallel programming. It is used for
+exchanging messages/data between processes in a parallel application.
+If you’ve been involved in developing or working with computational
+science software, you may already be familiar with MPI and running MPI
+applications.</p>
+<p>When working with an MPI code on a large-scale cluster, a common
+approach is to compile the code yourself, within your own user
+directory on the cluster platform, building against the supported MPI
+implementation on the cluster.  Alternatively, if the code is widely
+used on the cluster, the platform administrators may build and package
+the application as a module so that it is easily accessible by all
+users of the cluster.</p>
+</section>
+<section id="mpi-codes-with-singularity-containers">
+<h2>MPI codes with Singularity containers<a class="headerlink" href="#mpi-codes-with-singularity-containers" title="Link to this heading"></a></h2>
+<p>We’ve already seen that building Singularity containers can be
+impractical without root access. Since we’re highly unlikely to have
+root access on a large institutional, regional or national cluster,
+building a container directly on the target platform is not normally
+an option.</p>
+<p>If our target platform uses <a class="reference external" href="https://www.open-mpi.org/">OpenMPI</a>,
+one of the two widely used source MPI implementations, we can
+build/install a compatible OpenMPI version on our local build
+platform, or directly within the image as part of the image build
+process. We can then build our code that requires MPI, either
+interactively in an image sandbox or via a definition file.</p>
+<p>If the target platform uses a version of MPI based on <a class="reference external" href="https://www.mpich.org/">MPICH</a>, the other widely used open source MPI
+implementation, there is <a class="reference external" href="https://www.mpich.org/abi/">ABI compatibility between MPICH and several
+other MPI implementations</a>.  In this
+case, you can build MPICH and your code on a local platform, within an
+image sandbox or as part of the image build process via a definition
+file, and you should be able to successfully run containers based on
+this image on your target cluster platform.</p>
+<p>As described in Singularity’s <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/mpi.html">MPI documentation</a>, support for both
+OpenMPI and MPICH is provided. Instructions are given for building the
+relevant MPI version from source via a definition file and we’ll see
+this used in an example below.</p>
+<p>While building a container on a local system that is intended for use
+on a remote HPC platform does provide some level of portability, if
+you’re after the best possible performance, it can present some
+issues. The version of MPI in the container will need to be built and
+configured to support the hardware on your target platform if the best
+possible performance is to be achieved. Where a platform has
+specialist hardware with proprietary drivers, building on a different
+platform with different hardware present means that building with the
+right driver support for optimal performance is not likely to be
+possible. This is especially true if the version of MPI available is
+different (but compatible). Singularity’s <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/mpi.html">MPI documentation</a> highlights two
+different models for working with MPI codes.</p>
+<p>The <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/mpi.html#hybrid-model">hybrid model</a> that
+we’ll be looking at here involves using the MPI executable from the
+MPI installation on the host system to launch singularity and run the
+application within the container.  The application in the container is
+linked against and uses the MPI installation within the container
+which, in turn, communicates with the MPI daemon process running on
+the host system. In the following section we’ll look at building a
+Singularity image containing a small MPI application that can then be
+run using the hybrid model.</p>
+</section>
+<section id="building-and-running-a-singularity-image-for-an-mpi-code">
+<h2>Building and running a Singularity image for an MPI code<a class="headerlink" href="#building-and-running-a-singularity-image-for-an-mpi-code" title="Link to this heading"></a></h2>
+<section id="building-and-testing-an-image">
+<h3>Building and testing an image<a class="headerlink" href="#building-and-testing-an-image" title="Link to this heading"></a></h3>
+<p>This example makes the assumption that you’ll be building a container
+image on a local platform and then deploying it to a cluster with a
+different but compatible MPI implementation.  See <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/mpi.html#singularity-and-mpi-applications">Singularity and MPI
+applications</a>
+in the Singularity documentation for further information on how this
+works.  We’ll build an image from a definition file. Containers based
+on this image will be able to run MPI benchmarks using the <a class="reference external" href="https://mvapich.cse.ohio-state.edu/benchmarks/">OSU
+Micro-Benchmarks</a>
+software.</p>
+<p>In the OSU example, the target platform is a remote HPC cluster that uses
+<a class="reference external" href="https://www.mpich.org/">MPICH</a>. However, since the MPI launcher in the Vega system
+is OpenMPI, we create a container with proper OpenMPI libraries.
+The container can be built via the Singularity Docker image that we
+used in the previous episode of the Singularity material.</p>
+<p>We can either download OpenMPI and OSU Micro-Benchmarks locally and copy them to
+the container for the installation, or we can download them on-the-fly and install
+at the same time. Here we take the later approach. Please note the links to the
+“tarballs” for version 5.8 of the OSU Micro-Benchmarks from the <a class="reference external" href="https://mvapich.cse.ohio-state.edu/benchmarks/">OSU Micro-Benchmarks page</a> and for OpenMPI
+version 4.0.5 from the <a class="reference external" href="https://www.open-mpi.org/software/ompi/v4.0/">OpenMPI downloads page</a>.</p>
+<p>Begin by creating a directory and, within that directory save
+the following [definition file <code class="docutils literal notranslate"><span class="pre">/my_folder/osu_benchmarks.def</span></code> to a
+<code class="docutils literal notranslate"><span class="pre">.def</span></code> file, e.g. <code class="docutils literal notranslate"><span class="pre">osu_benchmarks.def</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+From:<span class="w"> </span>ubuntu:18.04
+
+%environment
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">MANPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/share/man:</span><span class="nv">$MANPATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span>C
+
+<span class="w"> </span>%post
+<span class="w">  </span>mkdir<span class="w"> </span>/data1<span class="w"> </span>/data2<span class="w"> </span>/data0
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/spool/slurm
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/d/hpc
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/ceph/grid
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/ceph/hpc
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/scratch
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/exa5/scratch
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing required packages...&quot;</span>
+<span class="w">  </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive<span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>build-essential<span class="w"> </span>libfabric-dev<span class="w"> </span>libibverbs-dev<span class="w"> </span>gfortran
+<span class="w">  </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>wget<span class="w"> </span>git<span class="w"> </span>bash<span class="w"> </span>gcc<span class="w"> </span>g++<span class="w"> </span>make<span class="w"> </span>file
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing Open MPI&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_VERSION</span><span class="o">=</span><span class="m">4</span>.0.5
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_URL</span><span class="o">=</span><span class="s2">&quot;https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-</span><span class="nv">$OMPI_VERSION</span><span class="s2">.tar.bz2&quot;</span>
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/ompi
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/opt
+<span class="w">  </span><span class="c1"># Download</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2<span class="w"> </span><span class="nv">$OMPI_URL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xjf<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2
+<span class="w">  </span><span class="c1"># Compile and install</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi/openmpi-<span class="nv">$OMPI_VERSION</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./configure<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$OMPI_DIR</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-j8<span class="w"> </span>install
+
+<span class="w">  </span><span class="c1"># Set env variables so we can compile our application</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/bin:<span class="nv">$PATH</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OSU_URL</span><span class="o">=</span><span class="s2">&quot;https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-5.8.tgz&quot;</span>
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/osub
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/osub<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>osu_mic_bench.tar<span class="w"> </span><span class="nv">$OSU_URL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xf<span class="w"> </span>osu_mic_bench.tar
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>osu-micro-benchmarks-5.8/
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Configuring and building OSU Micro-Benchmarks...&quot;</span>
+<span class="w">  </span>./configure<span class="w"> </span>--prefix<span class="o">=</span>/usr/local/osu<span class="w"> </span><span class="nv">CC</span><span class="o">=</span>/opt/ompi/bin/mpicc<span class="w"> </span><span class="nv">CXX</span><span class="o">=</span>/opt/ompi/bin/mpicxx
+<span class="w">  </span>make<span class="w"> </span>-j2<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>install
+
+<span class="w"> </span>%runscript
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Rank </span><span class="si">${</span><span class="nv">PMI_RANK</span><span class="si">}</span><span class="s2"> - About to run: /usr/local/osu/libexec/osu-micro-benchmarks/mpi/</span><span class="nv">$*</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">exec</span><span class="w"> </span>/usr/local/osu/libexec/osu-micro-benchmarks/mpi/<span class="nv">$*</span>
+</pre></div>
+</div>
+<p>A quick overview of what the above definition file is doing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The image is being bootstrapped from the <code class="docutils literal notranslate"><span class="pre">ubuntu:18.04</span></code> Docker
+image.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section: Set an environment variable that
+will be available within all containers run from the generated
+image.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section:</p>
+<ul>
+<li><p>Ubuntu’s <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package manager is used to update the package
+directory and then install the compilers and other libraries
+required for the OpenMPI build.</p></li>
+<li><p>The OpenMPI <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> file is extracted and the configure, build and
+install steps are run.</p></li>
+<li><p>The OSU Micro-Benchmarks tar.gz file is extracted and the
+configure, build and install steps are run to build the benchmark
+code from source.</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">%runscript</span></code> section: A runscript is set up that will echo
+the rank number of the current process and then run the command
+provided as a command line argument.</p></li>
+</ul>
+<p><em>Note that base path of the the executable to run is hardcoded in the
+run script</em> so the command line parameter to provide when running a
+container based on this image is relative to this base path, for
+example, <code class="docutils literal notranslate"><span class="pre">startup/osu_hello</span></code>, <code class="docutils literal notranslate"><span class="pre">collective/osu_allgather</span></code>,
+<code class="docutils literal notranslate"><span class="pre">pt2pt/osu_latency</span></code>, <code class="docutils literal notranslate"><span class="pre">one-sided/osu_put_latency</span></code>.</p>
+<div class="admonition-build-and-test-the-osu-micro-benchmarks-image exercise important admonition" id="exercise-0">
+<p class="admonition-title">Build and test the OSU Micro-Benchmarks image</p>
+<p>Using the above definition file, build a Singularity image named
+<code class="docutils literal notranslate"><span class="pre">osu_benchmarks.sif</span></code>.  Once you have built the image, use it to
+run the <cite>osu_hello</cite> benchmark that is found in the <cite>startup</cite>
+benchmark folder.</p>
+<p><strong>NOTE</strong>: If you’re not using the Singularity Docker image to build
+your Singularity image, you will need to edit the path to the
+.tar.gz file in the <code class="docutils literal notranslate"><span class="pre">%files</span></code> section of the definition file.</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Solution</p>
+<p>You should be able to build an image from the definition file
+as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>osu_benchmarks.sif<span class="w"> </span>osu_benchmarks.def
+</pre></div>
+</div>
+<p>Note that if you’re running the Singularity Docker container
+directly from the command line to undertake your build, you’ll
+need to provide the full path to the <code class="docutils literal notranslate"><span class="pre">.def</span></code> file at which it
+appears within the container - for example, if you’ve bind
+mounted the directory containing the file to
+<code class="docutils literal notranslate"><span class="pre">/home/singularity</span></code> within the container, the full path to the
+<code class="docutils literal notranslate"><span class="pre">.def</span></code> file will be <code class="docutils literal notranslate"><span class="pre">/home/singularity/osu_benchmarks.def</span></code>.</p>
+<p>Assuming the image builds successfully, you can then try
+running the container locally and also transfer the SIF file
+to a cluster platform that you have access to (that has
+Singularity installed) and run it there.</p>
+<p>Let’s begin with a single-process run of <code class="docutils literal notranslate"><span class="pre">osu_hello</span></code> on the
+local system to ensure that we can run the container as
+expected:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>run<span class="w"> </span>osu_benchmarks.sif<span class="w"> </span>startup/osu_hello
+</pre></div>
+</div>
+<p>You should see output similar to the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Rank  - About to run: /usr/local/osu/libexec/osu-micro-benchmarks/mpi/startup/osu_hello
+# OSU MPI Hello World Test v5.6.2
+This is a test with 1 processes
+</pre></div>
+</div>
+<p>Note that no rank number is shown since we didn’t run the
+container via mpirun and so the <code class="docutils literal notranslate"><span class="pre">${PMI_RANK}</span></code> environment
+variable that we’d normally have set in an MPICH run process is
+not set.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="running-singularity-containers-via-mpi">
+<h2>Running Singularity containers via MPI<a class="headerlink" href="#running-singularity-containers-via-mpi" title="Link to this heading"></a></h2>
+<p>Assuming the above tests worked, we can now try undertaking a parallel run of
+one of the OSU benchmarking tools within our container image.</p>
+<p>This is where things get interesting and we’ll begin by looking at how Singularity
+containers are run within an MPI environment.</p>
+<p>If you’re familiar with running MPI codes, you’ll know that you use <code class="docutils literal notranslate"><span class="pre">mpirun</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mpiexec</span></code> or a similar MPI executable to start your application. This executable
+may be run directly on the local system or cluster platform that you’re using, or
+you may need to run it through a job script submitted to a job scheduler.
+Your MPI-based application code, which will be linked against the MPI libraries,
+will make MPI API calls into these MPI libraries which in turn talk to the MPI
+daemon process running on the host system. This daemon process handles the
+communication between MPI processes, including talking to the daemons on other
+nodes to exchange information between processes running on different machines, as necessary.</p>
+<p>When running code within a Singularity container, we don’t use the MPI executables
+stored within the container (i.e. we <strong>DO NOT</strong> run <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">exec</span> <span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">&lt;numprocs&gt;</span> <span class="pre">/path/to/my/executable</span></code>).
+Instead we use the MPI installation on the host system to run Singularity and start
+an instance of our executable from within a container for each MPI process.
+Without Singularity support in an MPI implementation, this results in starting
+a separate Singularity container instance within each process. This can present
+some overhead if a large number of processes are being run on a host. Where Singularity
+support is built into an MPI implementation this can address this potential issue and reduce
+the overhead of running code from within a container as part of an MPI job.</p>
+<p>Ultimately, this means that our running MPI code is linking to the MPI libraries
+from the MPI install within our container and these are, in turn, communicating
+with the MPI daemon on the host system which is part of the host system’s MPI installation.
+These two installations of MPI may be different but as long as there is ABI compatibility
+between the version of MPI installed in your container image and the version on the host system,
+your job should run successfully.</p>
+<p>We can now try running a 2-process MPI run of a point to point benchmark <code class="docutils literal notranslate"><span class="pre">osu_latency</span></code>.
+If your local system has both MPI and Singularity installed and has multiple cores,
+you can run this test on that system. Alternatively you can run on a cluster. Note
+that you may need to submit this command via a job submission script submitted
+to a job scheduler if you’re running on a cluster.</p>
+<div class="admonition-undertake-a-parallel-run-of-the-osu-latency-benchmark-general-example exercise important admonition" id="exercise-1">
+<p class="admonition-title">Undertake a parallel run of the <code class="docutils literal notranslate"><span class="pre">osu_latency</span></code> benchmark (general example)</p>
+<p>Move the <code class="docutils literal notranslate"><span class="pre">osu_benchmarks.sif</span></code> Singularity image onto the cluster
+(or other suitable) platform where you’re going to undertake
+your benchmark run.</p>
+<p>You should be able to run the benchmark using a command similar
+to the one shown below. However, if you are running on a
+cluster, you may need to write and submit a job submission
+script at this point to initiate running of the benchmark.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-np<span class="w"> </span><span class="m">2</span><span class="w"> </span>singularity<span class="w"> </span>run<span class="w"> </span>osu_benchmarks.sif<span class="w"> </span>pt2pt/osu_latency
+</pre></div>
+</div>
+<div class="admonition-expected-output-and-discussion solution important dropdown admonition" id="solution-1">
+<p class="admonition-title">Expected output and discussion</p>
+<p>As you can see in the mpirun command shown above, we have called
+<code class="docutils literal notranslate"><span class="pre">mpirun</span></code> on the host system and are passing to MPI the
+<code class="docutils literal notranslate"><span class="pre">singularity</span></code> executable for which the parameters are the image
+file and any parameters we want to pass to the image’s run
+script, in this case the path/name of the benchmark executable
+to run.</p>
+<p>The following shows an example of the output you should expect
+to see. You should have latency values shown for message sizes
+up to 4MB.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Rank 1 - About to run: /.../mpi/pt2pt/osu_latency
+Rank 0 - About to run: /.../mpi/pt2pt/osu_latency
+# OSU MPI Latency Test v5.6.2
+# Size          Latency (us)
+0                       0.38
+1                       0.34
+...
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition-undertake-a-parallel-run-of-the-osu-latency-benchmark-taught-course-cluster-example exercise important admonition" id="exercise-2">
+<p class="admonition-title">Undertake a parallel run of the <code class="docutils literal notranslate"><span class="pre">osu_latency</span></code> benchmark (taught course cluster example)</p>
+<p>This version of the exercise for undertaking a parallel run of the
+osu_latency benchmark with your Singularity container that
+contains an MPI build is specific to this run of the course.  The
+information provided here is specifically tailored to the HPC
+platform that you’ve been given access to for this taught version
+of the course.  Move the <cite>osu_benchmarks.sif</cite> Singularity image
+onto the cluster where you’re going to undertake your benchmark
+run.  You should use <code class="docutils literal notranslate"><span class="pre">scp</span></code> or a similar utility to copy the file.
+The platform you’ve been provided with access to uses <cite>Slurm</cite>
+schedule jobs to run on the platform. You now need to create a
+<code class="docutils literal notranslate"><span class="pre">Slurm</span></code> job submission script to run the benchmark.</p>
+<p>Find a template script on <a class="reference external" href="https://doc.vega.izum.si/first-job/">the Vega support website</a>
+and edit it to suit your configuration. You can find more details about the Slurm
+<a class="reference external" href="https://doc.vega.izum.si/slurm/">here</a>. Create and appropriate bash file and submit
+the modified job submission script to the <cite>Slurm</cite> scheduler using the
+<code class="docutils literal notranslate"><span class="pre">sbatch</span></code> command.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>osu_latency.slurm
+</pre></div>
+</div>
+<div class="admonition-expected-output-and-discussion solution important dropdown admonition" id="solution-2">
+<p class="admonition-title">Expected output and discussion</p>
+<p>As you will have seen in the commands using the provided
+template job submission script, we have called <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> on the
+host system and are passing to MPI the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> executable
+for which the parameters are the image file and any parameters
+we want to pass to the image’s run script. In this case, the
+parameters are the path/name of the benchmark executable to
+run.</p>
+<p>The following shows an example of the output you should expect
+to see. You should have latency values shown for message sizes
+up to 4MB.</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO:    Convert SIF file to sandbox...
+      INFO:    Convert SIF file to sandbox...
+      Rank 1 - About to run: /.../mpi/pt2pt/osu_latency
+      Rank 0 - About to run: /.../mpi/pt2pt/osu_latency
+      # OSU MPI Latency Test v5.6.2
+      # Size          Latency (us)
+      0                       1.49
+      1                       1.50
+      2                       1.50
+      ...
+      4194304               915.44
+      INFO:    Cleaning up image...
+INFO:    Cleaning up image...
+</pre></div>
+</div>
+</div>
+</div>
+<p>This has demonstrated that we can successfully run a parallel MPI
+executable from within a Singularity container.  However, in this
+case, the two processes will almost certainly have run on the same
+physical node so this is not testing the performance of the
+interconnects between nodes.</p>
+<p>You could now try running a larger-scale test. You can also try
+running a benchmark that uses multiple processes, for example try
+<code class="docutils literal notranslate"><span class="pre">collective/osu_gather</span></code>.</p>
+<div class="admonition-investigate-performance-when-using-a-container-image-built-on-a-local-system-and-run-on-a-cluster exercise important admonition" id="exercise-3">
+<p class="admonition-title">Investigate performance when using a container image
+           built on a local system and run on a cluster</p>
+<p>To get an idea of any difference in performance between the code
+within your Singularity image and the same code built natively
+on the target HPC platform, try building the OSU benchmarks from
+source, locally on the cluster. Then try running the same
+benchmark(s) that you ran via the singularity container.  Have a
+look at the outputs you get when running <code class="docutils literal notranslate"><span class="pre">collective/osu_gather</span></code>
+or one of the other collective benchmarks to get an idea of
+whether there is a performance difference and how significant it
+is.</p>
+<p>Try running with enough processes that the processes are spread
+across different physical nodes so that you’re making use of the
+cluster’s network interconnects.</p>
+<p>What do you see?</p>
+<div class="admonition-discussion solution important dropdown admonition" id="solution-3">
+<p class="admonition-title">Discussion</p>
+<p>You may find that performance is significantly better with the
+version of the code built directly on the HPC platform.
+Alternatively, performance may be similar between the two
+versions.</p>
+<p>How big is the performance difference between the two builds of
+the code?</p>
+<p>What might account for any difference in performance between the
+two builds of the code?</p>
+<p>If performance is an issue for you with codes that you’d like to
+run via Singularity, you are advised to take a look at using the
+<a class="reference external" href="https://sylabs.io/guides/3.5/user-guide/mpi.html#bind-model">bind model</a>
+for building/running MPI applications through Singularity.</p>
+</div>
+</div>
+</section>
+<section id="a-simpler-mpi-example">
+<h2>A simpler MPI example<a class="headerlink" href="#a-simpler-mpi-example" title="Link to this heading"></a></h2>
+<p>While the OSU benchmark is an impressive test that shows how one can use containers
+with MPI launcher, it might obscure the structure behind the whole setup. Let’s take a
+look at an example in which we can simply see how MPI is run within a container.</p>
+<p>Create a new directory and save the <code class="docutils literal notranslate"><span class="pre">mpitest.c</span></code> given below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;mpi.h&gt;</span>
+<span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;stdlib.h&gt;</span>
+
+int<span class="w"> </span>main<span class="w"> </span><span class="o">(</span>int<span class="w"> </span>argc,<span class="w"> </span>char<span class="w"> </span>**argv<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span>int<span class="w"> </span>rc<span class="p">;</span>
+<span class="w">      </span>int<span class="w"> </span>size<span class="p">;</span>
+<span class="w">      </span>int<span class="w"> </span>myrank<span class="p">;</span>
+
+<span class="w">      </span><span class="nv">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>MPI_Init<span class="w"> </span><span class="o">(</span><span class="p">&amp;</span>argc,<span class="w"> </span><span class="p">&amp;</span>argv<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>rc<span class="w"> </span>!<span class="o">=</span><span class="w"> </span>MPI_SUCCESS<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">              </span>fprintf<span class="w"> </span><span class="o">(</span>stderr,<span class="w"> </span><span class="s2">&quot;MPI_Init() failed&quot;</span><span class="o">)</span><span class="p">;</span>
+<span class="w">              </span><span class="k">return</span><span class="w"> </span>EXIT_FAILURE<span class="p">;</span>
+<span class="w">      </span><span class="o">}</span>
+
+<span class="w">      </span><span class="nv">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>MPI_Comm_size<span class="w"> </span><span class="o">(</span>MPI_COMM_WORLD,<span class="w"> </span><span class="p">&amp;</span>size<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>rc<span class="w"> </span>!<span class="o">=</span><span class="w"> </span>MPI_SUCCESS<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">              </span>fprintf<span class="w"> </span><span class="o">(</span>stderr,<span class="w"> </span><span class="s2">&quot;MPI_Comm_size() failed&quot;</span><span class="o">)</span><span class="p">;</span>
+<span class="w">              </span>goto<span class="w"> </span>exit_with_error<span class="p">;</span>
+<span class="w">      </span><span class="o">}</span>
+
+<span class="w">      </span><span class="nv">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>MPI_Comm_rank<span class="w"> </span><span class="o">(</span>MPI_COMM_WORLD,<span class="w"> </span><span class="p">&amp;</span>myrank<span class="o">)</span><span class="p">;</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="o">(</span>rc<span class="w"> </span>!<span class="o">=</span><span class="w"> </span>MPI_SUCCESS<span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">              </span>fprintf<span class="w"> </span><span class="o">(</span>stderr,<span class="w"> </span><span class="s2">&quot;MPI_Comm_rank() failed&quot;</span><span class="o">)</span><span class="p">;</span>
+<span class="w">              </span>goto<span class="w"> </span>exit_with_error<span class="p">;</span>
+<span class="w">      </span><span class="o">}</span>
+
+<span class="w">      </span>fprintf<span class="w"> </span><span class="o">(</span>stdout,<span class="w"> </span><span class="s2">&quot;Hello, I am rank %d/%d\n&quot;</span>,<span class="w"> </span>myrank,<span class="w"> </span>size<span class="o">)</span><span class="p">;</span>
+
+<span class="w">      </span>MPI_Finalize<span class="o">()</span><span class="p">;</span>
+
+<span class="w">      </span><span class="k">return</span><span class="w"> </span>EXIT_SUCCESS<span class="p">;</span>
+
+exit_with_error:
+<span class="w">      </span>MPI_Finalize<span class="o">()</span><span class="p">;</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span>EXIT_FAILURE<span class="p">;</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>We can either compile directly, or compile inside the contianer. For learning
+purposes, let’s compile the code inside the container. Create a container with the defintion
+file given below.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+From:<span class="w"> </span>ubuntu:18.04
+
+%files
+<span class="w">  </span>mpitest.c<span class="w"> </span>/opt
+
+%environment
+<span class="w">  </span><span class="c1"># Point to OMPI binaries, libraries, man pages</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">MANPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/share/man:</span><span class="nv">$MANPATH</span><span class="s2">&quot;</span>
+
+%post
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing required packages...&quot;</span>
+<span class="w">  </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>wget<span class="w"> </span>git<span class="w"> </span>bash<span class="w"> </span>gcc<span class="w"> </span>gfortran<span class="w"> </span>g++<span class="w"> </span>make<span class="w"> </span>file
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing Open MPI&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_VERSION</span><span class="o">=</span><span class="m">4</span>.0.5
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_URL</span><span class="o">=</span><span class="s2">&quot;https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-</span><span class="nv">$OMPI_VERSION</span><span class="s2">.tar.bz2&quot;</span>
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/ompi
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/opt
+<span class="w">  </span><span class="c1"># Download</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2<span class="w"> </span><span class="nv">$OMPI_URL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xjf<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2
+<span class="w">  </span><span class="c1"># Compile and install</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi/openmpi-<span class="nv">$OMPI_VERSION</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./configure<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$OMPI_DIR</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-j8<span class="w"> </span>install
+
+<span class="w">  </span><span class="c1"># Set env variables so we can compile our application</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/bin:<span class="nv">$PATH</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Compiling the MPI application...&quot;</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/opt<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mpicc<span class="w"> </span>-o<span class="w"> </span>mpitest<span class="w"> </span>mpitest.c
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>singularity<span class="w"> </span>run<span class="w"> </span>mpi_hybrid.sif<span class="w"> </span>/opt/mpitest
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">1</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">2</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">3</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">4</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">5</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">6</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">7</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">0</span>/8
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../../train_contain/" class="btn btn-neutral float-left" title="Training Neural Networks using Containers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../rep_gran/" class="btn btn-neutral float-right" title="Containers in research workflows" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

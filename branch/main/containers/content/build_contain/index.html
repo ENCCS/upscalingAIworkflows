@@ -1,0 +1,1022 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building Singularity images &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../../../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Building Singularity images</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/containers/content/build_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="building-singularity-images">
+<span id="build-contain"></span><h1>Building Singularity images<a class="headerlink" href="#building-singularity-images" title="Link to this heading"></a></h1>
+<section id="preparing-to-use-singularity-for-building-images">
+<h2>Preparing to use Singularity for building images<a class="headerlink" href="#preparing-to-use-singularity-for-building-images" title="Link to this heading"></a></h2>
+<p>So far you’ve been able to work with Singularity from your own user
+account as a non-privileged user.  This part of the Singularity
+material requires that you use Singularity in an environment where you
+have administrative (root) access. While it is possible to build
+Singularity containers without root access, it is highly recommended
+that you do this as the <strong>root</strong> user, as highlighted in <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/build_a_container.html#creating-writable-sandbox-directories">this section</a>
+of the Singularity documentation. Bear in mind that the system that
+you use to build containers doesn’t have to be the system where you
+intend to run the containers. If, for example, you are intending to
+build a container that you can subsequently run on a Linux-based
+cluster, you could build the container on your own Linux-based desktop
+or laptop computer. You could then transfer the built image directly
+to the target platform or upload it to an image repository and pull it
+onto the target platform from this repository.</p>
+<p>There are three different options for accessing a suitable environment
+to undertake the material in this part of the course:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Run Singularity from within a Docker container - this will enable you to have the required privileges to build images</p></li>
+<li><p>Install Singularity locally on a system where you have administrative access</p></li>
+<li><p>Use Singularity on a system where it is already pre-installed and you have administrative (root) access</p></li>
+</ol>
+</div></blockquote>
+<p>We’ll focus on the first option in this part of the course. If you
+would like to install Singularity directly on your system, see the box
+below for some further pointers. Note that the installation process is
+an advanced task that is beyond the scope of this course so we won’t
+be covering this.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Installing Singularity on your local system (optional)</p>
+<p>If you are running Linux and would like to install Singularity
+locally on your system, Singularity provide the free, open source
+<a class="reference external" href="https://github.com/hpcng/singularity/releases">Singularity Community Edition</a>. You will need to
+install various dependencies on your system and then build
+Singularity from source code.</p>
+<p>If you are not familiar with building applications from source code,
+it is strongly recommended that you use the Docker Singularity
+image, as described below in the “Getting started with the Docker
+Singularity image” section rather than attempting to build and
+install Singularity yourself. The installation process is an
+advanced task that is beyond the scope of this session.</p>
+<p>However, if you have Linux systems knowledge and would like to
+attempt a local install of Singularity, you can find details in the
+<a class="reference external" href="https://github.com/sylabs/singularity/blob/master/INSTALL.md">INSTALL.md</a>
+file within the Singularity repository that explains how to install
+the prerequisites and build and install the software.  Singularity
+is written in the <a class="reference external" href="https://golang.org/">Go</a> programming language and
+Go is the main dependency that you’ll need to install on your
+system. The process of installing Go and any other requirements is
+detailed in the INSTALL.md file.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you do not have access to a system with Docker installed, or a
+Linux system where you can build and install Singularity but you
+have administrative privileges on another system, you could look at
+installing a virtualisation tool such as <a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a> on which you could run a Linux
+Virtual Machine (VM) image. Within the Linux VM image, you will be
+able to install Singularity.  Again this is beyond the scope of the
+course.</p>
+<p>If you are not able to access/run Singularity yourself on a system
+where you have administrative privileges, you can still follow
+through this material as it is being taught (or read through it in
+your own time if you’re not participating in a taught version of the
+course) since it will be helpful to have an understanding of how
+Singularity images can be built.</p>
+<p>You could also attempt to follow this section of the lesson without
+using root and instead using the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> command’s <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/fakeroot.html">–fakeroot</a> option.
+However, you may encounter issues with permissions when trying to
+build images and run your containers and this is why running the
+commands as root is strongly recommended and is the approach
+described in this lesson.</p>
+</div>
+</section>
+<section id="getting-started-with-the-docker-singularity-image">
+<h2>Getting started with the Docker Singularity image<a class="headerlink" href="#getting-started-with-the-docker-singularity-image" title="Link to this heading"></a></h2>
+<p>The <a class="reference external" href="https://quay.io/repository/singularity/singularity">Singularity Docker image</a> is available from
+<a class="reference external" href="https://quay.io/">Quay.io</a>.</p>
+<div class="admonition-familiarise-yourself-with-the-docker-singularity-image exercise important admonition" id="exercise-0">
+<p class="admonition-title">Familiarise yourself with the Docker Singularity image</p>
+<ul>
+<li><p>Using your previously acquired Docker knowledge, get the
+Singularity image for <code class="docutils literal notranslate"><span class="pre">v3.8.2</span></code> and ensure that you can run a Docker
+container using this image. You might want to use the <cite>v3.8.2-slim</cite> for Intel/AMD architecture
+or <cite>v3.8.2-slim-arm64</cite> for Arm architecture version of this image since it is significantly
+smaller than the standard image - the <strong>slim</strong> version of the image will be used in the
+examples below.</p></li>
+<li><p>Create a directory (e.g. <code class="docutils literal notranslate"><span class="pre">$HOME/singularity_data</span></code>) on your host
+machine that you can use for storage of <strong>definition files</strong> (we’ll
+introduce these shortly) and generated image files.</p>
+<p>This directory should be bind mounted into the Docker container at
+the location <cite>/home/singularity</cite> every time you run it - this will
+give you a location in which to store built images so that they are
+available on the host system once the container exits.  (take a look
+at the <code class="docutils literal notranslate"><span class="pre">-v</span></code> switch)</p>
+<p><strong>Note</strong>: To be able to build an image using the Docker Singularity
+container, you’ll probably need to add the <code class="docutils literal notranslate"><span class="pre">--privileged</span></code> switch to
+your docker command line.</p>
+<blockquote>
+<div><blockquote>
+<div><ul class="simple">
+<li><p>What is happening when you run the container?</p></li>
+<li><p>Can you run an interactive shell in the container?</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition-running-the-image solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Running the image</p>
+<dl>
+<dt>Having a bound directory from the host system accessible within</dt><dd><p>your running Singularity container will give you somewhere to
+place created images so that they are accessible on the host
+system after the container exits.  Begin by changing into the
+directory that you created above for storing your definiton
+files and built images (e.g. <code class="docutils literal notranslate"><span class="pre">$HOME/singularity_data</span></code>).</p>
+<p>You may choose to:</p>
+<ul class="simple">
+<li><p>open a shell within the Docker image so you can work at a
+command prompt and run the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> command directly</p></li>
+<li><p>use the <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> command to run a new container instance
+every time you want to run the <cite>singularity</cite> command.</p></li>
+</ul>
+<p>Either option is fine for this section of the material.</p>
+<p><strong>Some examples:</strong></p>
+<p>To run the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> command within the docker container
+directly from the host system’s terminal:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--privileged<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/home/singularity
+quay.io/singularity/singularity:v3.8.2-slim<span class="w"> </span>cache<span class="w"> </span>list
+</pre></div>
+</div>
+<p>To start a shell within the Singularity Docker container where
+the <cite>singularity</cite> command can be run directly:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--entrypoint<span class="o">=</span>/bin/sh<span class="w"> </span>--privileged<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/home/singularity<span class="w"> </span>quay.io/singularity/singularity:v3.8.2-slim
+</pre></div>
+</div>
+<p>To make things easier to read in the remainder of the material,
+command examples will use the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> command directly,
+e.g. <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">cache</span> <span class="pre">list</span></code>. If you’re running a shell in the
+Docker container, you can enter the commands as they appear.  If
+you’re using the container’s default run behavior and running a
+container instance for each run of the command, you’ll need to
+replace <code class="docutils literal notranslate"><span class="pre">singularity</span></code> with <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">--privileged</span> <span class="pre">-v</span>
+<span class="pre">${PWD}:/home/singularity</span> <span class="pre">quay.io/singularity/singularity:v3.8.2-slim</span></code> or similar.</p>
+</dd>
+</dl>
+</div>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</section>
+<section id="id1">
+<h2>Building Singularity images<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<section id="introduction">
+<h3>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h3>
+<p>As a platform that is widely used in the scientific/research software and HPC communities,
+Singularity provides great support for reproducibility.
+If you build a Singularity container for some scientific software, it’s likely that you and/or
+others will want to be able to reproduce exactly
+the same environment again. Maybe you want to verify the results of the code or provide a means
+that others can use to verify the results to support a paper or report.
+Maybe you’re making a tool available to others and want to ensure that they have exactly the right
+version/configuration of the code.</p>
+<p>Similarly to Docker and many other modern software tools, Singularity
+follows the “Configuration as code” approach and a container
+configuration can be stored in a file which can then be committed to
+your version control system alongside other code. Assuming it is
+suitably configured, this file can then be used by you or other
+individuals (or by automated build tools) to reproduce a container
+with the same configuration at some point in the future.</p>
+</section>
+<section id="different-approaches-to-building-images">
+<h3>Different approaches to building images<a class="headerlink" href="#different-approaches-to-building-images" title="Link to this heading"></a></h3>
+<p>There are various approaches to building Singularity images. We
+highlight two different approaches here and focus on one of them:</p>
+<ul class="simple">
+<li><p>Building within a sandbox: You can build a container
+interactively within a <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/build_a_container.html#creating-writable-sandbox-directories">sandbox environment</a>.
+This means you get a shell within the container environment and
+install and configure packages and code as you wish before exiting the
+sandbox and converting it into a container image.</p></li>
+<li><p>Building from a <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/build_a_container.html#building-containers-from-singularity-definition-files">Singularity Definition File</a>:
+This is Singularity’s equivalent to building a Docker container from a
+<cite>Dockerfile</cite> and we’ll discuss this approach in this section.</p></li>
+</ul>
+<p>You can take a look at Singularity’s “<a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/build_a_container.html">Build a Container</a>”
+documentation for more details on different approaches to building
+containers.</p>
+<div class="admonition-why-look-at-singularity-definition-files exercise important admonition" id="exercise-1">
+<p class="admonition-title">Why look at Singularity Definition Files?</p>
+<p>Why do you think we might be looking at the definition file
+approach here rather than the <em>sandbox approach</em>?</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-1">
+<p class="admonition-title">Solution</p>
+<p>The sandbox approach is great for prototyping and testing out an
+image configuration but it doesn’t provide the best support for
+our ultimate goal of <strong>reproducibility</strong>. If you spend time
+sitting at your terminal in front of a shell typing different
+commands to add configuration, maybe you realize you made a
+mistake so you undo one piece of configuration and change
+it. This goes on until you have your completed configuration but
+there’s no explicit record of exactly what you did to create
+that configuration.</p>
+<p>Say your container image file gets deleted by accident, or
+someone else wants to create an equivalent image to test
+something.  How will they do this and know for sure that they
+have the same configuration that you had?  With a definition
+file, the configuration steps are explicitly defined and can be
+easily stored, for example within a version control system, and
+re-run.</p>
+<p>Definition files are small text files while container files may
+be very large, multi-gigabyte files that are difficult and time
+consuming to move around. This makes definition files ideal for
+storing in a version control system along with their revisions.</p>
+</div>
+</div>
+</section>
+<section id="creating-a-singularity-definition-file">
+<h3>Creating a Singularity Definition File<a class="headerlink" href="#creating-a-singularity-definition-file" title="Link to this heading"></a></h3>
+<p>A Singularity Definition File is a text file that contains a series of statements that are used to create a container image.
+In line with the <em>configuration as code</em> approach mentioned above, the definition file can be stored in your code repository
+alongside your application code and used to create a reproducible image. This means that for a given commit in your repository,
+the version of the definition file present at that commit can be used to reproduce a container with a known state.
+It was pointed out earlier in the course, when covering Docker, that this property also applies for Dockerfiles.</p>
+<p>We’ll now look at a very simple example of a definition file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+From:<span class="w"> </span>ubuntu:20.04
+
+%post
+<span class="w">  </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3
+
+%runscript
+<span class="w">  </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;print(&quot;Hello World! Hello from our custom Singularity image!&quot;)&#39;</span>
+</pre></div>
+</div>
+<p>A definition file has a number of optional sections, specified using the <cite>%</cite> prefix,
+that are used to define or undertake different configuration during different stages of the image build process.
+You can find full details in Singularity’s <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/definition_files.html">Definition Files documentation</a>.
+In our very simple example here, we only use the <cite>%post</cite> and <cite>%runscript</cite> sections.</p>
+<p>Let’s step through this definition file and look at the lines in more detail:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+From:<span class="w"> </span>ubuntu:20.04
+</pre></div>
+</div>
+<p>These first two lines define where to <strong>bootstrap</strong> our image from. Why can’t we just put some application binaries into
+a blank image? Any applications or tools that we want to run will need to interact with standard system libraries and
+potentially a wide range of other libraries and tools. These need to be available within the image and we therefore
+need some sort of operating system as the basis for our image. The most straightforward way to achieve this is to start
+from an existing base image containing an operating system. In this case, we’re going to start from a minimal Ubuntu 20.04
+Linux Docker image. Note that we’re using a Docker image as the basis for creating a Singularity image.
+This demonstrates the flexibility in being able to start from different types of images when creating a new Singularity image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Bootstrap:</span> <span class="pre">docker</span></code> line is similar to prefixing an image path with <code class="docutils literal notranslate"><span class="pre">docker://</span></code> when using, for example,
+the <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">pull</span></code> command. A range of <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/definition_files.html#preferred-bootstrap-agents">different bootstrap options</a>
+are supported. <code class="docutils literal notranslate"><span class="pre">From:</span> <span class="pre">ubuntu:20.04</span></code> says that we want to use the <code class="docutils literal notranslate"><span class="pre">ubuntu</span></code> image with the tag <code class="docutils literal notranslate"><span class="pre">20.04</span></code>.</p>
+<p>Next we have the <cite>%post</cite> section of the definition file:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%post
+<span class="w">  </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3
+</pre></div>
+</div>
+<p>In this section of the file we can do tasks such as package installation, pulling data files from remote locations
+and undertaking local configuration within the image. The commands that appear in this section are standard shell
+commands and they are run <strong>within</strong> the context of our new container image. So, in the case of this example,
+these commands are being run within the context of a minimal Ubuntu 20.04 image that initially has only a very small
+set of core packages installed.</p>
+<p>Here we use Ubuntu’s package manager to update our package indexes and then install the <code class="docutils literal notranslate"><span class="pre">python3</span></code> package along
+with any required dependencies (in Ubuntu 20.04, the <strong>python3</strong> package installs <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">3.8.5</span></code>). The <code class="docutils literal notranslate"><span class="pre">-y</span></code> switches
+are used to accept, by default, interactive prompts that might appear asking you to confirm package updates or installation.
+This is required because our definition file should be able to run in an unattended, non-interactive environment.</p>
+<p>Finally we have the <code class="docutils literal notranslate"><span class="pre">%runscript</span></code> section:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>%runscript
+<span class="w">  </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;print(&quot;Hello World! Hello from our custom Singularity image!&quot;)&#39;</span>
+</pre></div>
+</div>
+<p>This section is used to define a script that should be run when a container is started based on this image using
+the <cite>singularity run</cite> command. In this simple example we use <cite>python3</cite> to print out some text to the console.</p>
+<p>We can now save the contents of the simple defintion file shown above to a file and build an image based on it.
+In the case of this example, the definition file has been named <cite>my_test_image.def</cite>. (Note that the instructions
+here assume you’ve bound the image output directory you created to the <cite>/home/singularity</cite> directory in your Docker Singularity container):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>/home/singularity/my_test_image.sif<span class="w"> </span>/home/singularity/my_test_image.def
+</pre></div>
+</div>
+<p>Recall from the details at the start of this section that if you are running your command from the host system command line,
+running an instance of a Docker container for each run of the command, your command will look something like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--privileged<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/home/singularity<span class="w"> </span>quay.io/singularity/singularity:v3.8.2-slim<span class="w"> </span>build<span class="w"> </span>/home/singularity/my_test_image.sif<span class="w"> </span>/home/singularity/my_test_image.def
+</pre></div>
+</div>
+<p>The above command requests the building of an image based on the <cite>my_test_image.def</cite> file with the resulting image
+saved to the <cite>my_test_image.sif</cite> file. Note that you will need to prefix the command with <cite>sudo</cite> if you’re running
+a locally installed version of Singularity and not running via Docker because it is necessary to have administrative
+privileges to build the image. You should see output similar to the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>INFO:    Starting build...
+Getting image source signatures
+Copying blob da7391352a9b done
+Copying blob 14428a6d4bcd done
+Copying blob 2c2d948710f2 done
+Copying config aa23411143 done
+Writing manifest to image destination
+Storing signatures
+2020/12/08 09:15:18  info unpack layer: sha256:da7391352a9bb76b292a568c066aa4c3cbae8d494e6a3c68e3c596d34f7c75f8
+2020/12/08 09:15:19  info unpack layer: sha256:14428a6d4bcdba49a64127900a0691fb00a3f329aced25eb77e3b65646638f8d
+2020/12/08 09:15:19  info unpack layer: sha256:2c2d948710f21ad82dce71743b1654b45acb5c059cf5c19da491582cef6f2601
+INFO:    Running post scriptlet
++ apt-get -y update
+Get:1 http://archive.ubuntu.com/ubuntu focal InRelease [265 kB]
+...
+[Package update output truncated]
+...
+Fetched 16.6 MB in 3s (6050 kB/s)
+Reading package lists...
++ apt-get install -y python3
+Reading package lists...
+...
+[Package install output truncated]
+...
+Processing triggers for libc-bin (2.31-0ubuntu9.1) ...
+INFO:    Adding runscript
+INFO:    Creating SIF file...
+INFO:    Build complete: my_test_image.sif
+$
+</pre></div>
+</div>
+<p>You should now have a <code class="docutils literal notranslate"><span class="pre">my_test_image.sif</span></code> file in the current directory. Note that in
+your version of the above output, after it says <code class="docutils literal notranslate"><span class="pre">INFO:</span>&#160; <span class="pre">Starting</span> <span class="pre">build...</span></code> you may see
+a series of <code class="docutils literal notranslate"><span class="pre">skipped:</span> <span class="pre">already</span> <span class="pre">exists</span></code> messages for the <code class="docutils literal notranslate"><span class="pre">Copying</span> <span class="pre">blob</span></code> lines. This happens
+when the Docker image slices for the Ubuntu 20.04 image have previously been downloaded and
+are cached on the system where this example is being run. On your system, if the image is not
+already cached, you will see the slices being downloaded from Docker Hub when these lines of output appear.</p>
+</section>
+<section id="permissions-of-the-created-image-file">
+<h3>Permissions of the created image file<a class="headerlink" href="#permissions-of-the-created-image-file" title="Link to this heading"></a></h3>
+<p>You may find that the created Singularity image file on your host filesystem is owned by the <cite>root</cite> user and not your user.
+In this case, you won’t be able to change the ownership/permissions of the file directly if you don’t have root access.
+However, the image file will be readable by you and you should be able to take a copy of the file under a new name which
+you will then own. You will then be able to modify the permissions of this copy of the image and delete the original
+root-owned file since the default permissions should allow this.</p>
+<p><strong>Testing your Singularity image</strong></p>
+<p>In a moment we’ll test the created image on our HPC platform but, first, you should be able to run a shell in an instance of
+the Docker Singularity container and run your singularity image there.</p>
+<div class="admonition-run-the-singularity-image-you-ve-created exercise important admonition" id="exercise-2">
+<p class="admonition-title">Run the Singularity image you’ve created</p>
+<p>Can you run the Singularity image you’ve just built from a shell
+within the Docker Singularity container?</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-2">
+<p class="admonition-title">Solution</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--entrypoint<span class="o">=</span>/bin/sh<span class="w"> </span>--privileged<span class="w"> </span>--rm<span class="w"> </span>-v<span class="w"> </span><span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/home/singularity<span class="w"> </span>quay.io/singularity/singularity:v3.8.2-slim
+/#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/home/singularity
+/home/singularity#<span class="w"> </span>singularity<span class="w"> </span>run<span class="w"> </span>my_test_image.sif
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Hello World! Hello from our custom Singularity image!
+/home/singularity#
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition-using-singularity-run-from-within-the-docker-container callout admonition" id="callout-0">
+<p class="admonition-title">Using <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">run</span></code> from within the Docker container</p>
+<p>It is strongly recommended that you don’t use the Docker container for running Singularity images
+in any production setting, only for creating them, since the Singularity command runs within the
+container as the root user.
+However, for the purposes of this simple example, the Docker Singularity container provides an ideal
+environment to test that
+you have successfully built your container.</p>
+</div>
+<p>Now we’ll test our image on an HPC platform. Move your created <code class="docutils literal notranslate"><span class="pre">.sif</span></code> image file to a platform with
+an installation of Singularity.
+You could, for example, do this using the command line secure copy command <code class="docutils literal notranslate"><span class="pre">scp</span></code>. For example,
+the following command would copy
+<cite>my_test_image.sif</cite> to the remote server identified by <code class="docutils literal notranslate"><span class="pre">&lt;target</span> <span class="pre">hostname&gt;</span></code> (don’t forget
+the colon at the end of the hostname!):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>scp<span class="w"> </span>-i<span class="w"> </span>&lt;full<span class="w"> </span>path<span class="w"> </span>to<span class="w"> </span>SSH<span class="w"> </span>key<span class="w"> </span>file&gt;<span class="w"> </span>my_test_image.sif<span class="w"> </span>&lt;target<span class="w"> </span>hostname&gt;:
+</pre></div>
+</div>
+<p>You could provide a destination path for the file straight after the colon at the end of the above
+command (without a space),
+but by default, the file will be uploaded to you home directory.</p>
+<p>Try to run the container on the login node of the HPC platform and check that you get the expected output.</p>
+<p>It is recommended that you move the create <cite>.sif</cite> file to a platform with an installation of Singularity,
+rather than attempting to run
+the image using the Docker container. However, if you do try to use the Docker container,
+see the notes below on “<em>Using singularity run from within the Docker container</em>” for further information.</p>
+<p>Now that we’ve built an image, we can attempt to run it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>run<span class="w"> </span>my_test_image.sif
+</pre></div>
+</div>
+<p>If everything worked successfully, you should see the message printed
+by Python:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hello<span class="w"> </span>World!<span class="w"> </span>Hello<span class="w"> </span>from<span class="w"> </span>our<span class="w"> </span>custom<span class="w"> </span>Singularity<span class="w"> </span>image!
+</pre></div>
+</div>
+<div class="admonition-using-singularity-run-from-within-the-docker-container callout admonition" id="callout-1">
+<p class="admonition-title">Using <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">run</span></code> from within the Docker container</p>
+<p>It is strongly recommended that you don’t use the Docker container
+for running Singularity images, only for creating then, since the
+Singularity command runs within the container as the root
+user. However, for the purposes of this simple example, if you are
+trying to run the container using the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> command from
+within the Docker container, it is likely that you will get an error
+relating to <code class="docutils literal notranslate"><span class="pre">/etc/localtime</span></code> similar to the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>WARNING: skipping mount of /etc/localtime: no such file or directory
+FATAL: container creation failed: mount
+/etc/localtime-&gt;/etc/localtime error: while mounting
+/etc/localtime: mount source /etc/localtime doesn&#39;t exist
+</pre></div>
+</div>
+<p>This occurs because the <code class="docutils literal notranslate"><span class="pre">/etc/localtime</span></code> file that provides
+timezone configuration is not present within the Docker container.
+If you want to use the Docker container to test that your newly
+created image runs, you’ll need to open a shell in the Docker
+container and add a timezone configuration as described in the
+<a class="reference external" href="https://wiki.alpinelinux.org/wiki/Setting_the_timezone">Alpine Linux documentation</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>apk<span class="w"> </span>add<span class="w"> </span>tzdata
+cp<span class="w"> </span>/usr/share/zoneinfo/Europe/London<span class="w"> </span>/etc/localtime
+</pre></div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">run</span></code> command should now work successfully.</p>
+</section>
+</section>
+<section id="more-about-definiton-files">
+<h2>More about definiton files<a class="headerlink" href="#more-about-definiton-files" title="Link to this heading"></a></h2>
+<p>A {Singularity} Definition file is divided into two parts:</p>
+<ol class="arabic simple">
+<li><p><strong>Header</strong>: The Header describes the core operating system to build within
+the container. Here you will configure the base operating system features
+needed within the container. You can specify, the Linux distribution, the
+specific version, and the packages that must be part of the core install
+(borrowed from the host system).</p></li>
+<li><p><strong>Sections</strong>: The rest of the definition is comprised of sections, (sometimes
+called scriptlets or blobs of data). Each section is defined by a <code class="docutils literal notranslate"><span class="pre">%</span></code>
+character followed by the name of the particular section. All sections are
+optional, and a def file may contain more than one instance of a given
+section. Sections that are executed at build time are executed with the
+<code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code> interpreter and can accept <code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code> options. Similarly,
+sections that produce scripts to be executed at runtime can accept options
+intended for <code class="docutils literal notranslate"><span class="pre">/bin/sh</span></code></p></li>
+</ol>
+<p>For more in-depth and practical examples of def files, see the <a class="reference external" href="https://github.com/hpcng/singularity/tree/master/examples">Singularity examples
+repository</a></p>
+<p>For a comparison between Dockerfile and {Singularity} definition file,
+please see: <span class="xref std std-ref">this section</span>.</p>
+<section id="header">
+<h3>Header<a class="headerlink" href="#header" title="Link to this heading"></a></h3>
+<p>The header should be written at the top of the def file. It tells {Singularity}
+about the base operating system that it should use to build the container. It is
+composed of several keywords.</p>
+<p>The only keyword that is required for every type of build is <code class="docutils literal notranslate"><span class="pre">Bootstrap</span></code>.
+It determines the <em>bootstrap agent</em>  that will be used to create the base
+operating system you want to use. For example, the <code class="docutils literal notranslate"><span class="pre">library</span></code> bootstrap agent
+will pull a container from the <a class="reference external" href="https://cloud.sylabs.io/library">Container Library</a> as a base. Similarly, the <code class="docutils literal notranslate"><span class="pre">docker</span></code>
+bootstrap agent will pull docker layers from <a class="reference external" href="https://hub.docker.com/">Docker Hub</a> as a base OS to start your image.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">Bootstrap</span></code> keyword needs to be the first
+entry in the header section.  This breaks compatibility with older versions
+that allow the parameters of the header to appear in any order.</p>
+<p>Depending on the value assigned to <code class="docutils literal notranslate"><span class="pre">Bootstrap</span></code>, other keywords may also be
+valid in the header. For example, when using the <code class="docutils literal notranslate"><span class="pre">library</span></code> bootstrap agent,
+the <code class="docutils literal notranslate"><span class="pre">From</span></code> keyword becomes valid. Observe the following example for building a
+Debian container from the Container Library:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="k">Bootstrap</span>:<span class="w"> </span>library
+<span class="k">From</span>:<span class="w"> </span>debian:<span class="m">7</span>
+</pre></div>
+</div>
+<p>A def file that uses an official mirror to install Centos-7 might look like
+this:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="k">Bootstrap</span>:<span class="w"> </span>yum
+<span class="k">OSVersion</span>:<span class="w"> </span><span class="m">7</span>
+<span class="k">MirrorURL</span>:<span class="w"> </span>http://mirror.centos.org/centos-%{OSVERSION}/%{OSVERSION}/os/$basearch/
+<span class="k">Include</span>:<span class="w"> </span>yum
+</pre></div>
+</div>
+<p>Each bootstrap agent enables its own options and keywords. You can read about
+them and see examples in the <span class="xref std std-ref">appendix section</span>:</p>
+<p><strong>Preferred bootstrap agents</strong></p>
+<ul class="simple">
+<li><p>library (images hosted on the <a class="reference external" href="https://cloud.sylabs.io/library">Container Library</a>)</p></li>
+<li><p>docker (images hosted on Docker Hub)</p></li>
+<li><p>build-shub (images hosted on Singularity Hub)</p></li>
+<li><p>oras (images from supporting OCI registries)</p></li>
+<li><p>scratch (a flexible option for building a container from scratch)</p></li>
+</ul>
+<p><strong>Other bootstrap agents</strong></p>
+<ul class="simple">
+<li><p>localimage (images saved on your machine)</p></li>
+<li><p>yum (yum based systems such as CentOS and Scientific Linux)</p></li>
+<li><p>debootstrap (apt based systems such as Debian and Ubuntu)</p></li>
+<li><p>oci (bundle compliant with OCI Image Specification)</p></li>
+<li><p>oci-archive (tar files obeying the OCI Image Layout Specification)</p></li>
+<li><p>docker-daemon (images managed by the locally running docker daemon)</p></li>
+<li><p>docker-archive (archived docker images)</p></li>
+<li><p>arch (Arch Linux)</p></li>
+<li><p>busybox (BusyBox)</p></li>
+<li><p>zypper (zypper based systems such as Suse and OpenSuse)</p></li>
+</ul>
+</section>
+<section id="a-general-definition">
+<h3>A general definition<a class="headerlink" href="#a-general-definition" title="Link to this heading"></a></h3>
+<p>The main content of the bootstrap file is broken into sections. Different
+sections add different content or execute commands at different times during the
+build process. Note that if any command fails, the build process will halt.</p>
+<p>Here is an example definition file that uses every available section. We will
+discuss each section in turn. It is not necessary to include every section (or
+any sections at all) within a def file. Furthermore, multiple sections of the
+same name can be included and will be appended to one another during the build
+process.</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="k">Bootstrap</span>:<span class="w"> </span>library
+<span class="k">From</span>:<span class="w"> </span>ubuntu:<span class="m">18.04</span>
+Stage:<span class="w"> </span>build
+
+<span class="gh">%setup</span>
+<span class="w">    </span>touch<span class="w"> </span>/file1
+<span class="w">    </span>touch<span class="w"> </span><span class="si">${</span><span class="nv">SINGULARITY_ROOTFS</span><span class="si">}</span>/file2
+
+<span class="gh">%files</span>
+<span class="w">    </span>/file1
+<span class="w">    </span>/file1<span class="w"> </span>/opt
+
+<span class="gh">%environment</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LISTEN_PORT</span><span class="o">=</span><span class="m">12345</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span>C
+
+<span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>netcat
+<span class="w">    </span><span class="nv">NOW</span><span class="o">=</span><span class="sb">`</span>date<span class="sb">`</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;export NOW=\&quot;</span><span class="si">${</span><span class="nv">NOW</span><span class="si">}</span><span class="s2">\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$SINGULARITY_ENVIRONMENT</span>
+
+<span class="gh">%runscript</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Container was created </span><span class="nv">$NOW</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Arguments received: </span><span class="nv">$*</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">exec</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+
+<span class="gh">%startscript</span>
+<span class="w">    </span>nc<span class="w"> </span>-lp<span class="w"> </span><span class="nv">$LISTEN_PORT</span>
+
+<span class="gh">%test</span>
+<span class="w">    </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="nv">NAME</span><span class="o">=</span><span class="se">\&quot;</span>Ubuntu<span class="se">\&quot;</span><span class="w"> </span>/etc/os-release
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Container base is Ubuntu as expected.&quot;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Container base is not Ubuntu.&quot;</span>
+<span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+
+<span class="gh">%labels</span>
+<span class="w">    </span>Author<span class="w"> </span>d@sylabs.io
+<span class="w">    </span>Version<span class="w"> </span>v0.0.1
+
+<span class="gh">%help</span>
+<span class="w">    </span>This<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>demo<span class="w"> </span>container<span class="w"> </span>used<span class="w"> </span>to<span class="w"> </span>illustrate<span class="w"> </span>a<span class="w"> </span>def<span class="w"> </span>file<span class="w"> </span>that<span class="w"> </span>uses<span class="w"> </span>all
+<span class="w">    </span>supported<span class="w"> </span>sections.
+</pre></div>
+</div>
+<p>Although the order of the sections in the def file is unimportant, they have
+been documented below in the order of their execution during the build process
+for logical understanding.</p>
+</section>
+<section id="setup">
+<h3><code class="docutils literal notranslate"><span class="pre">%setup</span></code><a class="headerlink" href="#setup" title="Link to this heading"></a></h3>
+<p>During the build process, commands in the <code class="docutils literal notranslate"><span class="pre">%setup</span></code> section are first executed
+on the host system outside of the container after the base OS has been installed.
+You can reference the container file system with the <code class="docutils literal notranslate"><span class="pre">$SINGULARITY_ROOTFS</span></code>
+environment variable in the <code class="docutils literal notranslate"><span class="pre">%setup</span></code> section.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Be careful with the <code class="docutils literal notranslate"><span class="pre">%setup</span></code> section! This scriptlet is executed outside
+of the container on the host system itself, and is executed with elevated
+privileges.</p>
+</div>
+<p>Consider the example from the definition file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%setup</span>
+<span class="w">    </span>touch<span class="w"> </span>/file1
+<span class="w">    </span>touch<span class="w"> </span><span class="si">${</span><span class="nv">SINGULARITY_ROOTFS</span><span class="si">}</span>/file2
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">file1</span></code> is created at the root of the file system <strong>on the host</strong>.
+We’ll use <code class="docutils literal notranslate"><span class="pre">file1</span></code> to demonstrate the usage of the <code class="docutils literal notranslate"><span class="pre">%files</span></code> section below.
+The <code class="docutils literal notranslate"><span class="pre">file2</span></code> is created at the root of the file system <strong>within the
+container</strong>.</p>
+<p>In later versions of {Singularity} the <code class="docutils literal notranslate"><span class="pre">%files</span></code> section is provided as a safer
+alternative to copying files from the host system into the container during the
+build. Because of the potential danger involved in running the <code class="docutils literal notranslate"><span class="pre">%setup</span></code>
+scriptlet with elevated privileges on the host system during the build, it’s
+use is generally discouraged.</p>
+<p><code class="docutils literal notranslate"><span class="pre">%setup</span></code> can be used for exporting environmental variables.</p>
+</section>
+<section id="files">
+<h3><code class="docutils literal notranslate"><span class="pre">%files</span></code><a class="headerlink" href="#files" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%files</span></code> section allows you to copy files into the container with greater
+safety than using the <code class="docutils literal notranslate"><span class="pre">%setup</span></code> section. Its general form is:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%files</span><span class="w"> </span><span class="o">[</span>from<span class="w"> </span>&lt;stage&gt;<span class="o">]</span>
+<span class="w">    </span>&lt;source&gt;<span class="w"> </span><span class="o">[</span>&lt;destination&gt;<span class="o">]</span>
+<span class="w">    </span>...
+</pre></div>
+</div>
+<p>Each line is a <code class="docutils literal notranslate"><span class="pre">&lt;source&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;destination&gt;</span></code> pair. The <code class="docutils literal notranslate"><span class="pre">&lt;source&gt;</span></code> is either:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>A valid path on your host system</p></li>
+<li><p>A valid path in a previous stage of the build</p></li>
+</ol>
+</div></blockquote>
+<p>while the <code class="docutils literal notranslate"><span class="pre">&lt;destination&gt;</span></code> is always a path into the current container. If the
+<code class="docutils literal notranslate"><span class="pre">&lt;destination&gt;</span></code> path is omitted it will be assumed to be the same as <code class="docutils literal notranslate"><span class="pre">&lt;source&gt;</span></code>.
+To show how copying from your host system works, let’s consider the example from
+the definition file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%files</span>
+<span class="w">    </span>/file1
+<span class="w">    </span>/file1<span class="w"> </span>/opt
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">file1</span></code> was created in the root of the host file system during the <code class="docutils literal notranslate"><span class="pre">%setup</span></code>
+section (see above).  The <code class="docutils literal notranslate"><span class="pre">%files</span></code> scriptlet will copy <code class="docutils literal notranslate"><span class="pre">file1</span></code> to the root
+of the container file system and then make a second copy of <code class="docutils literal notranslate"><span class="pre">file1</span></code> within the
+container in <code class="docutils literal notranslate"><span class="pre">/opt</span></code>.</p>
+<p>Files can also be copied from other stages by providing the source location in the
+previous stage and the destination in the current container.</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%files</span><span class="w"> </span>from<span class="w"> </span>stage_name
+<span class="w">  </span>/root/hello<span class="w"> </span>/bin/hello
+</pre></div>
+</div>
+<p>The only difference in behavior between copying files from your host system and copying them
+from previous stages is that in the former case symbolic links are always followed
+during the copy to the container, while in the latter symbolic links are preserved.</p>
+<p>Files in the <code class="docutils literal notranslate"><span class="pre">%files</span></code> section are always copied before the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section is
+executed so that they are available during the build and configuration process.</p>
+</section>
+<section id="post">
+<h3><code class="docutils literal notranslate"><span class="pre">%post</span></code><a class="headerlink" href="#post" title="Link to this heading"></a></h3>
+<p>This section is where you can download files from the internet with tools like <code class="docutils literal notranslate"><span class="pre">git</span></code>
+and <code class="docutils literal notranslate"><span class="pre">wget</span></code>, install new software and libraries, write configuration files,
+create new directories, etc.</p>
+<p>Consider the example from the definition file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%post</span>
+<span class="w">    </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>netcat
+<span class="w">    </span><span class="nv">NOW</span><span class="o">=</span><span class="sb">`</span>date<span class="sb">`</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;export NOW=\&quot;</span><span class="si">${</span><span class="nv">NOW</span><span class="si">}</span><span class="s2">\&quot;&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span><span class="nv">$SINGULARITY_ENVIRONMENT</span>
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">%post</span></code> scriptlet uses the Ubuntu package manager <code class="docutils literal notranslate"><span class="pre">apt</span></code> to update the
+container and install the program <code class="docutils literal notranslate"><span class="pre">netcat</span></code> (that will be used in the
+<code class="docutils literal notranslate"><span class="pre">%startscript</span></code> section below).</p>
+<p>The script is also setting an environment variable at build time.  Note that the
+value of this variable cannot be anticipated, and therefore cannot be set during
+the <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section. For situations like this, the <code class="docutils literal notranslate"><span class="pre">$SINGULARITY_ENVIRONMENT</span></code>
+variable is provided. Redirecting text to this variable will cause it to be
+written to a file called <code class="docutils literal notranslate"><span class="pre">/.singularity.d/env/91-environment.sh</span></code> that will be
+sourced at runtime.</p>
+</section>
+<section id="test">
+<h3><code class="docutils literal notranslate"><span class="pre">%test</span></code><a class="headerlink" href="#test" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%test</span></code> section runs at the very end of the build process to
+validate the container using a method of your choice. You can also
+execute this scriptlet through the container itself, using the
+<code class="docutils literal notranslate"><span class="pre">test</span></code> command.</p>
+<p>Consider the example from the def file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%test</span>
+<span class="w">    </span>grep<span class="w"> </span>-q<span class="w"> </span><span class="nv">NAME</span><span class="o">=</span><span class="se">\&quot;</span>Ubuntu<span class="se">\&quot;</span><span class="w"> </span>/etc/os-release
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Container base is Ubuntu as expected.&quot;</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">        </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Container base is not Ubuntu.&quot;</span>
+<span class="w">        </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="w">    </span><span class="k">fi</span>
+</pre></div>
+</div>
+<p>This (somewhat silly) script tests if the base OS is Ubuntu. You could
+also write a script to test that binaries were appropriately
+downloaded and built, or that software works as expected on custom
+hardware. If you want to build a container without running the
+<code class="docutils literal notranslate"><span class="pre">%test</span></code> section (for example, if the build system does not have the
+same hardware that will be used on the production system), you can do
+so with the <code class="docutils literal notranslate"><span class="pre">--notest</span></code> build option:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ sudo singularity build --notest my_container.sif my_container.def
+</pre></div>
+</div>
+<p>Running the test command on a container built with this def file yields the
+following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ singularity test my_container.sif
+Container base is Ubuntu as expected.
+</pre></div>
+</div>
+<p>One common use of the <code class="docutils literal notranslate"><span class="pre">%test</span></code> section is to run a quick check that
+the programs you intend to install in the container are present. If
+you installed the program <code class="docutils literal notranslate"><span class="pre">samtools</span></code>, which shows a usage screen when
+run without any options, you might test it can be run with:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%test</span>
+<span class="w">    </span><span class="c1"># Run samtools - exits okay with usage screen if installed</span>
+<span class="w">    </span>samtools
+</pre></div>
+</div>
+<p>If <code class="docutils literal notranslate"><span class="pre">samtools</span></code> is not successfully installed in the container then the
+<code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">test</span></code> will exit with an error such as <code class="docutils literal notranslate"><span class="pre">samtools:</span>
+<span class="pre">command</span> <span class="pre">not</span> <span class="pre">found</span></code>.</p>
+<p>Some programs return an error code when run without mandatory
+options. If you want to ignore this, and just check the program is
+present and can be called, you can run it as <code class="docutils literal notranslate"><span class="pre">myprog</span> <span class="pre">||</span> <span class="pre">true</span></code> in
+your test:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%test</span>
+<span class="w">    </span><span class="c1"># Run bwa - exits with error code if installed and run without</span>
+<span class="w">    </span><span class="c1"># options</span>
+<span class="w">    </span>bwa<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">||</span> <span class="pre">true</span></code> means that if the command before it is found but
+returns an error code it will be ignored, and replaced with the error
+code from <code class="docutils literal notranslate"><span class="pre">true</span></code> - which is always <code class="docutils literal notranslate"><span class="pre">0</span></code> indicating success.</p>
+<p>Because the <code class="docutils literal notranslate"><span class="pre">%test</span></code> section is a shell scriptlet, complex tests are
+possible. Your scriptlet should usually be written so it will exit
+with a non-zero error code if there is a problem during the tests.</p>
+<p>Now, the following sections are all inserted into the container filesystem in
+single step:</p>
+</section>
+<section id="environment">
+<h3><code class="docutils literal notranslate"><span class="pre">%environment</span></code><a class="headerlink" href="#environment" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section allows you to define environment variables that
+will be set at runtime. Note that these variables are not made available at
+build time by their inclusion in the <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section. This means that
+if you need the same variables during the build process, you should also define
+them in your <code class="docutils literal notranslate"><span class="pre">%post</span></code> section. Specifically:</p>
+<ul class="simple">
+<li><p><strong>during build</strong>: The <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section is written to a file in the
+container metadata directory. This file is not sourced.</p></li>
+<li><p><strong>during runtime</strong>: The file in the container metadata directory is sourced.</p></li>
+</ul>
+<p>You should use the same conventions that you would use in a <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> or
+<code class="docutils literal notranslate"><span class="pre">.profile</span></code> file. Consider this example from the def file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%environment</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LISTEN_PORT</span><span class="o">=</span><span class="m">12345</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span>C
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">$LISTEN_PORT</span></code> variable will be used in the <code class="docutils literal notranslate"><span class="pre">%startscript</span></code> section
+below. The <code class="docutils literal notranslate"><span class="pre">$LC_ALL</span></code> variable is useful for many programs (often written in
+Perl) that complain when no locale is set.</p>
+<p>After building this container, you can verify that the environment variables are
+set appropriately at runtime with the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ singularity exec my_container.sif env | grep -E &#39;LISTEN_PORT|LC_ALL&#39;
+LISTEN_PORT=12345
+LC_ALL=C
+</pre></div>
+</div>
+<p>In the special case of variables generated at build time, you can also add
+environment variables to your container in the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section.</p>
+<p>At build time, the content of the <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section is written to a file
+called <code class="docutils literal notranslate"><span class="pre">/.singularity.d/env/90-environment.sh</span></code> inside of the container.  Text
+redirected to the <code class="docutils literal notranslate"><span class="pre">$SINGULARITY_ENVIRONMENT</span></code> variable during <code class="docutils literal notranslate"><span class="pre">%post</span></code> is
+added to a file called <code class="docutils literal notranslate"><span class="pre">/.singularity.d/env/91-environment.sh</span></code>.</p>
+<p>At runtime, scripts in <code class="docutils literal notranslate"><span class="pre">/.singularity/env</span></code> are sourced in order. This means
+that variables in the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section take precedence over those added  via
+<code class="docutils literal notranslate"><span class="pre">%environment</span></code>.</p>
+<p>See <span class="xref std std-ref">Environment and Metadata</span> for more
+information about the {Singularity} container environment.</p>
+</section>
+<section id="runscript">
+<h3><code class="docutils literal notranslate"><span class="pre">%runscript</span></code><a class="headerlink" href="#runscript" title="Link to this heading"></a></h3>
+<p>The contents of the <code class="docutils literal notranslate"><span class="pre">%runscript</span></code> section are written to a file within the
+container that is executed when the container image is run (either via the
+<code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">run</span></code> command or by executing the container directly as a
+command). When the container is invoked, arguments following the container name
+are passed to the runscript. This means that you can (and should) process
+arguments within your runscript.</p>
+<p>Consider the example from the def file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%runscript</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Container was created </span><span class="nv">$NOW</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Arguments received: </span><span class="nv">$*</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">exec</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$@</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p>In this runscript, the time that the container was created is echoed via the
+<code class="docutils literal notranslate"><span class="pre">$NOW</span></code> variable (set in the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section above). The options passed to
+the container at runtime are printed as a single string (<code class="docutils literal notranslate"><span class="pre">$*</span></code>) and then they
+are passed to echo via a quoted array (<code class="docutils literal notranslate"><span class="pre">$&#64;</span></code>) which ensures that all of the
+arguments are properly parsed by the executed command. The <code class="docutils literal notranslate"><span class="pre">exec</span></code> preceding
+the final <code class="docutils literal notranslate"><span class="pre">echo</span></code> command replaces the current entry in the process table
+(which originally was the call to {Singularity}). Thus the runscript shell process
+ceases to exist, and only the process running within the container remains.</p>
+<p>Running the container built using this def file will yield the following:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ ./my_container.sif
+Container was created Thu Dec  6 20:01:56 UTC 2018
+Arguments received:
+
+$ ./my_container.sif this that and the other
+Container was created Thu Dec  6 20:01:56 UTC 2018
+Arguments received: this that and the other
+this that and the other
+</pre></div>
+</div>
+</section>
+<section id="labels">
+<h3><code class="docutils literal notranslate"><span class="pre">%labels</span></code><a class="headerlink" href="#labels" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">%labels</span></code> section is used to add metadata to the file
+<code class="docutils literal notranslate"><span class="pre">/.singularity.d/labels.json</span></code> within your container. The general format is a
+name-value pair.</p>
+<p>Consider the example from the def file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%labels</span>
+<span class="w">    </span>Author<span class="w"> </span>d@sylabs.io
+<span class="w">    </span>Version<span class="w"> </span>v0.0.1
+<span class="w">    </span>MyLabel<span class="w"> </span>Hello<span class="w"> </span>World
+</pre></div>
+</div>
+<p>Note that labels are defined by key-value pairs. To define a label just add it
+on the labels section and after the first space character add the correspondent value to the label.</p>
+<p>In the previous example, the first label name is <code class="docutils literal notranslate"><span class="pre">Author`</span></code> with a
+value of <code class="docutils literal notranslate"><span class="pre">d&#64;sylabs.io</span></code>. The second label name is <code class="docutils literal notranslate"><span class="pre">Version</span></code> with a value of <code class="docutils literal notranslate"><span class="pre">v0.0.1</span></code>.
+Finally, the last label named <code class="docutils literal notranslate"><span class="pre">MyLabel</span></code> has the value of <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World</span></code>.</p>
+<p>To inspect the available labels on your image you can do so by running the following command:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ singularity inspect my_container.sif
+
+{
+  &quot;Author&quot;: &quot;d@sylabs.io&quot;,
+  &quot;Version&quot;: &quot;v0.0.1&quot;,
+  &quot;MyLabel&quot;: &quot;Hello World&quot;,
+  &quot;org.label-schema.build-date&quot;: &quot;Thursday_6_December_2018_20:1:56_UTC&quot;,
+  &quot;org.label-schema.schema-version&quot;: &quot;1.0&quot;,
+  &quot;org.label-schema.usage&quot;: &quot;/.singularity.d/runscript.help&quot;,
+  &quot;org.label-schema.usage.singularity.deffile.bootstrap&quot;: &quot;library&quot;,
+  &quot;org.label-schema.usage.singularity.deffile.from&quot;: &quot;ubuntu:18.04&quot;,
+  &quot;org.label-schema.usage.singularity.runscript.help&quot;: &quot;/.singularity.d/runscript.help&quot;,
+  &quot;org.label-schema.usage.singularity.version&quot;: &quot;3.0.1&quot;
+}
+</pre></div>
+</div>
+<p>Some labels that are captured automatically from the build process. You can read
+more about labels and metadata <span class="xref std std-ref">here</span>.</p>
+</section>
+<section id="help">
+<h3><code class="docutils literal notranslate"><span class="pre">%help</span></code><a class="headerlink" href="#help" title="Link to this heading"></a></h3>
+<p>Any text in the <code class="docutils literal notranslate"><span class="pre">%help</span></code> section is transcribed into a metadata file in the
+container during the build. This text can then be displayed using the
+<code class="docutils literal notranslate"><span class="pre">run-help</span></code> command.</p>
+<p>Consider the example from the def file above:</p>
+<div class="highlight-singularity notranslate"><div class="highlight"><pre><span></span><span class="gh">%help</span>
+<span class="w">    </span>This<span class="w"> </span>is<span class="w"> </span>a<span class="w"> </span>demo<span class="w"> </span>container<span class="w"> </span>used<span class="w"> </span>to<span class="w"> </span>illustrate<span class="w"> </span>a<span class="w"> </span>def<span class="w"> </span>file<span class="w"> </span>that<span class="w"> </span>uses<span class="w"> </span>all
+<span class="w">    </span>supported<span class="w"> </span>sections.
+</pre></div>
+</div>
+<p>After building the help can be displayed like so:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ singularity run-help my_container.sif
+    This is a demo container used to illustrate a def file that uses all
+    supported sections.
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/definition_files.html#sections">“Sections” part of the definition file documentation</a>
+details all the sections and provides an example definition file that
+makes use of all the sections.</p>
+</section>
+</section>
+<section id="additional-singularity-features">
+<h2>Additional Singularity features<a class="headerlink" href="#additional-singularity-features" title="Link to this heading"></a></h2>
+<p>Singularity has a wide range of features. You can find full details in
+the <a class="reference external" href="https://sylabs.io/guides/3.5/user-guide/index.html">Singularity User Guide</a> and we
+highlight a couple of key features here that may be of use/interest:</p>
+<p><strong>Remote Builder Capabilities:</strong> If you have access to a platform with
+Singularity installed but you don’t have root access to create
+containers, you may be able to use the <a class="reference external" href="https://cloud.sylabs.io/builder">Remote
+Builder</a> functionality to offload the
+process of building an image to remote cloud resources.  You’ll need
+to register for a <strong>cloud token</strong> via the link on the Remote Builder
+page.</p>
+<p><strong>Signing containers:</strong> If you do want to share container image
+(<code class="docutils literal notranslate"><span class="pre">.sif</span></code>) files directly with colleagues or collaborators, how can the
+people you send an image to be sure that they have received the file
+without it being tampered with or suffering from corruption during
+transfer/storage? And how can you be sure that the same goes for any
+container image file you receive from others? Singularity supports
+signing containers. This allows a digital signature to be linked to
+an image file. This signature can be used to verify that an image
+file has been signed by the holder of a specific key and that the
+file is unchanged from when it was signed. You can find full details
+of how to use this functionality in the Singularity documentation on
+<a class="reference external" href="https://sylabs.io/guides/3.7/user-guide/signNverify.html">Signing and Verifying Containers</a>.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

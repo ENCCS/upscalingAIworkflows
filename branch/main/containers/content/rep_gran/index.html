@@ -1,0 +1,358 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Containers in research workflows &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/tabs.css?v=a5c4661c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script src="../../../_static/tabs.js?v=3030b3cb"></script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="PWD exercises" href="../pwd_exmps/" />
+    <link rel="prev" title="Running MPI parallel jobs using Singularity containers" href="../mpi_contain/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../../../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Containers in research workflows</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#reproducibility">Reproducibility</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sharing-images">Sharing images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#archiving-images">Archiving images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reproducibility-good-practice">Reproducibility good practice</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#container-granularity">Container Granularity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#container-orchestration">Container Orchestration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Containers in research workflows</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/containers/content/rep_gran.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="containers-in-research-workflows">
+<span id="rep-gran"></span><h1>Containers in research workflows<a class="headerlink" href="#containers-in-research-workflows" title="Link to this heading"></a></h1>
+<p>Although this workshop is titled “Reproducible computational
+environments using containers”, so far we have mostly covered the
+mechanics of using Docker with only passing reference to the
+reproducibility aspects. In this section, we discuss these aspects in
+more detail.</p>
+<div class="admonition-work-in-progress callout admonition" id="callout-0">
+<p class="admonition-title">Work in progress</p>
+<p>Note that reproducibility aspects of software and containers are an
+active area of research, discussion and development so are subject
+to many changes. We will present some ideas and approaches here but
+best practices will likely evolve in the near future.</p>
+</div>
+<section id="reproducibility">
+<h2>Reproducibility<a class="headerlink" href="#reproducibility" title="Link to this heading"></a></h2>
+<p>By <em>reproducibility</em> here we mean the ability of someone else (or your
+future self) being able to reproduce what you did computationally at a
+particular time (be this in research, analysis or something else) as
+closely as possible even if they do not have access to exactly the
+same hardware resources # that you had when you did the original work.</p>
+<p>Some examples of why containers are an attractive technology to help
+with reproducibility include:</p>
+<ul class="simple">
+<li><p>The same computational work can be run across multiple different
+technologies seamlessly (e.g. Windows, macOS, Linux).</p></li>
+<li><p>You can save the exact process that you used for your computational
+work (rather than relying on potentially incomplete notes).</p></li>
+<li><p>You can save the exact versions of software and their dependencies
+in the image.</p></li>
+<li><p>You can access legacy versions of software and underlying
+dependencies which may not be generally available any more.</p></li>
+<li><p>Depending on their size, you can also potentially store a copy of
+key data within the image.</p></li>
+<li><p>You can archive and share the image as well as associating a
+persistent identifier with an image to allow other researchers to
+reproduce and build on your work.</p></li>
+</ul>
+</section>
+<section id="sharing-images">
+<h2>Sharing images<a class="headerlink" href="#sharing-images" title="Link to this heading"></a></h2>
+<p>As we have already seen, the Docker Hub provides a platform for
+sharing images publicly. Once you have uploaded an image, you can
+point people to its public location and they can download and build
+upon it.</p>
+<p>This is fine for working collaboratively with images on a day-to-day
+basis but the Docker Hub is not a good option for long time archive of
+images in support of research and publications as:</p>
+<ul class="simple">
+<li><p>free accounts have a limit on how long an image will be hosted if it
+is not updated</p></li>
+<li><p>it does not support adding persistent identifiers to images</p></li>
+<li><p>it is easy to overwrite tagged images with newer versions by mistake.</p></li>
+</ul>
+</section>
+<section id="archiving-images">
+<h2>Archiving images<a class="headerlink" href="#archiving-images" title="Link to this heading"></a></h2>
+<p>If for any reason you decided to archive an image, you can use the
+command below to take a snapshot of the image.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>save<span class="w"> </span>alice/alpine-python:v1<span class="w"> </span>-o<span class="w"> </span>alpine-python.tar
+</pre></div>
+</div>
+<div class="admonition-restoring-the-image-from-a-save callout admonition" id="callout-1">
+<p class="admonition-title">Restoring the image from a save</p>
+<p>Unsurprisingly, the command <cite>docker load alpine-python.tar.gz</cite> would
+be used to load the saved container and make it available to be used
+on your system. Note that the command can restore the compressed
+container directly without the need to uncompress first.</p>
+</div>
+</section>
+<section id="reproducibility-good-practice">
+<h2>Reproducibility good practice<a class="headerlink" href="#reproducibility-good-practice" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Make use of images to capture the computational environment
+required for your work.</p></li>
+<li><p>Decide on the appropriate granularity for the images you will use
+for your computational work - this will be different for each
+project/area. Take note of accepted practice from contemporary work
+in the same area.  What are the right building blocks for
+individual images in your work?</p></li>
+<li><p>Document what you have done and why - this can be put in comments
+in the Dockerfile and the use of the image described in associated
+documentation and/or publications.  Make sure that references are
+made in both directions so that the image and the documentation are
+appropriately linked.</p></li>
+</ul>
+</section>
+<section id="container-granularity">
+<h2>Container Granularity<a class="headerlink" href="#container-granularity" title="Link to this heading"></a></h2>
+<p>As mentioned above, one of the decisions you may need to make when
+containerising your research workflows is what level of <em>granularity</em>
+you wish to employ. The two extremes of this decision could be
+characterised as:</p>
+<ul class="simple">
+<li><p>Create a single container image with all the tools you require for
+your research or analysis workflow</p></li>
+<li><p>Create many container images each running a single command (or step)
+of the workflow and use them in sequence</p></li>
+</ul>
+<p>Of course, many real applications will sit somewhere between these two
+extremes.</p>
+<div class="admonition-positives-and-negatives callout admonition" id="callout-2">
+<p class="admonition-title">Positives and negatives</p>
+<p>What are the advantages and disadvantages of the two approaches to
+container granularity for research workflows described above? Think
+about this and write a few bullet points for advantages and
+disadvantages for each approach in the course Etherpad.</p>
+<p><strong>Single large container</strong></p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">Advantages</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">Disadvantages</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p>Simpler to document</p></li>
+<li><p>Full set of requirements packaged in one place</p></li>
+<li><p>Potentially easier to maintain (though could be opposite if
+working with large, distributed group)</p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p>Could get very large in size, making it more difficult to
+distribute</p></li>
+<li><p>Could use Docker multi-stage build
+docs.docker.com/develop/develop-images/multistage-build to
+reduce size</p></li>
+<li><p>Singularity also has a multistage build feature:
+sylabs.io/guides/3.2/user-guide/definition_files.html#multi-stage-builds</p></li>
+<li><p>May end up with same dependency issues within the container
+from different software requirements</p></li>
+<li><p>Potentially more complex to test</p></li>
+<li><p>Less re-useable for different, but related, work</p></li>
+</ul>
+</div></div>
+<p><strong>Multiple smaller containers</strong></p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" class="closeable" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Advantages</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Disadvantage</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p>Individual components can be re-used for different, but
+related, work</p></li>
+<li><p>Individual parts are smaller in size making them easier to
+distribute</p></li>
+<li><p>Avoid dependency issues between different softwares</p></li>
+<li><p>Easier to test</p></li>
+</ul>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p>More difficult to document</p></li>
+<li><p>Potentially more difficult to maintain (though could be
+easier if working with large, distributed group)</p></li>
+<li><p>May end up with dependency issues between component
+containers if they get out of sync</p></li>
+</ul>
+</div></div>
+</div>
+</section>
+<section id="container-orchestration">
+<h2>Container Orchestration<a class="headerlink" href="#container-orchestration" title="Link to this heading"></a></h2>
+<p>Although you can certainly manage research workflows that use multiple
+containers manually, there are a number of container orchestration
+tools that you may find useful when managing workflows that use
+multiple containers.  We won’t go in depth on using these tools in
+this lesson but instead briefly describe a few options and point to
+useful resources on using these tools to allow you to explore them
+yourself.</p>
+<ul class="simple">
+<li><p>Docker Compose</p></li>
+<li><p>Kubernetes</p></li>
+<li><p>Docker Swarm</p></li>
+</ul>
+<div class="admonition-the-wild-west callout admonition" id="callout-3">
+<p class="admonition-title">The Wild West</p>
+<p>Use of container orchestration tools for research workflows is a
+relatively new concept and so there is not a huge amount of
+documentation and experience out there at the moment. You may need
+to search around for useful information or, better still, contact
+your friendly neighbourhood to discuss what you want to do.</p>
+</div>
+<p><a class="reference external" href="https://docs.docker.com/compose/">Docker Compose</a> provides a
+way of constructing a unified workflow (or service) made up of
+multiple individual Docker containers. In addition to the individual
+Dockerfiles for each container, you provide a higher-level
+configuration file which describes the different containers and how
+they link together along with shared storage definitions between the
+containers. Once this high-level configuration has been defined, you
+can use single commands to start and stop the orchestrated set of
+containers.</p>
+<p><a class="reference external" href="https://kubernetes.io">Kubernetes</a> is an open source framework
+that provides similar functionality to Docker Compose. Its particular
+strengths are that is platform independent and can be used with many
+different container technologies and that it is widely available on
+cloud platforms so once you have implemented your workflow in
+Kubernetes it can be deployed in different locations as required. It
+has become the de facto standard for container orchestration.</p>
+<p><a class="reference external" href="https://docs.docker.com/engine/swarm/">Docker Swarm</a> provides
+a way to scale out to multiple copies of similar containers. This
+potentially allows you to parallelise and scale out your research
+workflow so that you can run multiple copies and increase
+throughput. This would allow you, for example, to take advantage of
+multiple cores on a local system or run your workflow in the cloud to
+access more resources. Docker Swarm uses the concept of a manager
+container and worker containers to implement this distribution.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../mpi_contain/" class="btn btn-neutral float-left" title="Running MPI parallel jobs using Singularity containers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pwd_exmps/" class="btn btn-neutral float-right" title="PWD exercises" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

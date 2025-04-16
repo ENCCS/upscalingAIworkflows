@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upscaling AI Workflows &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=187304be"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="_static/copybutton.js?v=f281be69"></script>
+      <script src="_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex/" />
+    <link rel="search" title="Search" href="search/" />
+    <link rel="next" title="Access to Vega" href="setup/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Upscaling AI Workflows</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/index.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="upscaling-ai-workflows">
+<h1>Upscaling AI Workflows<a class="headerlink" href="#upscaling-ai-workflows" title="Link to this heading"></a></h1>
+<p>Artificial Intelligence (AI) has become a foundational building block
+of our modern world.  Accordingly, a vast effort has been put into
+bringing AI to researchers and practitioners of a wide range of
+fields.  Nonetheless, the computationally intensive task of training
+an AI increasingly requires more computational power than what our
+laptops and PCs can offer. Therefore, the ability to develop and train
+a neural network on large clusters seems imperative. This workshop
+teaches us how to scale an AI-powered application in large clusters,
+i.e., supercomputers.</p>
+<div class="admonition-prerequisites prerequisites admonition" id="prerequisites-0">
+<p class="admonition-title">Prerequisites</p>
+<p>Working knowledge of Unix OS is required. In addition, a basic
+understanding of Neural Networks (NNs) is desirable.  Please follow
+the <a class="reference external" href="https://docs.docker.com/get-docker/">link</a> to install docker
+locally on your laptop as we need to use it for some part of the
+begininng of this workshop. Details of using and accessing to
+the Vega cluster are given in <a class="reference internal" href="setup/"><span class="doc">Access to Vega</span></a> section.</p>
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>5 min</p></td>
+<td><p><a class="reference internal" href="intro-container/"><span class="doc">Introduction to Containers</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="intro_docker/"><span class="doc">Introduction to Docker</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="mang_contain/"><span class="doc">Cleaning Up Containers</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="create_contain/"><span class="doc">Creating your own container images</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="compx_contain/"><span class="doc">Creating More Complex Container Images</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="singlrty_start/"><span class="doc">What is Singularity?</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="work_contain/"><span class="doc">Working with Singularity containers</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>10 min</p></td>
+<td><p><a class="reference internal" href="build_contain/"><span class="doc">Building Singularity images</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>25 min</p></td>
+<td><p><a class="reference internal" href="tf_intro/"><span class="doc">TensorFlow on a single GPU</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>25 min</p></td>
+<td><p><a class="reference internal" href="tf_mltgpus/"><span class="doc">Distributed training in TensorFlow</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>25 min</p></td>
+<td><p><a class="reference internal" href="hvd_intro/"><span class="doc">Intoduction to Horovod</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>25 min</p></td>
+<td><p><a class="reference internal" href="train_contain/"><span class="doc">Training Neural Networks using Containers</span></a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guide/">Instructor’s guide</a></li>
+</ul>
+</div>
+<section id="who-is-the-course-for">
+<span id="learner-personas"></span><h2>Who is the course for?<a class="headerlink" href="#who-is-the-course-for" title="Link to this heading"></a></h2>
+</section>
+<section id="about-the-course">
+<h2>About the course<a class="headerlink" href="#about-the-course" title="Link to this heading"></a></h2>
+<p>This lesson material is developed by the <a class="reference external" href="https://enccs.se/">EuroCC National Competence Center
+Sweden (ENCCS)</a> and taught in ENCCS workshops. It aims
+at researchers and developers who have experience working with AI and wish to train their applications on supercomputers.
+The lesson material is licensed under <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">CC-BY-4.0</a> and can be reused in any form
+(with appropriate credit) in other courses and workshops.
+Instructors who wish to teach this lesson can refer to the <a class="reference internal" href="guide/"><span class="doc">Instructor’s guide</span></a> for
+practical advice.</p>
+</section>
+<section id="see-also">
+<h2>See also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<p>Docker provides plenty of educational materials for users. Therefore, checking <a class="reference external" href="https://docs.docker.com/get-started/">Docker official website</a>
+is highly recommended. The same can be stated about <a class="reference external" href="https://sylabs.io/guides/latest/user-guide/">Singularity</a>
+, where one can find many compelling examples with relevant details.</p>
+<p>TensorFlow and Horovorod documentation are also good sources of learning about commands
+and their proper use.</p>
+</section>
+<section id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Link to this heading"></a></h2>
+<p>The lesson file structure and browsing layout is inspired by and
+derived from <a class="reference external" href="https://github.com/coderefinery/sphinx-lesson">work</a>
+by <a class="reference external" href="https://coderefinery.org/">CodeRefinery</a> licensed under the <a class="reference external" href="http://opensource.org/licenses/mit-license.html">MIT
+license</a>. We have
+copied and adapted most of their license text.</p>
+<dl class="simple">
+<dt>Materials from the below references have been used in various parts of this course.</dt><dd><ul class="simple">
+<li><p>The Carpentries lesson on <a class="reference external" href="https://epcced.github.io/2020-12-08-Containers-Online/">“Reproducible Computational Environments Using Containers: Introduction to Docker and Singularity”</a></p></li>
+<li><p><a class="reference external" href="https://www.tensorflow.org/guide/distributed_training">TensorFlow documentation</a></p></li>
+<li><p><a class="reference external" href="https://horovod.readthedocs.io/en/stable/">Horovod documentation</a></p></li>
+</ul>
+</dd>
+</dl>
+<section id="instructional-material">
+<h3>Instructional Material<a class="headerlink" href="#instructional-material" title="Link to this heading"></a></h3>
+<p>This instructional material is made available under the <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">Creative
+Commons Attribution license (CC-BY-4.0)</a>.  The following is a
+human-readable summary of (and not a substitute for) the <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/legalcode">full legal
+text of the CC-BY-4.0 license</a>.  You are
+free to:</p>
+<ul class="simple">
+<li><p><strong>share</strong> - copy and redistribute the material in any medium or format</p></li>
+<li><p><strong>adapt</strong> - remix, transform, and build upon the material for any purpose,
+even commercially.</p></li>
+</ul>
+<p>The licensor cannot revoke these freedoms as long as you follow these
+license terms:</p>
+<ul class="simple">
+<li><p><strong>Attribution</strong> - You must give appropriate credit (mentioning that your work
+is derived from work that is Copyright (c) Hossein Ehteshami and individual contributors and, where practical, linking
+to <a class="reference external" href="https://enccs.se">https://enccs.se</a>), provide a <a class="reference external" href="https://creativecommons.org/licenses/by/4.0/">link to the license</a>, and indicate if changes were
+made. You may do so in any reasonable manner, but not in any way that suggests
+the licensor endorses you or your use.</p></li>
+<li><p><strong>No additional restrictions</strong> - You may not apply legal terms or
+technological measures that legally restrict others from doing anything the
+license permits.</p></li>
+</ul>
+<p>With the understanding that:</p>
+<ul class="simple">
+<li><p>You do not have to comply with the license for elements of the material in
+the public domain or where your use is permitted by an applicable exception
+or limitation.</p></li>
+<li><p>No warranties are given. The license may not give you all of the permissions
+necessary for your intended use. For example, other rights such as
+publicity, privacy, or moral rights may limit how you use the material.</p></li>
+</ul>
+</section>
+<section id="software">
+<h3>Software<a class="headerlink" href="#software" title="Link to this heading"></a></h3>
+<p>Except where otherwise noted, the example programs and other software
+provided with this repository are made available under the <a class="reference external" href="http://opensource.org/">OSI</a>-approved
+<a class="reference external" href="https://opensource.org/licenses/mit-license.html">MIT license</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setup/" class="btn btn-neutral float-right" title="Access to Vega" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

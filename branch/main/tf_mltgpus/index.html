@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Distributed training in TensorFlow &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Intoduction to Horovod" href="../hvd_intro/" />
+    <link rel="prev" title="TensorFlow on a single GPU" href="../tf_intro/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Distributed training in TensorFlow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#types-of-strategies">Types of strategies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mirroredstrategy">MirroredStrategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-with-model-fit">Training with <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-loop-training">Custom loop training</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#calculation-of-loss-with-mirrored-strategy">Calculation of loss with Mirrored Strategy:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameterserverstrategy">ParameterServerStrategy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiworkermirroredstrategy">MultiWorkerMirroredStrategy</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Distributed training in TensorFlow</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/tf_mltgpus.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="distributed-training-in-tensorflow">
+<span id="tf-mltgpus"></span><h1>Distributed training in TensorFlow<a class="headerlink" href="#distributed-training-in-tensorflow" title="Link to this heading"></a></h1>
+<p>TensorFlow provides different methods to distribute training with minimal coding.
+<code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code> is a TensorFlow API to distribute training across
+multiple GPUs, multiple machines, or TPUs. Using this API, you can distribute
+your existing models.</p>
+<p>The main advantages of using <code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code>, according to TensorFlow, are:</p>
+<ul class="simple">
+<li><p>Easy to use and support multiple user segments,
+including researchers, machine learning engineers, etc.</p></li>
+<li><p>Provide good performance out of the box.</p></li>
+<li><p>Easy switching between strategies.</p></li>
+</ul>
+<p>You can distribute training using <code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code> with a high-level
+API like Keras <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code>, as we are familiar with, as well as custom training
+loops (and, in general, any computation using TensorFlow).
+You can use <code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code> with very few changes to your code, because
+the underlying components of TensorFlow have been changed to become strategy-aware.
+This includes variables, layers, models, optimizers, metrics, summaries, and checkpoints.</p>
+<section id="types-of-strategies">
+<h2>Types of strategies<a class="headerlink" href="#types-of-strategies" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code> covers several use cases along different axes.
+Some of these combinations are currently supported. TensorFlow promises in the website
+that others will be added in the future. Some of these axes are:</p>
+<ul class="simple">
+<li><p><strong>Synchronous vs asynchronous training</strong>: These are two common ways of distributing
+training with data parallelism. In sync training, all workers train over different
+slices of input data in sync, and aggregating gradients at each step. In async training,
+all workers are independently training over the input data and updating variables asynchronously.
+Typically sync training is supported via all-reduce and async through parameter server architecture.</p></li>
+<li><p><strong>Hardware platform</strong>: You may want to scale your training onto multiple GPUs on
+one machine, or multiple machines in a network (with 0 or more GPUs each), or on Cloud TPUs.</p></li>
+</ul>
+</section>
+<section id="mirroredstrategy">
+<h2>MirroredStrategy<a class="headerlink" href="#mirroredstrategy" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tf.distribute.MirroredStrategy</span></code> supports synchronous distributed training on
+multiple GPUs on one machine. It creates one replica per GPU device. Each variable
+in the model is mirrored across all the replicas. Together, these variables form
+a single conceptual variable called MirroredVariable. These variables are kept
+in sync with each other by applying identical updates.</p>
+<p>Efficient all-reduce algorithms are used to communicate the variable updates across
+the devices. All-reduce aggregates tensors across all the devices by adding them up,
+and makes them available on each device. It’s a fused algorithm that is very efficient
+and can reduce the overhead of synchronization significantly. There are many all-reduce
+algorithms and implementations available, depending on the type of communication available
+between devices. By default, it uses the NVIDIA Collective Communication Library
+(<a class="reference external" href="https://developer.nvidia.com/nccl">NCCL</a>) as the all-reduce implementation.</p>
+<p>The main features of <code class="docutils literal notranslate"><span class="pre">tf.distribute.MirroredStrategy</span></code>:</p>
+<ul class="simple">
+<li><p>All the variables and the model graph is replicated on the replicas.</p></li>
+<li><p>Input is evenly distributed across the replicas.</p></li>
+<li><p>Each replica calculates the loss and gradients for the input it received.</p></li>
+<li><p>The gradients are synced across all the replicas by summing them.</p></li>
+<li><p>After the sync, the same update is made to the copies of the variables on each replica.</p></li>
+</ul>
+<p>We can initiate the strategy Using</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">strategy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">MirroredStrategy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If the list of devices is not specified in the <code class="docutils literal notranslate"><span class="pre">tf.distribute.MirroredStrategy</span></code>
+constructor, it will be auto-detected. For example, if we book a node with 5 GPUs,
+the result of</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Number of devices: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>will be</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Number<span class="w"> </span>of<span class="w"> </span>devices:<span class="w"> </span><span class="m">5</span>
+</pre></div>
+</div>
+<p>Let’s apply the <code class="docutils literal notranslate"><span class="pre">tf.distribute.MirroredStrategy</span></code> to the Quora dataset using the NNLM model.
+Since we already have download the dataset and saved as a pickle library, we can simply use
+loading part from previous section.</p>
+<p>We need to change the shape of dataset in order to feed it to the model. The
+global batch sizes is equal to the batch size*number of replicas because each
+replica will take a batch per run.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">buffer_size</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">size</span>
+<span class="n">batch_size_per_replica</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">global_batch_size</span> <span class="o">=</span> <span class="n">batch_size_per_replica</span> <span class="o">*</span> <span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span>
+</pre></div>
+</div>
+<p>Transforming to the TensorFlow type tensor dataset and distributing among replicas</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_dataset</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">train_df</span><span class="o">.</span><span class="n">question_text</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">train_df</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+                <span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">global_batch_size</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">))</span> <span class="c1">#.shuffle(buffer_size)</span>
+
+<span class="n">valid_dataset</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">valid_df</span><span class="o">.</span><span class="n">question_text</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">valid_df</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+                <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">global_batch_size</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>We use <code class="docutils literal notranslate"><span class="pre">tf.keras.callbacks</span></code> for different purposes. Here, three callbacks are</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">tf.keras.callbacks.TensorBoard</span></code>: writes a log for TensorBoard, which allows
+you to visualize the graphs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tfdocs.modeling.EpochDots()</span></code>:  To reduce the logging noise use the tfdocs.EpochDots
+which simply prints a . for each epoch, and a full set of metrics every 100 epochs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tf.keras.callbacks.EarlyStopping</span></code> : to avoid long and unnecessary training times.
+This callback is set to monitor the val_loss.</p></li>
+</ul>
+<p>There are other callbacks which can be of interests for specific purposes. Nonetheless, we just use
+the callbacks mentioned above.</p>
+</section>
+<section id="training-with-model-fit">
+<h2>Training with <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code><a class="headerlink" href="#training-with-model-fit" title="Link to this heading"></a></h2>
+<p>We define a function to instantiate the model, train it and returns the history object.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_and_evaluate_model</span><span class="p">(</span><span class="n">module_url</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">hub_layer</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">KerasLayer</span><span class="p">(</span><span class="n">module_url</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">[],</span> <span class="n">output_shape</span><span class="o">=</span><span class="p">[</span><span class="n">embed_size</span><span class="p">],</span> <span class="n">dtype</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="n">trainable</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+                                      <span class="n">hub_layer</span><span class="p">,</span>
+                                      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+                                      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+                                      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">),</span>
+                <span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">BinaryCrossentropy</span><span class="p">(),</span>
+                <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="n">tf</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;accuracy&#39;</span><span class="p">)])</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="c1">#train_df[&#39;question_text&#39;], train_df[&#39;target&#39;],</span>
+                      <span class="n">epochs</span> <span class="o">=</span> <span class="mi">100</span><span class="p">,</span>
+                      <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+                      <span class="n">validation_data</span><span class="o">=</span><span class="n">valid_dataset</span><span class="p">,</span> <span class="c1">#(valid_df[&#39;question_text&#39;], valid_df[&#39;target&#39;]),</span>
+                      <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">tfdocs</span><span class="o">.</span><span class="n">modeling</span><span class="o">.</span><span class="n">EpochDots</span><span class="p">(),</span>
+                                 <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="n">monitor</span><span class="o">=</span><span class="s1">&#39;val_loss&#39;</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">),</span>
+                                 <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">TensorBoard</span><span class="p">(</span><span class="n">logdir</span><span class="o">/</span><span class="n">name</span><span class="p">)],</span>
+                      <span class="n">verbose</span> <span class="o">=</span> <span class="mi">0</span>
+                      <span class="p">)</span>
+    <span class="k">return</span> <span class="n">history</span>
+</pre></div>
+</div>
+<p>Now, we can simply call the usual <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code> function to train the model!</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">strategy</span><span class="o">.</span><span class="n">scope</span><span class="p">():</span>
+   <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+   <span class="n">histories</span><span class="p">[</span><span class="s1">&#39;nnlm-en-dim128&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">train_and_evaluate_model</span><span class="p">(</span><span class="n">module_url</span><span class="p">,</span> <span class="n">embed_size</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;nnlm-en-dim128&#39;</span><span class="p">)</span>
+   <span class="n">endt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span><span class="o">-</span><span class="n">start</span>
+   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> Time for </span><span class="si">{}</span><span class="s2"> ms&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">1000</span><span class="o">*</span><span class="n">endt</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Which will print</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Epoch</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">:</span><span class="mf">0.9326</span><span class="p">,</span>  <span class="n">loss</span><span class="p">:</span><span class="mf">0.2864</span><span class="p">,</span>  <span class="n">val_accuracy</span><span class="p">:</span><span class="mf">0.9385</span><span class="p">,</span>  <span class="n">val_loss</span><span class="p">:</span><span class="mf">0.1761</span><span class="p">,</span>
+<span class="o">.....................</span>
+
+<span class="n">Time</span> <span class="k">for</span> <span class="mf">85504.98509407043</span> <span class="n">ms</span>
+</pre></div>
+</div>
+<p>That simple! <code class="docutils literal notranslate"><span class="pre">tf.keras</span></code> APIs to build the model and <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code> for training it
+made the distributed training very easy.</p>
+</section>
+<section id="custom-loop-training">
+<h2>Custom loop training<a class="headerlink" href="#custom-loop-training" title="Link to this heading"></a></h2>
+<p>In cases where we need to customize the training procedure, we still are able to use
+the <code class="docutils literal notranslate"><span class="pre">tf.distribute.MirroredStrategy</span></code>. Here, the setup is a bit more elaborated and
+needs some care. Let’s create a model using <code class="docutils literal notranslate"><span class="pre">tf.keras.Sequential</span></code>.</p>
+<p>There is a difference to create the datasets in comparison to the previous section; as will be explained
+below, here we need to add a dummy dimension to our dataset_inputs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">buffer_size</span> <span class="o">=</span> <span class="n">train_df</span><span class="o">.</span><span class="n">size</span>
+<span class="n">batch_size_per_replica</span> <span class="o">=</span> <span class="mi">64</span>
+<span class="n">global_batch_size</span> <span class="o">=</span> <span class="n">batch_size_per_replica</span> <span class="o">*</span> <span class="n">strategy</span><span class="o">.</span><span class="n">num_replicas_in_sync</span>
+
+<span class="n">train_dataset</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">train_df</span><span class="o">.</span><span class="n">question_text</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="n">train_df</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]))</span>
+                <span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">global_batch_size</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">))</span>
+
+<span class="n">valid_dataset</span> <span class="o">=</span> <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">((</span><span class="n">valid_df</span><span class="o">.</span><span class="n">question_text</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">],</span> <span class="n">valid_df</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="o">...</span><span class="p">,</span><span class="kc">None</span><span class="p">]))</span>
+                <span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">global_batch_size</span><span class="p">,</span> <span class="n">drop_remainder</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">prefetch</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">AUTOTUNE</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The model function can be defined using Keras Sequential API.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">module_url</span> <span class="o">=</span> <span class="s2">&quot;https://tfhub.dev/google/tf2-preview/nnlm-en-dim128/1&quot;</span>
+<span class="n">embeding_size</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">name_of_model</span> <span class="o">=</span> <span class="s1">&#39;nnlm-en-dim128/1&#39;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_model</span><span class="p">(</span><span class="n">module_url</span><span class="p">,</span> <span class="n">embed_size</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">hub_layer</span> <span class="o">=</span> <span class="n">hub</span><span class="o">.</span><span class="n">KerasLayer</span><span class="p">(</span><span class="n">module_url</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">[],</span>
+                               <span class="n">output_shape</span><span class="o">=</span><span class="p">[</span><span class="n">embed_size</span><span class="p">],</span><span class="n">dtype</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="n">trainable</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span><span class="n">hub_layer</span><span class="p">,</span>
+                                        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">256</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+                                        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+                                        <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;sigmoid&#39;</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">model</span>
+</pre></div>
+</div>
+</section>
+<section id="calculation-of-loss-with-mirrored-strategy">
+<h2>Calculation of loss with Mirrored Strategy:<a class="headerlink" href="#calculation-of-loss-with-mirrored-strategy" title="Link to this heading"></a></h2>
+<p>Normally, on a single machine with 1 GPU/CPU, loss is divided by the number of examples
+in the batch of input. How should the loss function be calculated within <code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code>?</p>
+<p>It requires special care. Why?</p>
+<ul class="simple">
+<li><p>For an example, let’s say you have 4 GPU’s and a batch size of 64. One batch of input is
+distributed across the replicas (4 GPUs), each replica getting an input of size 16.</p></li>
+<li><p>The model on each replica does a forward pass with its respective input and calculates the loss.
+Now, instead of dividing the loss by the number of examples in its respective input
+(<code class="docutils literal notranslate"><span class="pre">BATCH_SIZE_PER_REPLICA</span> <span class="pre">=</span> <span class="pre">16</span></code>), the loss should be divided by the <code class="docutils literal notranslate"><span class="pre">GLOBAL_BATCH_SIZE</span> <span class="pre">(64)</span></code>.</p></li>
+</ul>
+<p><strong>Why do this?</strong></p>
+<ul class="simple">
+<li><p>This needs to be done because after the gradients are calculated on each replica,
+they are synced across the replicas by summing them.</p></li>
+</ul>
+<p>How to do this in TensorFlow?</p>
+<ul class="simple">
+<li><p>If we’re writing a custom training loop, as in this tutorial, you should sum
+the per example losses and divide the sum by the GLOBAL_BATCH_SIZE:
+<code class="docutils literal notranslate"><span class="pre">scale_loss</span> <span class="pre">=</span> <span class="pre">tf.reduce_sum(loss)</span> <span class="pre">*</span> <span class="pre">(1.</span> <span class="pre">/</span> <span class="pre">GLOBAL_BATCH_SIZE)</span></code>
+or you can use tf.nn.compute_average_loss which takes the per example loss,
+optional sample weights, and GLOBAL_BATCH_SIZE as arguments and returns the scaled loss.</p></li>
+<li><p>If you are using regularization losses in your model then you need to scale
+the loss value by number of replicas. You can do this by using the
+<code class="docutils literal notranslate"><span class="pre">tf.nn.scale_regularization_loss</span></code> function.</p></li>
+<li><p>Using <code class="docutils literal notranslate"><span class="pre">tf.reduce_mean</span></code> is not recommended. Doing so divides the loss by actual
+per replica batch size which may vary step to step. More on this below.</p></li>
+<li><p>This reduction and scaling is done automatically in keras <code class="docutils literal notranslate"><span class="pre">model.compile</span></code>
+and <code class="docutils literal notranslate"><span class="pre">model.fit</span></code> (Why aren’t we grateful then?!)</p></li>
+<li><p>If using <code class="docutils literal notranslate"><span class="pre">tf.keras.losses</span></code> classes (as in the example below),
+the loss reduction needs to be explicitly specified to be one of <code class="docutils literal notranslate"><span class="pre">NONE</span></code> or <code class="docutils literal notranslate"><span class="pre">SUM</span></code>.
+<code class="docutils literal notranslate"><span class="pre">AUTO</span></code> and <code class="docutils literal notranslate"><span class="pre">SUM_OVER_BATCH_SIZE</span></code> are disallowed when used with <code class="docutils literal notranslate"><span class="pre">tf.distribute.Strategy</span></code>.
+<code class="docutils literal notranslate"><span class="pre">AUTO</span></code> is disallowed because the user should explicitly think about what reduction
+they want to make sure it is correct in the distributed case. <code class="docutils literal notranslate"><span class="pre">SUM_OVER_BATCH_SIZE</span></code>
+is disallowed because currently it would only divide by per replica batch size,
+and leave the dividing by number of replicas to the user, which might be easy to miss.
+So the user must do the reduction themselves explicitly.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">labels</span></code> is multi-dimensional, then average the <code class="docutils literal notranslate"><span class="pre">per_example_loss</span></code> across
+the number of elements in each sample. For example, if the shape of <code class="docutils literal notranslate"><span class="pre">predictions</span></code>
+is <code class="docutils literal notranslate"><span class="pre">(batch_size,</span> <span class="pre">H,</span> <span class="pre">W,</span> <span class="pre">n_classes)</span></code> and labels is <code class="docutils literal notranslate"><span class="pre">(batch_size,</span> <span class="pre">H,</span> <span class="pre">W)</span></code>,
+you will need to update <code class="docutils literal notranslate"><span class="pre">per_example_loss</span></code> like:
+<code class="docutils literal notranslate"><span class="pre">per_example_loss</span> <span class="pre">/=</span> <span class="pre">tf.cast(tf.reduce_prod(tf.shape(labels)[1:]),</span> <span class="pre">tf.float32)</span></code></p></li>
+</ul>
+<div class="admonition-verify-the-shape-of-the-loss callout admonition" id="callout-0">
+<p class="admonition-title">Verify the shape of the loss</p>
+<p>Loss functions in tf.losses/tf.keras.losses typically return the average over
+the last dimension of the input. The loss classes wrap these functions. Passing
+<code class="docutils literal notranslate"><span class="pre">reduction=Reduction.NONE</span></code> when creating an instance of a loss class means
+“no additional reduction”. For categorical losses with an example input shape of
+<code class="docutils literal notranslate"><span class="pre">[batch,</span> <span class="pre">W,</span> <span class="pre">H,</span> <span class="pre">n_classes]</span></code> the n_classes dimension is reduced. For pointwise
+losses like <code class="docutils literal notranslate"><span class="pre">losses.mean_squared_error</span></code> or <code class="docutils literal notranslate"><span class="pre">losses.binary_crossentropy</span></code> include
+a dummy axis so that <code class="docutils literal notranslate"><span class="pre">[batch,</span> <span class="pre">W,</span> <span class="pre">H,</span> <span class="pre">1]</span></code> is reduced to [batch, W, H].
+Without the dummy axis <code class="docutils literal notranslate"><span class="pre">[batch,</span> <span class="pre">W,</span> <span class="pre">H]</span></code> will be incorrectly reduced to <code class="docutils literal notranslate"><span class="pre">[batch,</span> <span class="pre">W]</span></code>.</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">strategy</span><span class="o">.</span><span class="n">scope</span><span class="p">():</span>
+<span class="c1"># Set reduction to `none` so we can do the reduction afterwards and divide by</span>
+<span class="c1"># global batch size.</span>
+
+    <span class="n">loss_object</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">BinaryCrossentropy</span><span class="p">(</span>
+        <span class="n">from_logits</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">reduction</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">Reduction</span><span class="o">.</span><span class="n">NONE</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">compute_loss</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">):</span>
+        <span class="n">per_example_loss</span> <span class="o">=</span> <span class="n">loss_object</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">compute_average_loss</span><span class="p">(</span><span class="n">per_example_loss</span><span class="p">,</span> <span class="n">global_batch_size</span><span class="o">=</span><span class="n">global_batch_size</span><span class="p">)</span>
+
+    <span class="n">train_accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;train_accuracy&#39;</span><span class="p">)</span>
+    <span class="n">valid_accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;valid_accuracy&#39;</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">create_model</span><span class="p">(</span><span class="n">module_url</span><span class="p">,</span> <span class="n">embed_size</span><span class="o">=</span><span class="n">embeding_size</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name_of_model</span><span class="p">,</span> <span class="n">trainable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>By defining the metrics, we track the test loss and training and test accuracy.
+We can use .result() to get the accumulated statistics at any time.</p>
+<p>The next step is the calculations of loss, gradients and updating the gradients.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_step</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+    <span class="n">texts</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">inputs</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+
+    <span class="n">gradients</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">gradients</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">))</span>
+
+    <span class="n">train_accuracy</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">loss</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">valid_step</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+    <span class="n">texts</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">inputs</span>
+
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">v_loss</span> <span class="o">=</span> <span class="n">compute_loss</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+
+    <span class="n">valid_accuracy</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">v_loss</span>
+</pre></div>
+</div>
+<p>Before being able to run the training, we need to create <code class="docutils literal notranslate"><span class="pre">replica</span> <span class="pre">datasets</span></code> objects for
+distributed training using</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_dist_dataset</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">experimental_distribute_dataset</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">)</span>
+<span class="n">valid_dist_dataset</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">experimental_distribute_dataset</span><span class="p">(</span><span class="n">valid_dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">run</span></code> command replicates the provided computation and runs it with
+the distributed input.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">epochs</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="c1"># `run` replicates the provided computation and runs it</span>
+<span class="c1"># with the distributed input.</span>
+<span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">distributed_train_step</span><span class="p">(</span><span class="n">dataset_inputs</span><span class="p">):</span>
+    <span class="n">per_replica_losses</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">train_step</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">dataset_inputs</span><span class="p">,))</span>
+    <span class="k">return</span> <span class="n">strategy</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">ReduceOp</span><span class="o">.</span><span class="n">SUM</span><span class="p">,</span> <span class="n">per_replica_losses</span><span class="p">,</span>
+                         <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">distributed_valid_step</span><span class="p">(</span><span class="n">dataset_inputs</span><span class="p">):</span>
+    <span class="n">per_replica_losses</span> <span class="o">=</span> <span class="n">strategy</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">valid_step</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">dataset_inputs</span><span class="p">,))</span>
+    <span class="k">return</span> <span class="n">strategy</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">ReduceOp</span><span class="o">.</span><span class="n">SUM</span><span class="p">,</span> <span class="n">per_replica_losses</span><span class="p">,</span>
+                         <span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">history_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;epochs&#39;</span><span class="p">,</span> <span class="s1">&#39;train_loss&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_loss&#39;</span><span class="p">,</span> <span class="s1">&#39;train_acc&#39;</span><span class="p">,</span> <span class="s1">&#39;valid_acc&#39;</span><span class="p">])</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+    <span class="c1"># TRAIN LOOP</span>
+    <span class="n">total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">num_batches</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">train_dist_dataset</span><span class="p">:</span>
+        <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">distributed_train_step</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">num_batches</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">train_loss</span> <span class="o">=</span> <span class="n">total_loss</span> <span class="o">/</span> <span class="n">num_batches</span>
+
+    <span class="c1"># TEST LOOP</span>
+    <span class="n">v_total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">v_num_batches</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">valid_dist_dataset</span><span class="p">:</span>
+        <span class="n">v_total_loss</span> <span class="o">+=</span> <span class="n">distributed_valid_step</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">v_num_batches</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">valid_loss</span> <span class="o">=</span> <span class="n">v_total_loss</span> <span class="o">/</span> <span class="n">v_num_batches</span>
+
+    <span class="n">template</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Epoch </span><span class="si">{}</span><span class="s2">, Loss: </span><span class="si">{:.4f}</span><span class="s2">, Accuracy: </span><span class="si">{:.4f}</span><span class="s2">, Valid Loss: </span><span class="si">{:.4f}</span><span class="s2">, Valid Accuracy: </span><span class="si">{:.4f}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">template</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">train_loss</span><span class="p">,</span>
+                         <span class="n">train_accuracy</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+                         <span class="n">valid_loss</span><span class="p">,</span>
+                         <span class="n">valid_accuracy</span><span class="o">.</span><span class="n">result</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">))</span>
+
+    <span class="n">history_df</span> <span class="o">=</span> <span class="n">history_df</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;epochs&#39;</span><span class="p">:</span><span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+                                    <span class="s1">&#39;train_loss&#39;</span><span class="p">:</span><span class="n">train_loss</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+                                    <span class="s1">&#39;valid_loss&#39;</span><span class="p">:</span><span class="n">valid_loss</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span>
+                                    <span class="s1">&#39;train_acc&#39;</span><span class="p">:</span><span class="n">train_accuracy</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span>
+                                    <span class="s1">&#39;valid_acc&#39;</span><span class="p">:</span><span class="n">valid_accuracy</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span><span class="p">},</span>
+                                  <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">train_accuracy</span><span class="o">.</span><span class="n">reset_states</span><span class="p">()</span>
+    <span class="n">valid_accuracy</span><span class="o">.</span><span class="n">reset_states</span><span class="p">()</span>
+
+<span class="n">endt</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">timelp</span> <span class="o">=</span> <span class="mi">1000</span><span class="o">*</span><span class="p">(</span><span class="n">endt</span><span class="o">-</span><span class="n">start</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output will be</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Epoch</span> <span class="mi">1</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1653</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.3007</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1384</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.6289</span>
+<span class="n">Epoch</span> <span class="mi">2</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1416</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.7266</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1334</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.3125</span>
+<span class="n">Epoch</span> <span class="mi">3</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1371</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.9104</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1311</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.0195</span>
+<span class="n">Epoch</span> <span class="mi">4</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1322</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.0705</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1266</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.1172</span>
+<span class="n">Epoch</span> <span class="mi">5</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1271</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.2275</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1306</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.8242</span>
+<span class="n">Epoch</span> <span class="mi">6</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1225</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.3569</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1329</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.6289</span>
+<span class="n">Epoch</span> <span class="mi">7</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1174</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.5476</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1367</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.0195</span>
+<span class="n">Epoch</span> <span class="mi">8</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1124</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.7629</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1374</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.8242</span>
+<span class="n">Epoch</span> <span class="mi">9</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1073</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">95.9566</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1430</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.8242</span>
+<span class="n">Epoch</span> <span class="mi">10</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1024</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">96.1298</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1481</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.6289</span>
+<span class="n">Epoch</span> <span class="mi">11</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0970</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">96.3626</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1521</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.4336</span>
+<span class="n">Epoch</span> <span class="mi">12</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0918</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">96.5173</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1577</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.5312</span>
+<span class="n">Epoch</span> <span class="mi">13</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0867</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">96.7639</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1723</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.4336</span>
+<span class="n">Epoch</span> <span class="mi">14</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0814</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">96.9439</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1681</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.1406</span>
+<span class="n">Epoch</span> <span class="mi">15</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0774</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">97.0573</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1741</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.4336</span>
+<span class="n">Epoch</span> <span class="mi">16</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0719</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">97.2963</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1874</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">93.8477</span>
+<span class="n">Epoch</span> <span class="mi">17</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0666</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">97.5559</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1871</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">93.5547</span>
+<span class="n">Epoch</span> <span class="mi">18</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0622</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">97.7168</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.1976</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">94.5312</span>
+<span class="n">Epoch</span> <span class="mi">19</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0579</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">97.8577</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.2086</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">93.9453</span>
+<span class="n">Epoch</span> <span class="mi">20</span><span class="p">,</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.0533</span><span class="p">,</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">98.1013</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Loss</span><span class="p">:</span> <span class="mf">0.2278</span><span class="p">,</span> <span class="n">Valid</span> <span class="n">Accuracy</span><span class="p">:</span> <span class="mf">93.7500</span>
+<span class="n">Elapsed</span> <span class="n">time</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ms</span><span class="p">):</span> <span class="mf">71537.03</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">for</span></code> loop that marches though the input (training or test datasets) can be implemented
+using other methods too. For example, one can make use of Python iterator functions
+<code class="docutils literal notranslate"><span class="pre">iter</span></code> and <code class="docutils literal notranslate"><span class="pre">next</span></code>. Using iterator we have more control over the number of steps we wish to
+execute the commands. Another way of implementing could be using <code class="docutils literal notranslate"><span class="pre">for</span></code> inside <code class="docutils literal notranslate"><span class="pre">tf.function</span></code>.</p>
+</section>
+<section id="parameterserverstrategy">
+<h2>ParameterServerStrategy<a class="headerlink" href="#parameterserverstrategy" title="Link to this heading"></a></h2>
+<p>Parameter server training is a common data-parallel method to scale up model training on
+multiple machines. A parameter server training cluster consists of workers and parameter servers.
+Variables are created on parameter servers and they are read and updated by workers in each step.
+Similar to <code class="docutils literal notranslate"><span class="pre">MirroredStrategy</span></code>, it can be implemented using Keras API <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code> or custom
+training loop.</p>
+<p>In TensorFlow 2, parameter server training uses a central coordinator-based architecture via the
+<code class="docutils literal notranslate"><span class="pre">tf.distribute.experimental.coordinator.ClusterCoordinator</span></code> class. In this implementation,
+the worker and parameter server tasks run <code class="docutils literal notranslate"><span class="pre">tf.distribute.Servers</span></code> that listen for tasks
+from the coordinator. The coordinator creates resources, dispatches training tasks, writes
+checkpoints, and deals with task failures.</p>
+<p>In the programming running on the coordinator, one uses a <code class="docutils literal notranslate"><span class="pre">ParameterServerStrategy</span></code> object to
+define a training step and use a <code class="docutils literal notranslate"><span class="pre">ClusterCoordinator</span></code> to dispatch training steps to remote workers.</p>
+</section>
+<section id="multiworkermirroredstrategy">
+<h2>MultiWorkerMirroredStrategy<a class="headerlink" href="#multiworkermirroredstrategy" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">tf.distribute.MultiWorkerMirroredStrategy</span></code> is very similar to <code class="docutils literal notranslate"><span class="pre">MirroredStrategy</span></code>. It implements
+synchronous distributed training across multiple workers, each with potentially multiple GPUs.
+Similar to tf.distribute.MirroredStrategy, it creates copies of all variables in the model on
+each device across all workers. One of the key differences to get multi worker training going,
+as compared to multi-GPU training, is the multi-worker setup. The ‘TF_CONFIG’ environment variable
+is the standard way in TensorFlow to specify the cluster configuration to each worker that is part
+of the cluster. In other words, the main difference between <code class="docutils literal notranslate"><span class="pre">MultiWorkerMirroredStrategy</span></code> and
+<code class="docutils literal notranslate"><span class="pre">MirroredStrategy</span></code> is While in <em>MultiWorkerMirroredStrategy</em>, the network setup is necessary,
+in <em>MirroredStrategy</em> the setup is automatically topology aware meaning that we don’t need
+to setup the network and interconnects.</p>
+<div class="admonition-which-one-is-faster exercise important admonition" id="exercise-0">
+<p class="admonition-title">Which one is faster?</p>
+<p>Comment out the <code class="docutils literal notranslate"><span class="pre">EarlyStopping</span></code> callback, fix the number of epochs to <code class="docutils literal notranslate"><span class="pre">20</span></code> and
+train the model using <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code> API:
+1. On 4 GPUs using <code class="docutils literal notranslate"><span class="pre">MirroredStrategy</span></code>
+2. On a single GPU using pinning method
+and compare the elapsed time with the number you obtained above.</p>
+<p>Which of these methods faster? Do you have any explanation for that?</p>
+</div>
+<div class="admonition-evaluation-for-a-custom-training exercise important admonition" id="exercise-1">
+<p class="admonition-title">Evaluation for a custom training</p>
+<p>Evaluate the performance of the metrics on the tests datasets for custom training loop.</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">eval_accuracy</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">BinaryAccuracy</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;eval_accuracy&#39;</span><span class="p">)</span>
+<span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">eval_step</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">eval_accuracy</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+    <span class="n">eval_accuracy</span><span class="o">.</span><span class="n">update_state</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">predictions</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">texts</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">valid_dataset</span><span class="p">:</span>
+    <span class="n">eval_step</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;The model accuracy : </span><span class="si">{:5.2f}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">eval_accuracy</span><span class="o">.</span><span class="n">result</span><span class="p">()</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="admonition-advanced-custom-training-loop-for-svhn exercise important admonition" id="exercise-2">
+<p class="admonition-title">(Advanced) Custom training loop for SVHN</p>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">SVHN_class</span></code> code provided in <a class="reference internal" href="../tf_intro/"><span class="doc">TensorFlow on a single GPU</span></a> and write a custom training loop using
+<code class="docutils literal notranslate"><span class="pre">MirroredStrategy</span></code>.</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../tf_intro/" class="btn btn-neutral float-left" title="TensorFlow on a single GPU" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../hvd_intro/" class="btn btn-neutral float-right" title="Intoduction to Horovod" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

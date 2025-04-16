@@ -1,0 +1,347 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Creating your own container images &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Creating More Complex Container Images" href="../compx_contain/" />
+    <link rel="prev" title="Cleaning Up Containers" href="../mang_contain/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Creating your own container images</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-installation">Interactive installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#put-installation-instructions-in-a-dockerfile">Put installation instructions in a <cite>Dockerfile</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-new-docker-image">Create a new Docker image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#share-your-new-container-on-docker-hub">Share your new container on Docker Hub</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Creating your own container images</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/create_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="creating-your-own-container-images">
+<span id="create-contain"></span><h1>Creating your own container images<a class="headerlink" href="#creating-your-own-container-images" title="Link to this heading"></a></h1>
+<p>There are lots of reasons why you might want to create your <strong>own</strong>
+Docker image.</p>
+<ul class="simple">
+<li><p>You can’t find a container with all the tools you need on Docker
+Hub.</p></li>
+<li><p>You want to have a container to “archive” all the specific software
+versions you ran for a project</p></li>
+<li><p>You want to share your workflow with someone else.</p></li>
+</ul>
+<section id="interactive-installation">
+<h2>Interactive installation<a class="headerlink" href="#interactive-installation" title="Link to this heading"></a></h2>
+<p>Before creating a reproducible installation, let’s experiment with
+installing software inside a container. Start the <cite>alpine</cite> container
+from before, interactively:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>ubuntu<span class="w"> </span>sh
+</pre></div>
+</div>
+<p>Because this is a basic container, there’s a lot of things not
+installed – for example, <cite>python3</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span>python3
+</pre></div>
+</div>
+<p>Output</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>sh: 1: python3: not found
+</pre></div>
+</div>
+<p>Inside the container, we can run commands to install Python 3. The
+Ubuntu version of Linux has a installation tool called <cite>apt install</cite> that we
+can use to install Python 3.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>pip
+</pre></div>
+</div>
+<p>We can test our installation by running a Python command:</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span>python3<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Once Python is installed, we can add Python packages using the pip
+package installer:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>cython
+</pre></div>
+</div>
+<p>Once we exit, these changes are not saved to a new container by
+default. There is a command that will “snapshot” our changes, but
+building containers this way is not very reproducible. Instead, we’re
+going to take what we’ve learned from this interactive installation
+and create our container from a reproducible recipe, known as a
+<cite>Dockerfile</cite>.</p>
+<p>If you haven’t already, exit out of the interactively running container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>/#<span class="w"> </span><span class="nb">exit</span>
+</pre></div>
+</div>
+</section>
+<section id="put-installation-instructions-in-a-dockerfile">
+<h2>Put installation instructions in a <cite>Dockerfile</cite><a class="headerlink" href="#put-installation-instructions-in-a-dockerfile" title="Link to this heading"></a></h2>
+<p>A <cite>Dockerfile</cite> is a plain text file with keywords and commands that
+can be used to create a new container image.</p>
+<p>Every Dockerfile is composed of three main parts as shown below.</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">&lt;EXISTING</span><span class="w"> </span>IMAGE&gt;
+<span class="k">RUN</span><span class="w"> </span>&lt;INSTALL<span class="w"> </span>CMDS<span class="w"> </span>FROM<span class="w"> </span>SHELL&gt;
+<span class="k">RUN</span><span class="w"> </span>&lt;INSTALL<span class="w"> </span>CMDS<span class="w"> </span>FROM<span class="w"> </span>SHELL&gt;
+<span class="k">CMD</span><span class="w"> </span>&lt;CMD<span class="w"> </span>TO<span class="w"> </span>RUN<span class="w"> </span>BY<span class="w"> </span>DEFAULT&gt;
+</pre></div>
+</div>
+<p>Let’s break this file down:</p>
+<ul class="simple">
+<li><p>The first line, <cite>FROM</cite>, indicates which container we’re starting with.</p></li>
+<li><p>The next two lines <cite>RUN</cite>, will indicate installation commands we
+want to run. These are the same commands that we used interactively
+above.</p></li>
+<li><p>The last line, <cite>CMD</cite> indicates the default command we want the
+container to run, if no other command is provided.</p></li>
+</ul>
+<div class="admonition-take-a-guess exercise important admonition" id="exercise-0">
+<p class="admonition-title">Take a Guess</p>
+<p>Do you have any ideas about what we should use to fill in the
+sample Dockerfile to replicate the installation we did above?</p>
+<div class="admonition-solution solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Solution</p>
+<p>Based on our experience above, edit the <cite>Dockerfile</cite> (in your
+text editor of choice) to look like this:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">ubuntu:18.04</span>
+<span class="k">RUN</span><span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3<span class="w"> </span>pip
+<span class="k">RUN</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>cython
+<span class="k">CMD</span><span class="w"> </span>python3<span class="w"> </span>--version
+</pre></div>
+</div>
+</div>
+</div>
+<p>The recipe provided by this Dockerfile will use Ubuntu Linux as the
+base container, add Python and the Cython library, and set a default
+print command.</p>
+</section>
+<section id="create-a-new-docker-image">
+<h2>Create a new Docker image<a class="headerlink" href="#create-a-new-docker-image" title="Link to this heading"></a></h2>
+<p>So far, we just have a file. We want Docker to take this file, run the
+install commands inside, and then save the resulting container as a
+new container image. To do this we will use the <cite>docker build</cite>
+command.</p>
+<p>We have to provide <cite>docker build</cite> with two pieces of information:</p>
+<ul class="simple">
+<li><p>the location of the <cite>Dockerfile</cite></p></li>
+<li><p>the name of the new image. Remember the naming scheme from before?
+You should name your new image with your Docker Hub username and a
+name for the container, like this: <code class="docutils literal notranslate"><span class="pre">USERNAME/CONTAINERNAME</span></code></p></li>
+</ul>
+<p>All together, the build command will look like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>USERNAME/CONTAINERNAME<span class="w"> </span>.
+</pre></div>
+</div>
+<p>The <cite>-t</cite> option names the container; the final dot indicates that the
+<cite>Dockerfile</cite> is in our current directory.</p>
+<p>For example, if my user name was <cite>alice</cite> and I wanted to call my
+image <cite>alpine-python</cite>, I would use this command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>alice/ubuntu-python<span class="w"> </span>.
+</pre></div>
+</div>
+<div class="admonition-review exercise important admonition" id="exercise-1">
+<p class="admonition-title">Review!</p>
+<ol class="arabic simple">
+<li><p>Think back to earlier. What command can you run to check if
+your image was created successfully? (Hint: what command shows
+the images on your computer?)</p></li>
+<li><p>We didn’t specify a tag for our image name. What did
+Docker automatically use?</p></li>
+<li><p>What command will run the container you’ve created? What
+should happen by default if you run the container? Can you make
+it do something different, like print “hello world”?</p></li>
+</ol>
+<div class="admonition-solution solution important dropdown admonition" id="solution-1">
+<p class="admonition-title">Solution</p>
+<ol class="arabic">
+<li><p>To see your new image, run <cite>docker image ls</cite>. You should
+see the name of your new image under the “REPOSITORY” heading.</p></li>
+<li><p>In the output of <cite>docker image ls</cite>, you can see that
+Docker has automatically used the <cite>latest</cite> tag for our new
+image.</p></li>
+<li><p>We want to use <cite>docker run</cite> to run the container.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>alice/ubuntu-python
+</pre></div>
+</div>
+<p>should run the container and print out our default
+message, including the version of Linux and Python.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span>alice/ubuntu-python<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Hello World&quot;</span>
+</pre></div>
+</div>
+<p>will run the container and print out “Hello world” instead.</p>
+</li>
+</ol>
+</div>
+</div>
+<p>While it may not look like you have achieved much, you have already
+effected the combination of a lightweight Linux operating system with
+your specification to run a given command that can operate reliably on
+macOS, Microsoft Windows, Linux and on the cloud!</p>
+</section>
+<section id="share-your-new-container-on-docker-hub">
+<h2>Share your new container on Docker Hub<a class="headerlink" href="#share-your-new-container-on-docker-hub" title="Link to this heading"></a></h2>
+<p>Images that you release publicly can be stored on the Docker Hub for
+free.  If you name your image as described above, with your Docker Hub
+username, all you need to do is run the opposite of <cite>docker pull</cite> –
+<cite>docker push</cite>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>push<span class="w"> </span>alice/ubuntu-python
+</pre></div>
+</div>
+<p>Make sure to substitute the full name of your container!</p>
+<p>In a web browser, open &lt;<a class="reference external" href="https://hub.docker.com">https://hub.docker.com</a>&gt;, and on your user page
+you should now see your container listed, for anyone to use or build
+on.</p>
+<div class="admonition-logging-in callout admonition" id="callout-0">
+<p class="admonition-title">Logging In</p>
+<p>Technically, you have to be logged into Docker on your computer for
+this to work.  Usually it happens by default, but if <cite>docker push</cite>
+doesn’t work for you, run <cite>docker login</cite> first, enter your Docker
+Hub username and password, and then try <cite>docker push</cite> again.</p>
+</div>
+<p>You can rename images using the <cite>docker tag</cite> command. For example,
+imagine someone named Alice has been working on a workflow container
+and called it <cite>workflow-test</cite> on her own computer. She now wants to
+share it in her <cite>alice</cite> Docker Hub account with the name
+<cite>workflow-complete</cite> and a tag of <cite>v1</cite>. Her <cite>docker tag</cite> command would
+look like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>tag<span class="w"> </span>workflow-test<span class="w"> </span>alice/workflow-complete:v1
+</pre></div>
+</div>
+<p>She could then push the re-named container to Docker Hub, using
+<cite>docker push alice/workflow-complete:v1</cite></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../mang_contain/" class="btn btn-neutral float-left" title="Cleaning Up Containers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../compx_contain/" class="btn btn-neutral float-right" title="Creating More Complex Container Images" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

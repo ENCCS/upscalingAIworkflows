@@ -1,0 +1,956 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Training Neural Networks using Containers &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=187304be"></script>
+      <script src="../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex/" />
+    <link rel="search" title="Search" href="../search/" />
+    <link rel="next" title="Running MPI parallel jobs using Singularity containers" href="../containers/content/mpi_contain/" />
+    <link rel="prev" title="Intoduction to Horovod" href="../hvd_intro/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Training Neural Networks using Containers</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#mpi-codes-with-singularity-containers">MPI codes with Singularity containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-simplest-mpi-example">The simplest MPI example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mpi-ping-pong">MPI Ping-Pong</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gpu-and-mpi">GPU and MPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#training-an-nlp-model-using-horovod">Training an NLP model using Horovod</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../upscalingAIcontainer/content/namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Training Neural Networks using Containers</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/train_contain.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="training-neural-networks-using-containers">
+<span id="train-contain"></span><h1>Training Neural Networks using Containers<a class="headerlink" href="#training-neural-networks-using-containers" title="Link to this heading"></a></h1>
+<p>We discussed already different methods of scaling
+for the training of the network. The essential part of any scaling
+scheme is the communication among the processors whether it is
+a bunch of CPUs or GPUs. For the communication between CPUs,
+<a class="reference external" href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI (Message Passing Interface)</a> is a widely used standard.
+MPI is a well-established standard and it is used for
+exchanging messages/data between processes in a parallel application.
+If you’ve been involved in developing or working with computational
+science software, you may already be familiar with MPI and running MPI
+applications.</p>
+<p>As for the communication between GPUs, depending on vendor providing GPUs,
+there are library, similar to MPI. GPUs which are available on Vega cluster
+are NVIDIA GPUs. The standard for communication for such GPUs is the NVIDIA
+Collective Communication Library <a class="reference external" href="https://developer.nvidia.com/nccl">(NCCL)</a>
+(NCCL, pronounced “Nickel”),
+partly as discussed in <a class="reference internal" href="../tf_mltgpus/"><span class="doc">Distributed training in TensorFlow</span></a>. Nvidia introduces NCCL as a library
+that enables multi-GPU and multi-node communication primitives optimized
+for NVIDIA GPUs and Networking that are topology-aware and can be easily integrated
+into applications.
+NCCL implements both collective communication and point-to-point send/receive
+primitives. It is not a full-blown parallel programming framework; rather, it is
+a library focused on accelerating inter-GPU communication.</p>
+<p>NCCL provides the following collective communication primitives :</p>
+<ul class="simple">
+<li><p>AllReduce</p></li>
+<li><p>Broadcast</p></li>
+<li><p>Reduce</p></li>
+<li><p>AllGather</p></li>
+<li><p>ReduceScatter</p></li>
+</ul>
+<p>Additionally, it allows for point-to-point send/receive communication which allows
+for scatter, gather, or all-to-all operations (<a class="reference external" href="https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/overview.html">NCCL doc</a>).</p>
+<p>In this section of the workshop, we will see how these two libraries will be in
+use during the training of a network using containers.</p>
+<section id="mpi-codes-with-singularity-containers">
+<h2>MPI codes with Singularity containers<a class="headerlink" href="#mpi-codes-with-singularity-containers" title="Link to this heading"></a></h2>
+<p>We’ve already seen that building Singularity containers can be
+impractical without root access. While it is unlikely to have
+root access on a large institutional, regional or national cluster,
+building a container directly on the target platform is not normally
+an option, the Vega staff cluster has generously given us the necessary
+privileges for creating containers.</p>
+<p>One of the reasons we mentioned for using containers is their portability across
+different platforms/machines. However, it is not the case when we need to
+create containers for training a network on specific cluster. If our target platform
+uses <a class="reference external" href="https://www.open-mpi.org/">OpenMPI</a>,
+one of the two widely used source MPI implementations, we can
+build/install a compatible OpenMPI version on our local build
+platform, or directly within the image as part of the image build
+process. We can then build our code that requires MPI, either
+interactively in an image sandbox or via a definition file.</p>
+<p>While building a container on a local system that is intended for use
+on a remote HPC platform does provide some level of portability, if
+you’re after the best possible performance, it can present some
+issues. The version of MPI in the container will need to be built and
+configured to support the hardware on your target platform if the best
+possible performance is to be achieved. Where a platform has
+specialist hardware with proprietary drivers, building on a different
+platform with different hardware present means that building with the
+right driver support for optimal performance is not likely to be
+possible. This is especially true if the version of MPI available is
+different (but compatible). Singularity’s <a class="reference external" href="https://sylabs.io/guides/3.9/user-guide/mpi.html">MPI documentation</a> highlights two
+different models for working with MPI codes namely, the hybrid and bind methods.</p>
+<p>The basic idea behind the Hybrid Approach is when you execute a
+Singularity container with MPI code, you will call <code class="docutils literal notranslate"><span class="pre">mpiexec</span></code>
+or a similar launcher on the <code class="docutils literal notranslate"><span class="pre">singularity</span></code> command itself.
+The MPI process outside of the container will then work in tandem with MPI
+inside the container and the containerized MPI code to instantiate the job.
+Similarly, the basic idea behind the Bind Approach is
+to start the MPI application by calling the MPI launcher (e.g., <code class="docutils literal notranslate"><span class="pre">mpirun</span></code>)
+from the host. The main difference between the hybrid and bind approach is
+the fact that with the bind approach, the container usually does not include
+any MPI implementation. This means that SingularityCE needs to mount/bind the
+MPI available on the host into the container.</p>
+<p>The <a class="reference external" href="https://sylabs.io/guides/3.9/user-guide/mpi.html#hybrid-model">hybrid model</a> that
+we’ll be looking at here involves using the MPI executable from the
+MPI installation on the host system to launch singularity and run the
+application within the container.  The application in the container is
+linked against and uses the MPI installation within the container
+which, in turn, communicates with the MPI daemon process running on
+the host system. In the following sections we’ll look at building a
+Singularity image containing a small MPI application that can then be
+run using the hybrid model.</p>
+</section>
+<section id="the-simplest-mpi-example">
+<h2>The simplest MPI example<a class="headerlink" href="#the-simplest-mpi-example" title="Link to this heading"></a></h2>
+<p>Let’s start with the simplest example of running an app within a container. This
+example will show the backbone of scaling an app using MPI primitives.</p>
+<p>Create a new directory and save the <code class="docutils literal notranslate"><span class="pre">mpitest.c</span></code> given below.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">rc</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">size</span><span class="p">;</span>
+<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">myrank</span><span class="p">;</span>
+
+<span class="w">      </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_Init</span><span class="w"> </span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">MPI_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="n">fprintf</span><span class="w"> </span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MPI_Init() failed&quot;</span><span class="p">);</span>
+<span class="w">              </span><span class="k">return</span><span class="w"> </span><span class="n">EXIT_FAILURE</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_Comm_size</span><span class="w"> </span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">size</span><span class="p">);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">MPI_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="n">fprintf</span><span class="w"> </span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MPI_Comm_size() failed&quot;</span><span class="p">);</span>
+<span class="w">              </span><span class="k">goto</span><span class="w"> </span><span class="n">exit_with_error</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">rc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_Comm_rank</span><span class="w"> </span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">myrank</span><span class="p">);</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rc</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">MPI_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">              </span><span class="n">fprintf</span><span class="w"> </span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;MPI_Comm_rank() failed&quot;</span><span class="p">);</span>
+<span class="w">              </span><span class="k">goto</span><span class="w"> </span><span class="n">exit_with_error</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="n">fprintf</span><span class="w"> </span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Hello, I am rank %d/%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">myrank</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">);</span>
+
+<span class="w">      </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">EXIT_SUCCESS</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A possible def file for the app above is given below.</p>
+<div class="highlight-docker notranslate"><div class="highlight"><pre><span></span>Bootstrap:<span class="w"> </span>docker
+<span class="k">From</span><span class="s">:</span><span class="w"> </span>ubuntu:18.04
+
+%files
+<span class="w">  </span>mpitest.c<span class="w"> </span>/opt
+
+%environment
+<span class="w">  </span>#<span class="w"> </span>Point<span class="w"> </span>to<span class="w"> </span>OMPI<span class="w"> </span>binaries,<span class="w"> </span>libraries,<span class="w"> </span>man<span class="w"> </span>pages
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">MANPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/share/man:</span><span class="nv">$MANPATH</span><span class="s2">&quot;</span>
+
+%post
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing required packages...&quot;</span>
+<span class="w">  </span>apt-get<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>wget<span class="w"> </span>git<span class="w"> </span>bash<span class="w"> </span>gcc<span class="w"> </span>gfortran<span class="w"> </span>g++<span class="w"> </span>make<span class="w"> </span>file
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing Open MPI&quot;</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_VERSION</span><span class="o">=</span><span class="m">4</span>.0.5
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_URL</span><span class="o">=</span><span class="s2">&quot;https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-</span><span class="nv">$OMPI_VERSION</span><span class="s2">.tar.bz2&quot;</span>
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/ompi
+<span class="w">  </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/opt
+<span class="w">  </span>#<span class="w"> </span>Download
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2<span class="w"> </span><span class="nv">$OMPI_URL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xjf<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2
+<span class="w">  </span>#<span class="w"> </span>Compile<span class="w"> </span>and<span class="w"> </span>install
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi/openmpi-<span class="nv">$OMPI_VERSION</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./configure<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$OMPI_DIR</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-j8<span class="w"> </span>install
+
+<span class="w">  </span>#<span class="w"> </span>Set<span class="w"> </span>env<span class="w"> </span>variables<span class="w"> </span>so<span class="w"> </span>we<span class="w"> </span>can<span class="w"> </span>compile<span class="w"> </span>our<span class="w"> </span>application
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/bin:<span class="nv">$PATH</span>
+<span class="w">  </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="w">  </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Compiling the MPI application...&quot;</span>
+<span class="w">  </span><span class="nb">cd</span><span class="w"> </span>/opt<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mpicc<span class="w"> </span>-o<span class="w"> </span>mpitest<span class="w"> </span>mpitest.c
+</pre></div>
+</div>
+<p>A quick recap of what the above definition file is doing:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>The image is being bootstrapped from the <code class="docutils literal notranslate"><span class="pre">ubuntu:18.04</span></code> Docker
+image.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">%environment</span></code> section: Set an environment variable that
+will be available within all containers run from the generated
+image.</p></li>
+<li><p>In the <code class="docutils literal notranslate"><span class="pre">%post</span></code> section:</p>
+<ul>
+<li><p>Ubuntu’s <code class="docutils literal notranslate"><span class="pre">apt-get</span></code> package manager is used to update the package
+directory and then install the compilers and other libraries
+required for the OpenMPI build.</p></li>
+<li><p>The OpenMPI <code class="docutils literal notranslate"><span class="pre">.tar.gz</span></code> file is extracted and the configure, build and
+install steps are run.</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<p>We have the option of either compiling <code class="docutils literal notranslate"><span class="pre">mpitest.c</span></code> directly on the cluster,
+or compiling it inside the container. For learning purposes, let’s compile the
+code inside the container.</p>
+<p>To create the container we use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>singularity<span class="w"> </span>build<span class="w"> </span>--fakeroot<span class="w"> </span>--sandbox<span class="w"> </span>mpi_hybrid<span class="w"> </span>mpi_hybrid.def
+singularity<span class="w"> </span>build<span class="w"> </span>mpi_hybrid.sif<span class="w"> </span>mpi_hybrid
+</pre></div>
+</div>
+<p>And to run the code on <code class="docutils literal notranslate"><span class="pre">8</span></code> processors we should use
+the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-n<span class="w"> </span><span class="m">8</span><span class="w"> </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>mpi_hybrid.sif<span class="w"> </span>/opt/mpitest
+</pre></div>
+</div>
+<p>The output should look like</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">1</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">2</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">3</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">4</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">5</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">6</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">7</span>/8
+Hello,<span class="w"> </span>I<span class="w"> </span>am<span class="w"> </span>rank<span class="w"> </span><span class="m">0</span>/8
+</pre></div>
+</div>
+<p>Let’s analyze what just happened. The <code class="docutils literal notranslate"><span class="pre">mpitest</span></code> app sent a <code class="docutils literal notranslate"><span class="pre">Hello,</span> <span class="pre">I</span> <span class="pre">am</span> <span class="pre">rank</span> <span class="pre">X/Y</span></code>
+message from within the container sent across <code class="docutils literal notranslate"><span class="pre">8</span></code> processors. For this process to
+happen, <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> runs a copy of the <code class="docutils literal notranslate"><span class="pre">mpi_hybrid.sif</span></code> container across the <code class="docutils literal notranslate"><span class="pre">8</span></code>
+processors and execute <code class="docutils literal notranslate"><span class="pre">/opt/mpitest</span></code> inside the container as we asked.</p>
+</section>
+<section id="mpi-ping-pong">
+<h2>MPI Ping-Pong<a class="headerlink" href="#mpi-ping-pong" title="Link to this heading"></a></h2>
+<p>The above example, did not have communicating between CPUs. To have a full-fledged
+MPI app that can scale with number of CPUs, communication is a must. Let’s take a
+look at how communication works using MPI within a container. To that end, we will
+use what is a common test for MPI communication. <cite>Pingpong test</cite> is a routine during
+which a message is sent and received in pingpong fashion between two processor.
+As result of such test, the latency and bandwidth can be calculated.</p>
+<p>One can either use the <code class="docutils literal notranslate"><span class="pre">pingpong</span></code> method as given in <a class="reference external" href="https://www.hlrs.de/about-us/media-publications/teaching-training-material/">HLRS MPI course</a>
+below</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">PROGRAM </span><span class="n">pingpong</span>
+
+<span class="c">!==============================================================!</span>
+<span class="c">!                                                              !</span>
+<span class="c">! This file has been written as a sample solution to an        !</span>
+<span class="c">! exercise in a course given at the High Performance           !</span>
+<span class="c">! Computing Centre Stuttgart (HLRS).                           !</span>
+<span class="c">! The examples are based on the examples in the MPI course of  !</span>
+<span class="c">! the Edinburgh Parallel Computing Centre (EPCC).              !</span>
+<span class="c">! It is made freely available with the understanding that      !</span>
+<span class="c">! every copy of this file must include this header and that    !</span>
+<span class="c">! HLRS and EPCC take no responsibility for the use of the      !</span>
+<span class="c">! enclosed teaching material.                                  !</span>
+<span class="c">!                                                              !</span>
+<span class="c">! Authors: Joel Malard, Alan Simpson,            (EPCC)        !</span>
+<span class="c">!          Rolf Rabenseifner, Traugott Streicher (HLRS)        !</span>
+<span class="c">!                                                              !</span>
+<span class="c">! Contact: rabenseifner@hlrs.de                                !</span>
+<span class="c">!                                                              !</span>
+<span class="c">! Purpose: A program to try MPI_Ssend and MPI_Recv.            !</span>
+<span class="c">!                                                              !</span>
+<span class="c">! Contents: F-Source                                           !</span>
+<span class="c">!                                                              !</span>
+<span class="c">!==============================================================!</span>
+
+<span class="w">  </span><span class="k">USE </span><span class="n">mpi</span>
+
+<span class="w">  </span><span class="k">IMPLICIT NONE</span>
+
+<span class="k">  </span><span class="kt">INTEGER </span><span class="n">proc_a</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="p">(</span><span class="n">proc_a</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">proc_b</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="p">(</span><span class="n">proc_b</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">ping</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="p">(</span><span class="n">ping</span><span class="o">=</span><span class="mi">17</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">pong</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="p">(</span><span class="n">pong</span><span class="o">=</span><span class="mi">23</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">number_of_messages</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="w"> </span><span class="p">(</span><span class="n">number_of_messages</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">start_length</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="w"> </span><span class="p">(</span><span class="n">start_length</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">length_factor</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="w"> </span><span class="p">(</span><span class="n">length_factor</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">max_length</span><span class="w">                </span><span class="c">! 2 Mega</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="w"> </span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">2097152</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">number_package_sizes</span>
+<span class="w">  </span><span class="k">PARAMETER</span><span class="w"> </span><span class="p">(</span><span class="n">number_package_sizes</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span>
+<span class="w">  </span><span class="kt">INTEGER</span><span class="p">(</span><span class="nb">KIND</span><span class="o">=</span><span class="n">MPI_ADDRESS_KIND</span><span class="p">)</span><span class="w"> </span><span class="n">lb</span><span class="p">,</span><span class="w"> </span><span class="n">size_of_real</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">length</span>
+
+<span class="w">  </span><span class="kt">DOUBLE PRECISION </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">finish</span><span class="p">,</span><span class="w"> </span><span class="nb">time</span><span class="p">,</span><span class="w"> </span><span class="n">transfer_time</span>
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">status</span><span class="p">(</span><span class="n">MPI_STATUS_SIZE</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">REAL </span><span class="n">buffer</span><span class="p">(</span><span class="n">max_length</span><span class="p">)</span>
+
+<span class="w">  </span><span class="kt">INTEGER </span><span class="n">ierror</span><span class="p">,</span><span class="w"> </span><span class="n">my_rank</span><span class="p">,</span><span class="w"> </span><span class="n">size</span>
+
+
+<span class="w">  </span><span class="k">CALL </span><span class="n">MPI_INIT</span><span class="p">(</span><span class="n">ierror</span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">CALL </span><span class="n">MPI_COMM_RANK</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">my_rank</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">  </span><span class="k">CALL </span><span class="n">MPI_TYPE_GET_EXTENT</span><span class="p">(</span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">lb</span><span class="p">,</span><span class="w"> </span><span class="n">size_of_real</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">my_rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="n">proc_a</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="k">     WRITE</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s2">&quot;message size   transfertime    bandwidth&quot;</span>
+<span class="w">  </span><span class="k">END IF</span>
+
+<span class="k">  </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">start_length</span>
+
+<span class="w">  </span><span class="k">DO </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">number_package_sizes</span>
+
+<span class="w">     </span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">my_rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="n">proc_a</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="k">           CALL </span><span class="n">MPI_SEND</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_b</span><span class="p">,</span><span class="w"> </span><span class="n">ping</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">           </span><span class="k">CALL </span><span class="n">MPI_RECV</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_b</span><span class="p">,</span><span class="w"> </span><span class="n">pong</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">     </span><span class="k">ELSE IF</span><span class="w"> </span><span class="p">(</span><span class="n">my_rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="n">proc_b</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="k">           CALL </span><span class="n">MPI_RECV</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_a</span><span class="p">,</span><span class="w"> </span><span class="n">ping</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">           </span><span class="k">CALL </span><span class="n">MPI_SEND</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_a</span><span class="p">,</span><span class="w"> </span><span class="n">pong</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">     </span><span class="k">END IF</span>
+
+<span class="k">     </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_WTIME</span><span class="p">()</span>
+
+<span class="w">     </span><span class="k">DO </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">number_of_messages</span>
+
+<span class="w">        </span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">my_rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="n">proc_a</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="k">           CALL </span><span class="n">MPI_SEND</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_b</span><span class="p">,</span><span class="w"> </span><span class="n">ping</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">           </span><span class="k">CALL </span><span class="n">MPI_RECV</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_b</span><span class="p">,</span><span class="w"> </span><span class="n">pong</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">        </span><span class="k">ELSE IF</span><span class="w"> </span><span class="p">(</span><span class="n">my_rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="n">proc_b</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+<span class="k">           CALL </span><span class="n">MPI_RECV</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_a</span><span class="p">,</span><span class="w"> </span><span class="n">ping</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">           </span><span class="k">CALL </span><span class="n">MPI_SEND</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_REAL</span><span class="p">,</span><span class="w"> </span><span class="n">proc_a</span><span class="p">,</span><span class="w"> </span><span class="n">pong</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">ierror</span><span class="p">)</span>
+<span class="w">        </span><span class="k">END IF</span>
+
+<span class="k">     END DO</span>
+
+<span class="k">     </span><span class="n">finish</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_WTIME</span><span class="p">()</span>
+
+<span class="w">     </span><span class="k">IF</span><span class="w"> </span><span class="p">(</span><span class="n">my_rank</span><span class="w"> </span><span class="p">.</span><span class="n">EQ</span><span class="p">.</span><span class="w"> </span><span class="n">proc_a</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span>
+
+<span class="k">        </span><span class="nb">time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">finish</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span>
+<span class="w">        </span><span class="n">transfer_time</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">time</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">number_of_messages</span><span class="p">)</span>
+
+<span class="w">        </span><span class="k">WRITE</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="nb">INT</span><span class="p">(</span><span class="n">length</span><span class="o">*</span><span class="n">size_of_real</span><span class="p">),</span><span class="s1">&#39;bytes  &#39;</span><span class="p">,</span><span class="w"> </span><span class="n">transfer_time</span><span class="o">*</span><span class="mf">1e6</span><span class="p">,</span><span class="s1">&#39;usec  &#39;</span><span class="p">,</span><span class="w"> </span><span class="mf">1e-6</span><span class="o">*</span><span class="n">length</span><span class="o">*</span><span class="n">size_of_real</span><span class="o">/</span><span class="n">transfer_time</span><span class="p">,</span><span class="s1">&#39;MB/s&#39;</span>
+
+<span class="w">     </span><span class="k">END IF</span>
+
+<span class="k">     </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">length_factor</span>
+
+<span class="w">  </span><span class="k">END DO</span>
+
+<span class="k">  CALL </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="n">ierror</span><span class="p">)</span>
+
+<span class="k">END PROGRAM</span>
+</pre></div>
+</div>
+<p>Or a similar code from <a class="reference external" href="http://www.archer.ac.uk/training/course-material/2018/07/mpi-epcc/index.php">EPCC - University of Edinburgh</a></p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">!</span>
+<span class="c">! Program in which 2 processes repeatedly pass a message back and forth</span>
+<span class="c">!</span>
+<span class="c">! The same data is sent from A to B, then returned from B to A.</span>
+<span class="c">!</span>
+
+<span class="k">program </span><span class="n">pingpong</span>
+<span class="k">implicit none</span>
+<span class="k">include</span><span class="w"> </span><span class="s1">&#39;mpif.h&#39;</span>
+
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierr</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">numiter</span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">status</span><span class="p">(</span><span class="n">MPI_STATUS_SIZE</span><span class="p">)</span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tag1</span><span class="p">,</span><span class="w"> </span><span class="n">tag2</span><span class="p">,</span><span class="w"> </span><span class="n">extent</span>
+<span class="kt">character</span><span class="o">*</span><span class="mi">10</span><span class="w"> </span><span class="n">temp_char10</span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="nb">iargc</span>
+<span class="kt">real</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">sbuffer</span><span class="p">(:)</span>
+<span class="kt">double precision</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">tstart</span><span class="p">,</span><span class="w"> </span><span class="n">tstop</span><span class="p">,</span><span class="w"> </span><span class="nb">time</span><span class="p">,</span><span class="w"> </span><span class="n">totmess</span>
+
+<span class="n">comm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span>
+<span class="n">tag1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="n">tag2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+
+<span class="k">call </span><span class="n">MPI_INIT</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<span class="k">call </span><span class="n">MPI_COMM_RANK</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="n">rank</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<span class="k">call </span><span class="n">MPI_COMM_SIZE</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nb">iargc</span><span class="p">()</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k"> if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">   write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;Usage: pingpong &lt;array length&gt; &lt;number of iterations&gt;&#39;</span>
+<span class="w"> </span><span class="k">end if</span>
+
+<span class="k"> call </span><span class="n">mpi_finalize</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w"> </span><span class="k">stop</span>
+<span class="k">end if</span>
+
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k"> print</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Rank not participating&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span>
+<span class="k">end if</span>
+
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k"> call </span><span class="nb">getarg</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">temp_char10</span><span class="p">)</span>
+<span class="w"> </span><span class="k">read</span><span class="p">(</span><span class="n">temp_char10</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">length</span>
+<span class="w"> </span><span class="k">call </span><span class="nb">getarg</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="n">temp_char10</span><span class="p">)</span>
+<span class="w"> </span><span class="k">read</span><span class="p">(</span><span class="n">temp_char10</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">numiter</span>
+
+<span class="w"> </span><span class="k">print</span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;Array length, number of iterations = &#39;</span>
+<span class="w"> </span><span class="k">print</span><span class="o">*</span><span class="p">,</span><span class="w">  </span><span class="n">length</span><span class="p">,</span><span class="w"> </span><span class="n">numiter</span>
+<span class="k">end if</span>
+
+<span class="k">call </span><span class="n">MPI_BCAST</span><span class="p">(</span><span class="n">length</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">MPI_INTEGER</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<span class="k">call </span><span class="n">MPI_BCAST</span><span class="p">(</span><span class="n">numiter</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">MPI_INTEGER</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+
+<span class="c">! Must be run on at least 2 processors</span>
+<span class="k">if</span><span class="p">(</span><span class="n">size</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mi">2</span><span class="p">)</span><span class="k">then</span>
+<span class="k"> if</span><span class="p">(</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; The code must be run on at least 2 processors.&#39;</span>
+<span class="w"> </span><span class="k">call </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w"> </span><span class="k">stop</span>
+<span class="k">endif</span>
+
+<span class="c">! Allocate array</span>
+<span class="k">allocate</span><span class="p">(</span><span class="n">sbuffer</span><span class="p">(</span><span class="n">length</span><span class="p">))</span>
+
+<span class="c">! Send &#39;buffer&#39; back and forth between rank 0 and rank 1.</span>
+<span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">length</span>
+<span class="w"> </span><span class="n">sbuffer</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rank</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="mf">0.d0</span>
+<span class="k">enddo</span>
+
+<span class="c">! Start timing the parallel part here.</span>
+<span class="k">call </span><span class="n">MPI_BARRIER</span><span class="p">(</span><span class="n">comm</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<span class="n">tstart</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_Wtime</span><span class="p">()</span>
+
+<span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">numiter</span>
+<span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">  call </span><span class="n">MPI_SSEND</span><span class="p">(</span><span class="n">sbuffer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">length</span><span class="p">,</span><span class="n">MPI_REAL</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">tag1</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">MPI_RECV</span><span class="p">(</span><span class="n">sbuffer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">length</span><span class="p">,</span><span class="n">MPI_REAL</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">tag2</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">status</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+
+<span class="w"> </span><span class="k">else if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span><span class="k">then</span>
+<span class="k">  call </span><span class="n">MPI_RECV</span><span class="p">(</span><span class="n">sbuffer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">length</span><span class="p">,</span><span class="n">MPI_REAL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">tag1</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">status</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">MPI_SSEND</span><span class="p">(</span><span class="n">sbuffer</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="n">length</span><span class="p">,</span><span class="n">MPI_REAL</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">tag2</span><span class="p">,</span><span class="n">comm</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w"> </span><span class="k">endif</span>
+<span class="k">enddo</span>
+
+
+<span class="n">tstop</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_Wtime</span><span class="p">()</span>
+<span class="nb">time</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">tstop</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">tstart</span>
+
+<span class="k">call </span><span class="n">MPI_TYPE_SIZE</span><span class="p">(</span><span class="n">MPI_REAL</span><span class="p">,</span><span class="n">extent</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span>
+
+<span class="k">if</span><span class="p">(</span><span class="n">rank</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k"> </span><span class="n">totmess</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">2.d0</span><span class="o">*</span><span class="n">extent</span><span class="o">*</span><span class="n">length</span><span class="o">/</span><span class="mi">102</span><span class="mf">4.d0</span><span class="o">*</span><span class="n">numiter</span><span class="o">/</span><span class="mi">102</span><span class="mf">4.d0</span>
+<span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39; Ping-Pong of twice &#39;</span><span class="p">,</span><span class="n">extent</span><span class="o">*</span><span class="n">length</span><span class="p">,</span><span class="s1">&#39; bytes, for &#39;</span><span class="p">,</span><span class="n">numiter</span><span class="p">,</span><span class="s1">&#39; times.&#39;</span>
+<span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;Total computing time is &#39;</span><span class="p">,</span><span class="nb">time</span><span class="p">,</span><span class="s1">&#39; [s].&#39;</span>
+<span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;Total message size is &#39;</span><span class="p">,</span><span class="n">totmess</span><span class="p">,</span><span class="s1">&#39; [MB].&#39;</span>
+<span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;Latency (time per message) is &#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">time</span><span class="o">/</span><span class="n">numiter</span><span class="o">*</span><span class="mf">0.5d0</span><span class="p">,</span><span class="s1">&#39;[s].&#39;</span>
+<span class="w"> </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="s1">&#39;Bandwidth (message per time) is &#39;</span><span class="p">,</span><span class="n">totmess</span><span class="o">/</span><span class="nb">time</span><span class="p">,</span><span class="s1">&#39; [MB/s].&#39;</span>
+
+<span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="nb">time</span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="mf">1.d0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="w">         </span><span class="c">! write(*,*) &quot;WARNING! The time is too short to be meaningful, increase the number</span>
+<span class="w">  </span><span class="c">! of iterations and/or the array size so time is at least one second!&quot;</span>
+
+
+<span class="w"> </span><span class="k">endif</span>
+<span class="k">endif</span>
+
+<span class="k">deallocate</span><span class="p">(</span><span class="n">sbuffer</span><span class="p">)</span>
+
+<span class="k">call </span><span class="n">MPI_FINALIZE</span><span class="p">(</span><span class="n">ierr</span><span class="p">)</span>
+
+<span class="k">end program </span><span class="n">pingpong</span>
+</pre></div>
+</div>
+<p>Please choose one of these programs and save it to <code class="docutils literal notranslate"><span class="pre">pingpong.f90</span></code>. The def file
+that we used for <code class="docutils literal notranslate"><span class="pre">mpitest</span></code> can be used in this case too. All we need to do is to
+replace  <code class="docutils literal notranslate"><span class="pre">mpitest.c</span> <span class="pre">/opt</span></code> with <code class="docutils literal notranslate"><span class="pre">pingpong.f90</span> <span class="pre">/opt</span></code> at <code class="docutils literal notranslate"><span class="pre">%files</span></code> and to change
+the complition at the end of <code class="docutils literal notranslate"><span class="pre">%post</span></code> from <code class="docutils literal notranslate"><span class="pre">mpicc</span> <span class="pre">-o</span> <span class="pre">mpitest</span> <span class="pre">mpitest.c</span></code> to
+<code class="docutils literal notranslate"><span class="pre">mpif90</span> <span class="pre">-o</span> <span class="pre">pingpong.x</span> <span class="pre">pingpong.f90</span></code>. You can also directly compile it on the cluster
+and copy the binary file <code class="docutils literal notranslate"><span class="pre">pingpong.x</span></code> instead of the code. The container creation
+command remains the same.</p>
+<p>Similar to <code class="docutils literal notranslate"><span class="pre">mpitest</span></code>, we run the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>mpi_hybrid.sif<span class="w"> </span>/opt/pingpong.x
+</pre></div>
+</div>
+<p>The output should look like</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>message<span class="w"> </span>size<span class="w">   </span>transfertime<span class="w">    </span>bandwidth
+<span class="w">       </span><span class="m">32</span><span class="w"> </span>bytes<span class="w">     </span><span class="m">1</span>.6736700000000000<span class="w">      </span>usec<span class="w">     </span><span class="m">19</span>.119659143802402<span class="w">      </span>MB/s
+<span class="w">     </span><span class="m">2048</span><span class="w"> </span>bytes<span class="w">     </span><span class="m">2</span>.9812600000000011<span class="w">      </span>usec<span class="w">     </span><span class="m">686</span>.95786171930536<span class="w">      </span>MB/s
+<span class="w">   </span><span class="m">131072</span><span class="w"> </span>bytes<span class="w">     </span><span class="m">19</span>.135579999999994<span class="w">      </span>usec<span class="w">     </span><span class="m">6849</span>.6486476540076<span class="w">      </span>MB/s
+<span class="w">  </span><span class="m">8388608</span><span class="w"> </span>bytes<span class="w">     </span><span class="m">523</span>.77068999999995<span class="w">      </span>usec<span class="w">     </span><span class="m">16015</span>.802600219577<span class="w">      </span>MB/s
+</pre></div>
+</div>
+<p>Let’s analyze what just happened:
+When the <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> is invoked as shown above, the MPI-based application code,
+which will be linked against the MPI libraries, will make MPI API calls into these
+MPI libraries which in turn talk to the MPI daemon process running on the host system.
+This daemon process handles the communication between MPI processes, including talking
+to the daemons on other nodes to exchange information between processes running on
+different machines, as necessary.</p>
+<p>Ultimately, this means that our running MPI code is linking to the MPI libraries
+from the MPI install within our container and these are, in turn, communicating
+with the MPI daemon on the host system which is part of the host system’s MPI
+installation. These two installations of MPI may be different but as long as there
+is compatibility between the version of MPI installed in your container image and
+the version on the host system, your job should run successfully.</p>
+<p>As a side note, when running code within a Singularity container, we don’t use
+the MPI executables stored within the container (i.e. we <strong>DO NOT</strong> run
+<code class="docutils literal notranslate"><span class="pre">singularity</span> <span class="pre">exec</span> <span class="pre">mpirun</span> <span class="pre">-np</span> <span class="pre">&lt;numprocs&gt;</span> <span class="pre">/path/to/my/executable</span></code>).
+Instead we use the MPI installation on the host system to run Singularity and start
+an instance of our executable from within a container for each MPI process.</p>
+</section>
+<section id="gpu-and-mpi">
+<h2>GPU and MPI<a class="headerlink" href="#gpu-and-mpi" title="Link to this heading"></a></h2>
+<p>In the <a class="reference internal" href="../hvd_intro/"><span class="doc">Intoduction to Horovod</span></a>, we discussed how Horovod uses the MPI in conjuction with NCCL
+to scale up apps. In this section, we see a simple example of using a similar concept for
+running/training an app or a network on GPUs. The main advantage of such scheme is its
+possibility of scaling.</p>
+<p>In the below CUDA code, a large is divided by the number of available processers. While the
+summation over each chunck is done within a GPU, the total sum is calculated using MPI
+AllReduce method. Here, we pin (assume) there is one GPU per CPU.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;mpi.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;cstdio&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;chrono&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+
+
+<span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">kernel</span><span class="w"> </span><span class="p">(</span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">x</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mf">1.0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// naive atomic reduction kernel</span>
+<span class="n">__global__</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="n">atomic_red</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">double</span><span class="w">  </span><span class="o">*</span><span class="n">gdata</span><span class="p">,</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">N</span><span class="p">){</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="o">+</span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="o">*</span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">idx</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">atomicAdd</span><span class="p">(</span><span class="n">out</span><span class="p">,</span><span class="w"> </span><span class="n">gdata</span><span class="p">[</span><span class="n">idx</span><span class="p">]);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="kt">int</span><span class="w"> </span><span class="n">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="o">**</span><span class="w"> </span><span class="n">argv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w"> </span><span class="n">num_ranks</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">num_ranks</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">rank</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Binding the cuda device with local MPI rank</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">local_rank</span><span class="p">,</span><span class="w"> </span><span class="n">local_size</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MPI_Comm</span><span class="w"> </span><span class="n">local_comm</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MPI_Comm_split_type</span><span class="p">(</span><span class="n">MPI_COMM_WORLD</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_TYPE_SHARED</span><span class="p">,</span><span class="w"> </span><span class="n">rank</span><span class="p">,</span><span class="w">  </span><span class="n">MPI_INFO_NULL</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">local_comm</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">MPI_Comm_size</span><span class="p">(</span><span class="n">local_comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">local_size</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MPI_Comm_rank</span><span class="p">(</span><span class="n">local_comm</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">local_rank</span><span class="p">);</span>
+<span class="w">    </span><span class="n">cudaSetDevice</span><span class="p">(</span><span class="n">local_rank</span><span class="o">%</span><span class="n">local_size</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Total problem size</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">1024</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Problem size per rank (assumes divisibility of N)</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">N_per_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">num_ranks</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// Adapt the last mpi_rank if necessary</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="p">(</span><span class="n">num_ranks</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">N_per_rank</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">N_per_rank</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="n">num_ranks</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// Initialize d_local_x to zero on device</span>
+<span class="w">    </span><span class="kt">double</span><span class="o">*</span><span class="w"> </span><span class="n">d_local_x</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cudaMalloc</span><span class="p">((</span><span class="kt">void</span><span class="o">**</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;</span><span class="n">d_local_x</span><span class="p">,</span><span class="w"> </span><span class="n">N_per_rank</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
+<span class="w">    </span><span class="n">cudaMemset</span><span class="p">(</span><span class="n">d_local_x</span><span class="p">,</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w"> </span><span class="n">N_per_rank</span><span class="o">*</span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
+
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="o">*</span><span class="n">d_local_sum</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h_local_sum</span><span class="p">;</span>
+<span class="w">    </span><span class="n">h_local_sum</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="kt">double</span><span class="p">;</span>
+<span class="w">    </span><span class="n">cudaMalloc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">d_local_sum</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">));</span>
+
+<span class="w">    </span><span class="c1">// Number of repetitions</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">num_reps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="k">namespace</span><span class="w"> </span><span class="nn">std</span><span class="o">::</span><span class="nn">chrono</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">256</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">blocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">N_per_rank</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threads_per_block</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">threads_per_block</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">num_reps</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">kernel</span><span class="o">&lt;&lt;&lt;</span><span class="n">blocks</span><span class="p">,</span><span class="w"> </span><span class="n">threads_per_block</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">d_local_x</span><span class="p">,</span><span class="w"> </span><span class="n">N_per_rank</span><span class="p">);</span>
+<span class="w">        </span><span class="n">cudaDeviceSynchronize</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="c1">// summarize the vector of d_x</span>
+<span class="w">    </span><span class="n">atomic_red</span><span class="o">&lt;&lt;&lt;</span><span class="n">blocks</span><span class="p">,</span><span class="w"> </span><span class="n">threads_per_block</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span><span class="n">d_local_x</span><span class="p">,</span><span class="w"> </span><span class="n">d_local_sum</span><span class="p">,</span><span class="w"> </span><span class="n">N_per_rank</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">end</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">high_resolution_clock</span><span class="o">::</span><span class="n">now</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">duration_cast</span><span class="o">&lt;</span><span class="n">milliseconds</span><span class="o">&gt;</span><span class="p">(</span><span class="n">end</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">start</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Copy vector sums from device to host:</span>
+<span class="w">    </span><span class="n">cudaMemcpy</span><span class="p">(</span><span class="n">h_local_sum</span><span class="p">,</span><span class="w"> </span><span class="n">d_local_sum</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">double</span><span class="p">),</span><span class="w"> </span><span class="n">cudaMemcpyDeviceToHost</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// Reduce all sums into the global sum</span>
+<span class="w">    </span><span class="kt">double</span><span class="w"> </span><span class="n">h_global_sum</span><span class="p">;</span>
+<span class="w">    </span><span class="n">MPI_Allreduce</span><span class="p">(</span><span class="n">h_local_sum</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">h_global_sum</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_DOUBLE</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_SUM</span><span class="p">,</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Time per kernel = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">duration</span><span class="p">.</span><span class="n">count</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; ms &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">rank</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">h_global_sum</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">N</span><span class="o">*</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">1e-14</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cerr</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;The sum is incorrect!&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">      </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;The total sum of x = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">h_global_sum</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Please save this as <code class="docutils literal notranslate"><span class="pre">reduction.cu</span></code> and compile the code using the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>add<span class="w"> </span>OpenMPI/4.0.5-gcccuda-2020b
+nvcc<span class="w"> </span>-arch<span class="o">=</span>sm_80<span class="w"> </span>-o<span class="w"> </span>reduction.x<span class="w"> </span>reduction.cu<span class="w"> </span>-I/cvmfs/sling.si/modules/el7/software/OpenMPI/4.0.5-gcccuda-2020b/include<span class="w"> </span>-L/cvmfs/sling.si/modules/el7/software/hwloc/2.2.0-GCCcore-10.2.0/lib<span class="w"> </span>-lmpi<span class="w"> </span>-lcudart
+</pre></div>
+</div>
+<p>Afterwards, you can use the definition file given below to create the desirable contianer.
+Since we will use a similar container for the last section, more details about the definition
+file will be given in below.</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span>BootStrap:<span class="w"> </span>docker
+<span class="k">From</span><span class="s">:</span><span class="w"> </span>nvidia/cuda:11.1.1-devel-ubuntu18.04
+
+%files
+<span class="w">    </span>reduction.x<span class="w"> </span>/
+
+%environment
+<span class="w">    </span>#<span class="w"> </span>Point<span class="w"> </span>to<span class="w"> </span>OMPI<span class="w"> </span>binaries,<span class="w"> </span>libraries,<span class="w"> </span>man<span class="w"> </span>pages
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/lib:</span><span class="nv">$LD_LIBRARY_PATH</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">MANPATH</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$OMPI_DIR</span><span class="s2">/share/man:</span><span class="nv">$MANPATH</span><span class="s2">&quot;</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LC_ALL</span><span class="o">=</span>C
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">HOROVOD_GPU_ALLREDUCE</span><span class="o">=</span>NCCL
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">HOROVOD_GPU_ALLGATHER</span><span class="o">=</span>MPI
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">HOROVOD_GPU_BROADCAST</span><span class="o">=</span>MPI
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">HOROVOD_NCCL_HOME</span><span class="o">=</span>/usr/local/cuda/nccl
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">HOROVOD_NCCL_INCLUDE</span><span class="o">=</span>/usr/local/cuda/nccl/include
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">HOROVOD_NCCL_LIB</span><span class="o">=</span>/usr/local/cuda/nccl/lib
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="m">3</span>.7
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">TENSORFLOW_VERSION</span><span class="o">=</span><span class="m">2</span>.7.0
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">CUDNN_VERSION</span><span class="o">=</span><span class="m">8</span>.0.4.30-1+cuda11.1
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_VERSION</span><span class="o">=</span><span class="m">2</span>.8.3-1+cuda11.0
+
+%post
+<span class="w">    </span>mkdir<span class="w"> </span>/data1<span class="w"> </span>/data2<span class="w"> </span>/data0
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/spool/slurm
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/d/hpc
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/ceph/grid
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/ceph/hpc
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/scratch
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/exa5/scratch
+
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHON_VERSION</span><span class="o">=</span><span class="m">3</span>.7
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">TENSORFLOW_VERSION</span><span class="o">=</span><span class="m">2</span>.7
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">CUDNN_VERSION</span><span class="o">=</span><span class="m">8</span>.0.4.30-1+cuda11.1
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">NCCL_VERSION</span><span class="o">=</span><span class="m">2</span>.8.3-1+cuda11.0
+
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb http://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64 /&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/etc/apt/sources.list.d/nvidia-ml.list
+
+<span class="w">    </span>apt-get<span class="w"> </span>-y<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--allow-downgrades<span class="w"> </span>--allow-change-held-packages<span class="w"> </span>--no-install-recommends<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>build-essential<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>cmake<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>git<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>curl<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>vim<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>wget<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>ca-certificates<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="nv">libcudnn8</span><span class="o">=</span><span class="si">${</span><span class="nv">CUDNN_VERSION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span><span class="nv">libnccl2</span><span class="o">=</span><span class="si">${</span><span class="nv">NCCL_VERSION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>libnccl-dev<span class="o">=</span><span class="si">${</span><span class="nv">NCCL_VERSION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>libjpeg-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>libpng-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>python<span class="si">${</span><span class="nv">PYTHON_VERSION</span><span class="si">}</span><span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>python<span class="si">${</span><span class="nv">PYTHON_VERSION</span><span class="si">}</span>-dev<span class="w"> </span><span class="se">\</span>
+<span class="w">        </span>python<span class="si">${</span><span class="nv">PYTHON_VERSION</span><span class="si">}</span>-distutils
+
+<span class="w">    </span>ln<span class="w"> </span>-s<span class="w"> </span>/usr/bin/python<span class="si">${</span><span class="nv">PYTHON_VERSION</span><span class="si">}</span><span class="w"> </span>/usr/bin/python
+
+<span class="w">    </span>curl<span class="w"> </span>-O<span class="w"> </span>https://bootstrap.pypa.io/get-pip.py<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>python<span class="w"> </span>get-pip.py<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>rm<span class="w"> </span>get-pip.py
+
+<span class="c"># Install Open MPI</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Installing Open MPI&quot;</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_DIR</span><span class="o">=</span>/opt/ompi
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_VERSION</span><span class="o">=</span><span class="m">4</span>.0.5
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">OMPI_URL</span><span class="o">=</span><span class="s2">&quot;https://download.open-mpi.org/release/open-mpi/v4.0/openmpi-</span><span class="nv">$OMPI_VERSION</span><span class="s2">.tar.bz2&quot;</span>
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/tmp/ompi
+<span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/opt
+<span class="w">    </span>#<span class="w"> </span>Download
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>wget<span class="w"> </span>-O<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2<span class="w"> </span><span class="nv">$OMPI_URL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>tar<span class="w"> </span>-xjf<span class="w"> </span>openmpi-<span class="nv">$OMPI_VERSION</span>.tar.bz2
+<span class="w">    </span>#<span class="w"> </span>Compile<span class="w"> </span>and<span class="w"> </span>install
+<span class="w">    </span><span class="nb">cd</span><span class="w"> </span>/tmp/ompi/openmpi-<span class="nv">$OMPI_VERSION</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./configure<span class="w"> </span>--prefix<span class="o">=</span><span class="nv">$OMPI_DIR</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>-j8<span class="w"> </span>install
+
+<span class="w">    </span>#<span class="w"> </span>Set<span class="w"> </span>env<span class="w"> </span>variables<span class="w"> </span>so<span class="w"> </span>we<span class="w"> </span>can<span class="w"> </span>compile<span class="w"> </span>our<span class="w"> </span>application
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/bin:<span class="nv">$PATH</span>
+<span class="w">    </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="nv">$OMPI_DIR</span>/lib:<span class="nv">$LD_LIBRARY_PATH</span>
+
+<span class="c"># Install TensorFlow, Keras</span>
+<span class="w">    </span>pip<span class="w"> </span>install<span class="w"> </span>tensorflow-gpu<span class="o">==</span><span class="si">${</span><span class="nv">TENSORFLOW_VERSION</span><span class="si">}</span><span class="w"> </span>h5py<span class="w"> </span>tensorflow-hub
+
+<span class="c"># Install the IB verbs</span>
+<span class="w">    </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--no-install-recommends<span class="w"> </span>libibverbs*
+<span class="w">    </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>--no-install-recommends<span class="w"> </span>ibverbs-utils<span class="w"> </span>librdmacm*<span class="w"> </span>infiniband-diags<span class="w"> </span>libmlx4*<span class="w"> </span>libmlx5*<span class="w"> </span>libnuma*
+
+<span class="c"># Install Horovod, temporarily using CUDA stubs</span>
+<span class="w">    </span>ldconfig<span class="w"> </span>/usr/local/cuda-11.1/targets/x86_64-linux/lib/stubs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nv">HOROVOD_GPU_ALLREDUCE</span><span class="o">=</span>NCCL<span class="w"> </span><span class="nv">HOROVOD_WITH_TENSORFLOW</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">HOROVOD_WITH_PYTORCH</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--no-cache-dir<span class="w"> </span>horovod<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>ldconfig
+
+<span class="c"># Configure OpenMPI to run good defaults:</span>
+<span class="c">#   --bind-to none --map-by slot --mca btl_tcp_if_exclude lo,docker0</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;hwloc_base_binding_policy = none&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/usr/local/etc/openmpi-mca-params.conf<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;rmaps_base_mapping_policy = slot&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/usr/local/etc/openmpi-mca-params.conf
+<span class="w">    </span>#echo<span class="w"> </span><span class="s2">&quot;btl_tcp_if_exclude = lo,docker0&quot;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>/usr/local/etc/openmpi-mca-params.conf
+
+<span class="c"># Set default NCCL parameters</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">NCCL_DEBUG</span><span class="o">=</span>INFO<span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/nccl.conf<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="nv">NCCL_SOCKET_IFNAME</span><span class="o">=</span>^docker0<span class="w"> </span>&gt;&gt;<span class="w"> </span>/etc/nccl.conf
+</pre></div>
+</div>
+<p>Saving it as <code class="docutils literal notranslate"><span class="pre">cuda_example.def</span></code>, we can create the <code class="docutils literal notranslate"><span class="pre">cuda_example.sif</span></code> as mentioned above.
+Similarly, we can run our example using</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--nv<span class="w"> </span>cuda_example.sif<span class="w"> </span>/reduction.x
+</pre></div>
+</div>
+<p>We should see an output similar to</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Time<span class="w"> </span>per<span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1676</span><span class="w"> </span>ms
+The<span class="w"> </span>total<span class="w"> </span>sum<span class="w"> </span>of<span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>.07374e+11
+Time<span class="w"> </span>per<span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1691</span><span class="w"> </span>ms
+Time<span class="w"> </span>per<span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1689</span><span class="w"> </span>ms
+Time<span class="w"> </span>per<span class="w"> </span><span class="nv">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1581</span><span class="w"> </span>ms
+</pre></div>
+</div>
+<p>This example shows the simplest way of <em>offloading</em> a job to GPU(s) and using
+the MPI AllReduce was used to calculate the final value. The example above can mimic
+the calculation of gradient across difference GPUs.</p>
+</section>
+<section id="training-an-nlp-model-using-horovod">
+<h2>Training an NLP model using Horovod<a class="headerlink" href="#training-an-nlp-model-using-horovod" title="Link to this heading"></a></h2>
+<p>For the final part, let’s train the NLP model we used in previous chapters using containers.
+Since we assume that the cluster does not provide TensorFlow and Horovod
+for our training, we don’t need to load these two modules for the rest of our work.
+We have the option either copying our code and dataset to the container or binding the current
+path to <code class="docutils literal notranslate"><span class="pre">singularity</span></code> so that it can read file and folders. So far, we avoided
+the latter because it interferes with building the containers with created above.
+To keep the same tradition let’s copy the code and dataset to the container as we did in other section by
+adding the <code class="docutils literal notranslate"><span class="pre">Transfer_Learning_NLP_Horovod.py</span></code> code and dataset <code class="docutils literal notranslate"><span class="pre">dataset.pkl</span></code> from <a class="reference internal" href="../hvd_intro/"><span class="doc">Intoduction to Horovod</span></a>
+to a new folder <code class="docutils literal notranslate"><span class="pre">horovod</span></code> and adding that to <code class="docutils literal notranslate"><span class="pre">%files</span></code> section.
+After creating the container we are ready to to traino our model on two processers
+using the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span>-H<span class="w"> </span>localhost:2<span class="w"> </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--nv<span class="w"> </span>horovod.sif<span class="w"> </span>python<span class="w"> </span>horovod/Transfer_Learning_NLP_Horovod.py
+</pre></div>
+</div>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>--------------------------------------------------------------------------
+By<span class="w"> </span>default,<span class="w"> </span><span class="k">for</span><span class="w"> </span>Open<span class="w"> </span>MPI<span class="w"> </span><span class="m">4</span>.0<span class="w"> </span>and<span class="w"> </span>later,<span class="w"> </span>infiniband<span class="w"> </span>ports<span class="w"> </span>on<span class="w"> </span>a<span class="w"> </span>device
+are<span class="w"> </span>not<span class="w"> </span>used<span class="w"> </span>by<span class="w"> </span>default.<span class="w">  </span>The<span class="w"> </span>intent<span class="w"> </span>is<span class="w"> </span>to<span class="w"> </span>use<span class="w"> </span>UCX<span class="w"> </span><span class="k">for</span><span class="w"> </span>these<span class="w"> </span>devices.
+You<span class="w"> </span>can<span class="w"> </span>override<span class="w"> </span>this<span class="w"> </span>policy<span class="w"> </span>by<span class="w"> </span>setting<span class="w"> </span>the<span class="w"> </span>btl_openib_allow_ib<span class="w"> </span>MCA<span class="w"> </span>parameter
+to<span class="w"> </span>true.
+
+<span class="w">  </span>Local<span class="w"> </span>host:<span class="w">              </span>vglogin0008
+<span class="w">  </span>Local<span class="w"> </span>adapter:<span class="w">           </span>mlx5_0
+<span class="w">  </span>Local<span class="w"> </span>port:<span class="w">              </span><span class="m">1</span>
+
+--------------------------------------------------------------------------
+--------------------------------------------------------------------------
+WARNING:<span class="w"> </span>There<span class="w"> </span>was<span class="w"> </span>an<span class="w"> </span>error<span class="w"> </span>initializing<span class="w"> </span>an<span class="w"> </span>OpenFabrics<span class="w"> </span>device.
+
+<span class="w">  </span>Local<span class="w"> </span>host:<span class="w">   </span>vglogin0008
+<span class="w">  </span>Local<span class="w"> </span>device:<span class="w"> </span>mlx5_0
+--------------------------------------------------------------------------
+Version:<span class="w">  </span><span class="m">2</span>.7.0
+Hub<span class="w"> </span>version:<span class="w">  </span><span class="m">0</span>.12.0
+GPU<span class="w"> </span>is<span class="w"> </span>available
+Number<span class="w"> </span>of<span class="w"> </span>GPUs<span class="w"> </span>:<span class="w"> </span><span class="m">1</span>
+The<span class="w"> </span>shape<span class="w"> </span>of<span class="w"> </span>training<span class="w"> </span><span class="o">(</span><span class="m">653061</span>,<span class="w"> </span><span class="m">3</span><span class="o">)</span><span class="w"> </span>and<span class="w"> </span>validation<span class="w"> </span><span class="o">(</span><span class="m">653</span>,<span class="w"> </span><span class="m">3</span><span class="o">)</span><span class="w"> </span>datasets.
+<span class="c1">##-------------------------##</span>
+
+<span class="c1">##-------------------------##</span>
+Training<span class="w"> </span>starts<span class="w"> </span>...
+Epoch<span class="w"> </span><span class="m">1</span>/40
+<span class="w">    </span><span class="m">1</span>/20408<span class="w"> </span><span class="o">[</span>..............................<span class="o">]</span><span class="w"> </span>-<span class="w"> </span>ETA:<span class="w"> </span><span class="m">18</span>:55:44<span class="w"> </span>-<span class="w"> </span>loss:<span class="w"> </span><span class="m">0</span>.6903<span class="w"> </span>-<span class="w"> </span>accuracy:<span class="w"> </span><span class="m">0</span>.5938
+</pre></div>
+</div>
+<p>There is whole host of flags at our disposal which can be/must be used to successfully train
+the network. For example</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-np<span class="w"> </span><span class="m">4</span><span class="w"> </span>-H<span class="w"> </span>localhost:4<span class="w"> </span>-x<span class="w"> </span>LD_LIBRARY_PATH<span class="w"> </span>-x<span class="w"> </span>PATH<span class="w"> </span>-x<span class="w"> </span><span class="nv">HOROVOD_MPI_THREADS_DISABLE</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>-x<span class="w"> </span><span class="nv">NCCL_SOCKET_IFNAME</span><span class="o">=</span>^virbr0,lo<span class="w"> </span>-mca<span class="w"> </span>btl<span class="w"> </span>openib,self<span class="w"> </span>-mca<span class="w"> </span>pml<span class="w"> </span>ob1<span class="w"> </span>singularity<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--nv<span class="w"> </span>horovod.sif<span class="w"> </span>python<span class="w"> </span>/horovod/Transfer_Learning_NLP_Horovod.py
+</pre></div>
+</div>
+<p>It is always recommended to consult with the system admin regarding the usage of such
+flags since it all depends on how the MPI and rest of system is setup.</p>
+<div class="admonition-what-is-in-the-definition-file exercise important admonition" id="exercise-0">
+<p class="admonition-title">What is in the definition file?</p>
+<p>The definition file for the CUDA example and Horovod training is
+almost the same. Can you go through the file explain what each part does?</p>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../hvd_intro/" class="btn btn-neutral float-left" title="Intoduction to Horovod" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../containers/content/mpi_contain/" class="btn btn-neutral float-right" title="Running MPI parallel jobs using Singularity containers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

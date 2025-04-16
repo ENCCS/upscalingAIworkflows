@@ -1,0 +1,406 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intoduction to Horovod &mdash; Upscaling AI workflows  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css?v=13237357" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_lesson.css?v=e9df6548" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/term_role_formatting.css?v=4194e21c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx_rtd_theme_ext_color_contrast.css?v=8e8ea19f" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/overrides.css?v=0572569b" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=187304be"></script>
+      <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/minipres.js?v=a0d29692"></script>
+      <script>let toggleHintShow = 'Click to show';</script>
+      <script>let toggleHintHide = 'Click to hide';</script>
+      <script>let toggleOpenOnPrint = 'true';</script>
+      <script src="../../../_static/togglebutton.js?v=4a39c7ea"></script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+      <script data-domain="enccs.github.io/upscalingAIworkflows" defer="defer" src="https://plausible.io/js/script.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../" class="icon icon-home">
+            Upscaling AI workflows
+              <img src="../../../_static/ENCCS.jpg" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../setup/">Access to Vega</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">The lesson</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro-container/">Introduction to Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../intro_docker/">Introduction to Docker</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mang_contain/">Cleaning Up Containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../create_contain/">Creating your own container images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compx_contain/">Creating More Complex Container Images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../singlrty_start/">What is Singularity?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../work_contain/">Working with Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build_contain/">Building Singularity images</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_intro/">TensorFlow on a single GPU</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tf_mltgpus/">Distributed training in TensorFlow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../hvd_intro/">Intoduction to Horovod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../train_contain/">Training Neural Networks using Containers</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Optional</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers/content/mpi_contain/">Running MPI parallel jobs using Singularity containers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers/content/rep_gran/">Containers in research workflows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../containers/content/pwd_exmps/">PWD exercises</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../namespc-cgroup/">Namespaces and cgroups</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../quick-reference/">Quick Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/">Instructor’s guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Upscaling AI workflows</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Intoduction to Horovod</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ENCCS/upscalingAIworkflows/blob/main/content/upscalingAIcontainer/content/hvd_intro.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="intoduction-to-horovod">
+<span id="hvd-intro"></span><h1>Intoduction to Horovod<a class="headerlink" href="#intoduction-to-horovod" title="Link to this heading"></a></h1>
+<figure class="align-default" id="id1">
+<a class="reference internal image-reference" href="https://horovod.readthedocs.io/en/stable/_static/logo.png"><img alt="https://horovod.readthedocs.io/en/stable/_static/logo.png" src="https://horovod.readthedocs.io/en/stable/_static/logo.png" style="width: 40%;" />
+</a>
+<figcaption>
+<p><span class="caption-text"><a class="reference external" href="https://horovod.ai">(Image Source)</a></span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="why-horovod">
+<h2>Why Horovod<a class="headerlink" href="#why-horovod" title="Link to this heading"></a></h2>
+<p>Horovod was developed at Uber with the primary motivation of making it easy to
+take a single-GPU training script and successfully scale it to train across many
+GPUs in parallel. This has two aspects:</p>
+<ul class="simple">
+<li><p>How much modification does one have to make to a program to make it distributed,
+and how easy is it to run it?</p></li>
+<li><p>How much faster would it run in distributed mode?</p></li>
+</ul>
+<p>What researchers at Uber discovered was that the MPI model to be much more straightforward
+and require far less code changes than previous solutions such as Distributed TensorFlow with
+parameter servers. Once a training script has been written for scale with Horovod, it can run
+on a single-GPU, multiple-GPUs, or even multiple hosts without any further code changes.</p>
+<p>In addition to being easy to use, Horovod is fast. Below is a chart representing the benchmark
+that was done on 128 servers with 4 Pascal GPUs each connected by RoCE-capable 25 Gbit/s network:</p>
+<img alt="scaling" src="https://user-images.githubusercontent.com/16640218/38965607-bf5c46ca-4332-11e8-895a-b9c137e86013.png" />
+<p>Horovod achieves 90% scaling efficiency for both Inception V3 and ResNet-101, and
+68% scaling efficiency for VGG-16. While installing MPI and NCCL itself may seem like an extra hassle,
+it only needs to be done once by the team dealing with infrastructure, while everyone else in the company
+who builds the models can enjoy the simplicity of training them at scale. Plus, in modern clusters where
+GPUs are available, MPI and NCCL are readily installed. Installation of Horovod is not as difficult.</p>
+</section>
+<section id="main-concept">
+<h2>Main concept<a class="headerlink" href="#main-concept" title="Link to this heading"></a></h2>
+<p>Horovod core principles are based on the MPI concepts <em>size</em>, <em>rank</em>, <em>local rank</em>,
+<em>allreduce</em>, <em>allgather</em>, <em>broadcast</em>, and <em>alltoall</em>. These are best explained by example.
+Say we launched a training script on 4 servers, each having 4 GPUs. If we launched one copy of the script per GPU:</p>
+<ul>
+<li><p><strong>Size</strong> would be the number of processes, in this case, 16.</p></li>
+<li><p><strong>Rank</strong> would be the unique process ID from 0 to 15 (size - 1).</p></li>
+<li><p><strong>Local rank</strong> would be the unique process ID within the server from 0 to 3.</p></li>
+<li><p><strong>Allreduce</strong> is an operation that aggregates data among multiple processes and
+distributes results back to them. Allreduce is used to average dense tensors.</p>
+<img alt="Allreduce" src="http://mpitutorial.com/tutorials/mpi-reduce-and-allreduce/mpi_allreduce_1.png" />
+</li>
+<li><p><strong>Allgather</strong> is an operation that gathers data from all processes on every process.
+Allgather is used to collect values of sparse tensors.</p>
+<img alt="allgather" src="http://mpitutorial.com/tutorials/mpi-scatter-gather-and-allgather/allgather.png" />
+</li>
+<li><p><strong>Broadcast</strong> is an operation that broadcasts data from one process, identified by
+root rank, onto every other process.</p>
+<img alt="broadcast" src="http://mpitutorial.com/tutorials/mpi-broadcast-and-collective-communication/broadcast_pattern.png" />
+</li>
+<li><p><strong>Alltoall</strong> is an operation to exchange data between all processes.
+Alltoall may be useful to implement neural networks with advanced architectures that span multiple devices.</p></li>
+</ul>
+</section>
+<section id="how-to-use-horovod">
+<h2>How to use Horovod<a class="headerlink" href="#how-to-use-horovod" title="Link to this heading"></a></h2>
+<p>To use Horovod, we should add the following to the program:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Run hvd.init() to initialize Horovod.</p></li>
+</ol>
+<p>2. Pin each GPU to a single process to avoid resource contention. With the typical
+setup of one GPU per process, set this to local rank.
+The first process on the server will be allocated the first GPU, the second process
+will be allocated the second GPU, and so forth.</p>
+<p>3. Scale the learning rate by the number of workers. Effective batch size in
+synchronous distributed training is scaled by the number of workers.
+An increase in learning rate compensates for the increased batch size.</p>
+<p>4. Wrap the optimizer in <code class="docutils literal notranslate"><span class="pre">hvd.DistributedOptimizer</span></code>. The distributed optimizer
+delegates gradient computation to the original optimizer, averages gradients
+using allreduce or allgather, and then applies those averaged gradients.</p>
+<p>5. Broadcast the initial variable states from rank 0 to all other processes.
+This is necessary to ensure consistent initialization of all workers when training
+is started with random weights or restored from a checkpoint.</p>
+<p>6. Modify your code to save checkpoints only on worker 0 to prevent other workers
+from corrupting them.</p>
+</div></blockquote>
+<p>Once the script is transformed to a proper form, it can be launched using <code class="docutils literal notranslate"><span class="pre">horovodrun</span></code>
+command. For example, to run the train scrip on a machine with 4 GPUs, we use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>horovodrun<span class="w"> </span>-np<span class="w"> </span><span class="m">4</span><span class="w"> </span>-H<span class="w"> </span>localhost:4<span class="w"> </span>python<span class="w"> </span>train.py
+</pre></div>
+</div>
+<p>And for running on 4 machines with 4 GPUs each, we use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>horovodrun<span class="w"> </span>-np<span class="w"> </span><span class="m">16</span><span class="w"> </span>-H<span class="w"> </span>server1:4,server2:4,server3:4,server4:4<span class="w"> </span>python<span class="w"> </span>train.py
+</pre></div>
+</div>
+<p>It is also possible to run the script using Open MPI without the horovodrun wrapper.
+The launch command for the first example using <code class="docutils literal notranslate"><span class="pre">mpirun</span></code> would be</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-np<span class="w"> </span><span class="m">4</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-bind-to<span class="w"> </span>none<span class="w"> </span>-map-by<span class="w"> </span>slot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-x<span class="w"> </span><span class="nv">NCCL_DEBUG</span><span class="o">=</span>INFO<span class="w"> </span>-x<span class="w"> </span>LD_LIBRARY_PATH<span class="w"> </span>-x<span class="w"> </span>PATH<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-mca<span class="w"> </span>pml<span class="w"> </span>ob1<span class="w"> </span>-mca<span class="w"> </span>btl<span class="w"> </span>^openib<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python<span class="w"> </span>train.py
+</pre></div>
+</div>
+<p>And for the second example</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mpirun<span class="w"> </span>-np<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span>server1:4,server2:4,server3:4,server4:4<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-bind-to<span class="w"> </span>none<span class="w"> </span>-map-by<span class="w"> </span>slot<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-x<span class="w"> </span><span class="nv">NCCL_DEBUG</span><span class="o">=</span>INFO<span class="w"> </span>-x<span class="w"> </span>LD_LIBRARY_PATH<span class="w"> </span>-x<span class="w"> </span>PATH<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-mca<span class="w"> </span>pml<span class="w"> </span>ob1<span class="w"> </span>-mca<span class="w"> </span>btl<span class="w"> </span>^openib<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>python<span class="w"> </span>train.py
+</pre></div>
+</div>
+<p>The recipe for running inside Jupyter Notebook is different, as we will see in
+the next section.</p>
+</section>
+<section id="training-with-model-fit">
+<h2>Training with <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code><a class="headerlink" href="#training-with-model-fit" title="Link to this heading"></a></h2>
+<p>Let’s go back to our CNN model for classification and upscale the training using
+Horovod.</p>
+<p>There are three Horovod callbacks.</p>
+<blockquote>
+<div><p>1. Horovod.broadcasts sends initial variable states from rank 0 to all other processes.
+This is necessary to ensure consistent initialization of all workers when
+training is started with random weights or restored from a checkpoint.</p>
+<p>2. Horovod.metric.averages calculates metrics among workers at the end of every epoch.
+Note: This callback must be in the list before the ReduceLROnPlateau, TensorBoard or other
+metrics-based callbacks.</p>
+<p>3. Horovod.LearningRateWarmup initializes the learning rate from the very beginning.
+Starting the training using <code class="docutils literal notranslate"><span class="pre">`lr</span> <span class="pre">=</span> <span class="pre">1.0</span> <span class="pre">*</span> <span class="pre">hvd.size()</span></code> with leads to worse final accuracy.
+This funciton scales the learning rate <code class="docutils literal notranslate"><span class="pre">lr</span> <span class="pre">=</span> <span class="pre">1.0</span></code> —&gt; <code class="docutils literal notranslate"><span class="pre">lr</span> <span class="pre">=</span> <span class="pre">1.0</span> <span class="pre">*</span> <span class="pre">hvd.size()</span></code> during
+the first three epochs. See <a class="reference external" href="https://arxiv.org/abs/1706.02677">this article</a> for details.</p>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">horovod</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">training_func</span><span class="p">():</span>
+
+  <span class="kn">import</span><span class="w"> </span><span class="nn">tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">tf</span>
+  <span class="kn">import</span><span class="w"> </span><span class="nn">horovod.tensorflow</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">hvd</span>
+
+  <span class="n">hvd</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+  <span class="c1"># Pinning GPUs (one GPU per process)</span>
+  <span class="n">gpus</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">list_physical_devices</span><span class="p">(</span><span class="s1">&#39;GPU&#39;</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">gpu</span> <span class="ow">in</span> <span class="n">gpus</span><span class="p">:</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">set_memory_growth</span><span class="p">(</span><span class="n">gpu</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">gpus</span><span class="p">:</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">experimental</span><span class="o">.</span><span class="n">set_visible_devices</span><span class="p">(</span><span class="n">gpus</span><span class="p">[</span><span class="n">hvd</span><span class="o">.</span><span class="n">local_rank</span><span class="p">()],</span> <span class="s1">&#39;GPU&#39;</span><span class="p">)</span>
+
+  <span class="p">(</span><span class="n">mnist_images</span><span class="p">,</span> <span class="n">mnist_labels</span><span class="p">),</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">mnist</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;mnist-</span><span class="si">%d</span><span class="s1">.npz&#39;</span> <span class="o">%</span> <span class="n">hvd</span><span class="o">.</span><span class="n">rank</span><span class="p">())</span>
+
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_tensor_slices</span><span class="p">(</span>
+      <span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">mnist_images</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+       <span class="n">tf</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">mnist_labels</span><span class="p">,</span> <span class="n">tf</span><span class="o">.</span><span class="n">int64</span><span class="p">)))</span>
+  <span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
+  <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">repeat</span><span class="p">()</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span><span class="o">.</span><span class="n">batch</span><span class="p">(</span><span class="n">batch_size</span><span class="p">)</span>
+
+  <span class="c1"># Horovod: adjust learning rate based on number of GPUs.</span>
+  <span class="n">scaled_lr</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">*</span> <span class="n">hvd</span><span class="o">.</span><span class="n">size</span><span class="p">()</span>
+  <span class="n">opt</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">optimizers</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">scaled_lr</span><span class="p">)</span>
+  <span class="n">opt</span> <span class="o">=</span> <span class="n">hvd</span><span class="o">.</span><span class="n">DistributedOptimizer</span><span class="p">(</span><span class="n">opt</span><span class="p">,</span> <span class="n">backward_passes_per_step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">average_aggregated_gradients</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+  <span class="n">mnist_model</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">Sequential</span><span class="p">([</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">(),</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Conv2D</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">MaxPooling2D</span><span class="p">(),</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(),</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">),</span>
+      <span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">Dense</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">)</span>
+  <span class="p">])</span>
+
+  <span class="n">mnist_model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">loss</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">SparseCategoricalCrossentropy</span><span class="p">(),</span>
+                  <span class="n">optimizer</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span>
+                  <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span>
+                  <span class="n">experimental_run_tf_function</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+  <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="n">horovod</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">BroadcastGlobalVariablesCallback</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+  <span class="n">horovod</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">MetricAverageCallback</span><span class="p">(),</span>
+  <span class="n">horovod</span><span class="o">.</span><span class="n">tensorflow</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">LearningRateWarmupCallback</span><span class="p">(</span><span class="n">initial_lr</span><span class="o">=</span><span class="n">scaled_lr</span><span class="p">,</span>
+  <span class="n">warmup_epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+  <span class="p">]</span>
+
+  <span class="k">if</span> <span class="n">hvd</span><span class="o">.</span><span class="n">rank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+      <span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">keras</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">ModelCheckpoint</span><span class="p">(</span><span class="s1">&#39;./checkpoint-</span><span class="si">{epoch}</span><span class="s1">.h5&#39;</span><span class="p">))</span>
+
+  <span class="n">verbose</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">hvd</span><span class="o">.</span><span class="n">rank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+  <span class="n">mnist_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">steps_per_epoch</span><span class="o">=</span><span class="mi">500</span> <span class="o">//</span> <span class="n">hvd</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span> <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">24</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To launch the training, we need to use this command in the Jupyter notebook</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">horovod</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">training_func</span><span class="p">,</span> <span class="n">np</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">disable_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">use_mpi</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition-verbose-true exercise important admonition" id="exercise-0">
+<p class="admonition-title"><code class="docutils literal notranslate"><span class="pre">verbose</span> <span class="pre">=</span> <span class="pre">True</span></code></p>
+<ul class="simple">
+<li><p>Change the <code class="docutils literal notranslate"><span class="pre">verbose</span></code> variable to <code class="docutils literal notranslate"><span class="pre">True</span></code> and inspect the results. What do you see?</p></li>
+<li><p>Time the calculations. Can you compare the result with the results reported in <a class="reference internal" href="../tf_mltgpus/"><span class="doc">Distributed training in TensorFlow</span></a>?</p></li>
+</ul>
+</div>
+<div class="admonition-playing-with-horovod exercise important admonition" id="exercise-1">
+<p class="admonition-title">Playing with Horovod</p>
+<p>1. Play with different parameters in the code and check the effect on the elapsed time and accuracy.
+which parameters are more important?</p>
+<p>2. Use Horovod using Keras <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code>, similar to the above, to upscale SVHN notebook you worked
+before. Are the results comparable to those in the section <a class="reference internal" href="../tf_mltgpus/"><span class="doc">Distributed training in TensorFlow</span></a>?</p>
+<ol class="arabic simple" start="3">
+<li><p>Instead of using <code class="docutils literal notranslate"><span class="pre">Model.fit</span></code>, write a custom training loop within the framework of Horovod.</p></li>
+</ol>
+<div class="admonition-solution solution important dropdown admonition" id="solution-0">
+<p class="admonition-title">Solution</p>
+<ol class="arabic simple" start="3">
+<li><p>Two main differences that should be made are:</p></li>
+</ol>
+<blockquote>
+<div><ul class="simple">
+<li><p>Definig the loss function using Horovod</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">training_step</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">first_batch</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+          <span class="n">probs</span> <span class="o">=</span> <span class="n">mnist_model</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">training</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+          <span class="n">loss_value</span> <span class="o">=</span> <span class="n">loss</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">probs</span><span class="p">)</span>
+
+    <span class="c1"># Horovod: add Horovod Distributed GradientTape.</span>
+    <span class="n">tape</span> <span class="o">=</span> <span class="n">hvd</span><span class="o">.</span><span class="n">DistributedGradientTape</span><span class="p">(</span><span class="n">tape</span><span class="p">)</span>
+
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss_value</span><span class="p">,</span> <span class="n">mnist_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">)</span>
+    <span class="n">opt</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">mnist_model</span><span class="o">.</span><span class="n">trainable_variables</span><span class="p">))</span>
+
+    <span class="c1"># Horovod: broadcast initial variable states from rank 0 to all other processes.</span>
+    <span class="c1"># This is necessary to ensure consistent initialization of all workers when</span>
+    <span class="c1"># training is started with random weights or restored from a checkpoint.</span>
+    <span class="c1"># Please see `the documentation &lt;https://horovod.readthedocs.io/en/stable/api.html#horovod.tensorflow.broadcast_variables&gt;`_.</span>
+    <span class="c1"># Note: broadcast should be done after the first gradient step to ensure optimizer</span>
+    <span class="c1"># initialization.</span>
+
+    <span class="k">if</span> <span class="n">first_batch</span><span class="p">:</span>
+        <span class="n">hvd</span><span class="o">.</span><span class="n">broadcast_variables</span><span class="p">(</span><span class="n">mnist_model</span><span class="o">.</span><span class="n">variables</span><span class="p">,</span> <span class="n">root_rank</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">hvd</span><span class="o">.</span><span class="n">broadcast_variables</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">variables</span><span class="p">(),</span> <span class="n">root_rank</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">loss_value</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Looping over the dataset</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">batch</span><span class="p">,</span> <span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">take</span><span class="p">(</span><span class="mi">10000</span> <span class="o">//</span> <span class="n">hvd</span><span class="o">.</span><span class="n">size</span><span class="p">())):</span>
+    <span class="n">loss_value</span> <span class="o">=</span> <span class="n">training_step</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">batch</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">hvd</span><span class="o">.</span><span class="n">local_rank</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Step #</span><span class="si">%d</span><span class="se">\t</span><span class="s1">Loss: </span><span class="si">%.6f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="n">loss_value</span><span class="p">))</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+<p>It is possible to carry the same procedure without using Jupyter notebook as the main developing tool.
+You can download <code class="xref download docutils literal notranslate"><span class="pre">the</span> <span class="pre">python</span> <span class="pre">script</span></code> from the github. We will go through
+some of the steps together.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, ENCCS, and individual contributors..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
