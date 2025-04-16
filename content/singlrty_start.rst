@@ -21,7 +21,7 @@ in order for them to run and interact with containers on a platform
 where Singularity has been installed.
 
 Getting started with Singularity
---------------------------------
+................................
 
 Initially developed within the research community, Singularity is open
 source and the `repository <https://github.com/hpcng/singularity>`_ is
@@ -71,7 +71,7 @@ Nonetheless, for the Vega system `singularity` is readily available.
 
 
 Images and containers
----------------------
+.....................
 
 We'll start with a brief note on the terminology used in this section
 of the course.  We refer to both **images** and **containers**. What
@@ -93,7 +93,7 @@ image to be a form of template from which running container instances
 can be started.
 
 Getting an image and running a Singularity container
-----------------------------------------------------
+....................................................
 
 If you recall from learning about Docker, Docker images are formed of
 a set of layers that make up the complete image. When you pull a

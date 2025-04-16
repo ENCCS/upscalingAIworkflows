@@ -57,11 +57,20 @@ i.e., supercomputers.
    singlrty_start
    work_contain
    build_contain
-   mpi_contain
    tf_intro
    tf_mltgpus
    hvd_intro
    train_contain
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Optional
+
+   containers/content/mpi_contain
+   containers/content/rep_gran
+   containers/content/pwd_exmps
+   upscalingAIcontainer/content/namespc-cgroup
+
 
 
 .. toctree::
